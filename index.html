@@ -1,11 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Agenda Corporativa Digital</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <header>
+        <div class="container">
+            <h1>Agenda Corporativa Digital</h1>
+        </div>
+    </header>
+
+    <section class="formulario">
+        <div class="container">
+            <h2>Cadastro de Contato</h2>
+            <form id="formCadastro">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" required>
+
+                <label for="departamento">Departamento:</label>
+                <input type="text" id="departamento" required>
+
+                <label for="ramal">Ramal:</label>
+                <input type="text" id="ramal" required>
+
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="consulta">
+        <div class="container">
+            <h2>consulta de Contatos</h2>
+            <input type="text" id="buscar" placeholder="Pesquisar por nome ou departamento" oninput="filtrarContatos()">
+            <table id="tabelaContatos">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Departamentos</th>
+                        <th>Ramal</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Contatos serão listados aqui -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>2026 - Projeto Integrador I - Univesp</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
 </body>
 </html>
