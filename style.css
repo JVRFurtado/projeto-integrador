@@ -22,3 +22,16 @@ header {
     padding: 20px 0;
     text-align: center;
 }
+
+h1 {
+    font-size: 2.5em;
+}
+
+section {
+    padding: 20px 0;
+}
+
+h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
