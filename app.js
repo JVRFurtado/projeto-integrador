@@ -2,7 +2,7 @@
 const contatosStorage = JSON.parse(localStorage.getItem("contatos")) || [];
 
 document.getElementById('formCadastro').addEventListener('submit', function(e) {
-    e.preventDefault(); // Impede o recarregamento da página
+    e.preventDefault();
 
 // Coleta dados do formulário
 const nome = document.getElementById('nome').value;
@@ -40,7 +40,7 @@ function exibirContatos() {
             <td>${contato.nome}</td>
             <td>${contato.departamento}</td>
             <td>${contato.ramal}</td>
-            <td><button onclicl="removerContato(${index})">Remover</>button</td>`;
+            <td><button onclick="removerContato(${index})">Remover</button></td>`;
         tabela.appendChild(tr);
     });
 }
@@ -70,7 +70,7 @@ contatosFiltrados.forEach((contato, index) => {
             <td>${contato.nome}</td>
             <td>${contato.departamento}</td>
             <td>${contato.ramal}</td>
-            <td><button onclicl="removerContato(${index})">Remover</>button</td>`;
+            <td><button onclick="removerContato(${index})">Remover</button></td>`;
         tabela.appendChild(tr);
 });
 }
