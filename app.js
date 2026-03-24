@@ -45,8 +45,19 @@ function exibirContatos() {
     });
 }
 
+// Função que remove um contato
 function removerContato(index) {
     contatosStorage.splice(index, 1);
     localStorage.setItem("contatos", JSON.stringify(contatosStorage));
     exibirContatos();
 }
+
+// Função para filtrar contatos
+function filtrarContatos() {
+    const termoBusca = document.getElementById('buscar').value.toLowerCase();
+    const contatosFiltrados = contatosStorage.filter(contato => {
+        return
+        contato.nome.toLowerCase().includes(termoBusca) || contato.departamento.toLowerCase().includes(termoBusca);
+    });
+}
+
