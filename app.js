@@ -21,6 +21,16 @@ const novoContato = {
 function exibirContatos() {
     const tabela = document.getElementById('tabelaContatos').getElementsByTagName('tbody')[0];
     tabela.innerHTML = ''; // Limpa a tabela antes de preencher
+    
+    contatosStorage.forEach((contato, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+        <td>${contato.nome}</td>
+        <td>${contato.departamento}</td>
+        <td>${contato.ramal}</td>
+        <td><button onclicl="removerContato(${index})">Remover</>button</td>`;
+        tabela.appendChild(tr);
+    });
 }
 
 function removerContato(index) {
