@@ -35,3 +35,8 @@ h2 {
     font-size: 2em;
     margin-bottom: 20px;
 }
+
+form label, table th {
+    font-size: 1.1em;
+    margin-top: 10px;
+}
