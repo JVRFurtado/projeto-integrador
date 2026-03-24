@@ -3,7 +3,6 @@ const contatosStorage = JSON.parse(localStorage.getItem("contatos")) || [];
 
 document.getElementById('formCadastro').addEventListener('submit', function(e) {
     e.preventDefault(); // Impede o recarregamento da página
-});
 
 // Coleta dados do formulário
 const nome = document.getElementById('nome').value;
@@ -26,6 +25,10 @@ document.getElementById('nome').value = '';
 document.getElementById('departamento').value = '';
 document.getElementById('ramal').value = '';
 
+// Atualiza a tabela
+exibirContatos();
+});
+
 // Função para exibir os contatos na tabela
 function exibirContatos() {
     const tabela = document.getElementById('tabelaContatos').getElementsByTagName('tbody')[0];
@@ -34,10 +37,10 @@ function exibirContatos() {
     contatosStorage.forEach((contato, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-        <td>${contato.nome}</td>
-        <td>${contato.departamento}</td>
-        <td>${contato.ramal}</td>
-        <td><button onclicl="removerContato(${index})">Remover</>button</td>`;
+            <td>${contato.nome}</td>
+            <td>${contato.departamento}</td>
+            <td>${contato.ramal}</td>
+            <td><button onclicl="removerContato(${index})">Remover</>button</td>`;
         tabela.appendChild(tr);
     });
 }
