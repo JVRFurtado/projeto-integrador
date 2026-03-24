@@ -17,6 +17,10 @@ const novoContato = {
     ramal,
 };
 
+// Adiciona o novo contato ao armazenamento
+contatosStorage.push(novoContato);
+localStorage.setItem("contatos", JSON.stringify(contatosStorage));
+
 // Função para exibir os contatos na tabela
 function exibirContatos() {
     const tabela = document.getElementById('tabelaContatos').getElementsByTagName('tbody')[0];
