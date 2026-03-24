@@ -46,5 +46,7 @@ function exibirContatos() {
 }
 
 function removerContato(index) {
-    
+    contatosStorage.splice(index, 1);
+    localStorage.setItem("contatos", JSON.stringify(contatosStorage));
+    exibirContatos();
 }
