@@ -48,3 +48,14 @@ input, button {
     width: 100%;
     max-width: 300px;
 }
+
+button {
+    background-color: #005a87;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #00416d;
+}
