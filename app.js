@@ -21,6 +21,11 @@ const novoContato = {
 contatosStorage.push(novoContato);
 localStorage.setItem("contatos", JSON.stringify(contatosStorage));
 
+// Limpa campos do formulário
+document.getElementById('nome').value = '';
+document.getElementById('departamento').value = '';
+document.getElementById('ramal').value = '';
+
 // Função para exibir os contatos na tabela
 function exibirContatos() {
     const tabela = document.getElementById('tabelaContatos').getElementsByTagName('tbody')[0];
