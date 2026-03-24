@@ -15,3 +15,10 @@ body {
     width: 80%;
     margin: 0 auto;
 }
+
+header {
+    background-color: #005a87;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
