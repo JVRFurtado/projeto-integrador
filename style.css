@@ -10,3 +10,8 @@ body {
     color: #333;
     line-height: 1.6;
 }
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
