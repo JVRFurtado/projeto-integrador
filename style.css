@@ -71,3 +71,7 @@ table th, table td {
     text-align: left;
     border: 1px solid #ddd;
 }
+
+input[type="text"] {
+    margin-bottom: 20px;
+}
