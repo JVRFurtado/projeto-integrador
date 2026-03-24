@@ -59,5 +59,21 @@ function filtrarContatos() {
         return
         contato.nome.toLowerCase().includes(termoBusca) || contato.departamento.toLowerCase().includes(termoBusca);
     });
+
+// Exibe contatos filtrados
+const tabela = document.getElementById('tabelaContatos').getElementsByTagName('tbody')[0];
+tabela.innerHTML = '';
+
+contatosFiltrados.forEach((contato, index) => {
+    const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${contato.nome}</td>
+            <td>${contato.departamento}</td>
+            <td>${contato.ramal}</td>
+            <td><button onclicl="removerContato(${index})">Remover</>button</td>`;
+        tabela.appendChild(tr);
+});
 }
 
+// Exibe o contatos ao carregar a página
+exibirContatos();
