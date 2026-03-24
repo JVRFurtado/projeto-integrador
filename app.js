@@ -56,8 +56,7 @@ function removerContato(index) {
 function filtrarContatos() {
     const termoBusca = document.getElementById('buscar').value.toLowerCase();
     const contatosFiltrados = contatosStorage.filter(contato => {
-        return
-        contato.nome.toLowerCase().includes(termoBusca) || contato.departamento.toLowerCase().includes(termoBusca);
+        return contato.nome.toLowerCase().includes(termoBusca) || contato.departamento.toLowerCase().includes(termoBusca);
     });
 
 // Exibe contatos filtrados
