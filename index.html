@@ -2,6 +2,16 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <script>
+        const theme = localStorage.getItem("theme");
+
+         if (
+            theme === "dark" ||
+            (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+            document.documentElement.classList.add("dark");
+        }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda Corporativa Digital</title>
     <link rel="stylesheet" href="style.css">
