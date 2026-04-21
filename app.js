@@ -302,3 +302,55 @@ async function removerUsuario(id) {
     await apiFetch(`${API_URL}/usuarios/${id}`, { method: "DELETE" });
     carregarUsuarios();
 }
+
+/* ================= UI ================= */
+function mostrarAba(aba) {
+    abaContatos.style.display = aba === "contatos" ? "block" : "none";
+    abaUsuarios.style.display = aba === "usuarios" ? "block" : "none";
+}
+
+function logout() {
+    const theme = localStorage.getItem("theme");
+    const lang = localStorage.getItem("lang");
+
+    localStorage.clear();
+
+    if (theme) localStorage.setItem("theme", theme);
+    if (lang) localStorage.setItem("lang", lang);
+
+    location.reload();
+}
+
+/* ================= DARK MODE ================= */
+function aplicarTemaAutomatico() {
+    const saved = localStorage.getItem("theme");
+
+    const isDark =
+        saved === "dark" ||
+        (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+    if (isDark) {
+        document.documentElement.classList.add("dark");
+        themeToggle.checked = true; // 🔥 FIX
+    } else {
+        document.documentElement.classList.remove("dark");
+        themeToggle.checked = false; // 🔥 FIX
+    }
+
+    atualizarIconeTema();
+}
+
+themeToggle.onchange = () => {
+    const isDark = themeToggle.checked;
+
+    document.documentElement.classList.toggle("dark", isDark);
+
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+
+    atualizarIconeTema();
+};
+
+function atualizarIconeTema() {
+    themeIcon.innerText = themeToggle.checked ? "🌙" : "☀️";
+}
+
