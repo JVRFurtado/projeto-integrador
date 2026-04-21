@@ -398,3 +398,26 @@ function aplicarIdiomaAuto() {
     langSwitch.value = lang;
     aplicarIdioma(lang);
 }
+
+/* ================= FILTRAR ================= */
+function filtrarContatos() {
+    const termo = buscar.value.toLowerCase();
+
+    const filtrados = listaContatos.filter(c =>
+        c.nome.toLowerCase().includes(termo) ||
+        c.departamento.toLowerCase().includes(termo) ||
+        c.ramal.toLowerCase().includes(termo)
+    );
+
+    renderContatos(filtrados);
+}
+
+function filtrarUsuarios() {
+    const termo = buscarUsuarios.value.toLowerCase();
+
+    const filtrados = listaUsuarios.filter(u =>
+        u.nome.toLowerCase().includes(termo)
+    );
+
+    renderUsuarios(filtrados);
+}
