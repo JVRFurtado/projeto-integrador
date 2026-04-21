@@ -16,7 +16,7 @@ function alerta(msg) {
     const lang = localStorage.getItem("lang") || "pt";
     const translatedMsg = getTranslation(msg, lang);
     alert(translatedMsg);
-};
+}
 
 /* ================= LOGIN ================= */
 loginForm.onsubmit = async (e) => {
@@ -128,4 +128,102 @@ async function refreshToken() {
     const data = await res.json();
     token = data.access_token;
     localStorage.setItem("token", token);
+}
+
+/* ================= CONTATOS ================= */
+formCadastro.onsubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("nome", nome.value);
+    formData.append("departamento", departamento.value);
+    formData.append("ramal", ramal.value);
+
+    await apiFetch(`${API_URL}/pessoas/`, {
+        method: "POST",
+        body: formData
+    });
+
+    nome.value = "";
+    departamento.value = "";
+    ramal.value = "";
+
+    exibirContatos();
+};
+
+async function exibirContatos() {
+    const res = await apiFetch(`${API_URL}/pessoas/`);
+    listaContatos = await res.json();
+    renderContatos(listaContatos);
+}
+
+function renderContatos(lista) {
+    tabelaContatos.innerHTML = "";
+
+    lista.forEach(c => {
+
+        if (editandoContato === c.id && role === "admin") {
+
+            tabelaContatos.innerHTML += `
+                <tr>
+                    <td><input value="${c.nome}" id="c-nome-${c.id}"></td>
+                    <td><input value="${c.departamento}" id="c-dep-${c.id}"></td>
+                    <td><input value="${c.ramal}" id="c-ramal-${c.id}"></td>
+                    <td>
+                        <button onclick="salvarContato(${c.id})">💾</button>
+                        <button onclick="cancelarEdicao()">❌</button>
+                    </td>
+                </tr>
+            `;
+
+        } else {
+
+            tabelaContatos.innerHTML += `
+                <tr>
+                    <td>${c.nome}</td>
+                    <td>${c.departamento}</td>
+                    <td>${c.ramal}</td>
+
+                    ${role === "admin" ? `
+                    <td>
+                        <button onclick="editarContato(${c.id})">✏️</button>
+                        <button onclick="removerContato(${c.id})">🗑️</button>
+                    </td>
+                    ` : ""}
+                </tr>
+            `;
+        }
+    });
+}
+
+function editarContato(id) {
+    editandoContato = id;
+    renderContatos(listaContatos);
+}
+
+function cancelarEdicao() {
+    editandoContato = null;
+    renderContatos(listaContatos);
+}
+
+async function salvarContato(id) {
+
+    const nome = document.getElementById(`c-nome-${id}`).value;
+    const departamento = document.getElementById(`c-dep-${id}`).value;
+    const ramal = document.getElementById(`c-ramal-${id}`).value;
+
+    await apiFetch(`${API_URL}/pessoas/${id}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ nome, departamento, ramal })
+    });
+
+    editandoContato = null;
+    exibirContatos();
+}
+
+async function removerContato(id) {
+    if (!confirm("Excluir?")) return;
+    await apiFetch(`${API_URL}/pessoas/${id}`, { method: "DELETE" });
+    exibirContatos();
 }
