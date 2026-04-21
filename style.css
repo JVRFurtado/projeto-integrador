@@ -203,3 +203,43 @@ footer {
     text-align: center;
     padding: 10px;
 }
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    header h1 {
+        text-align: center;
+    }
+
+    .top-controls {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .lang-minimal {
+        order: 1;
+    }
+
+    .theme-control {
+        order: 2;
+    }
+
+    .tabs {
+        flex-direction: column;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    input, select, button {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
