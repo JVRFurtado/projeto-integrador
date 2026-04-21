@@ -76,13 +76,38 @@
                 </table>
             </div>
         </div>
-
+        <div id="abaUsuarios" class="card" style="display:none;">
+            <h2 data-i18n="users">Usuários</h2>
+            <div class="form-grid">
+                <input id="userNome" data-i18n="nameUser" placeholder="Usuário" required>
+                <input id="userSenha" type="password" data-i18n="password" placeholder="Senha" required>
+                <select id="userTipo">
+                    <option value="padrao" data-i18n="standard">Padrão</option>
+                    <option value="admin" data-i18n="admin">Admin</option>
+                </select>
+                <button onclick="criarUsuario()" data-i18n="create">Criar</button>
+            </div>
+            <input id="buscarUsuarios" data-i18n="searchUsers" placeholder="Buscar usuário..." oninput="filtrarUsuarios()">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-i18n="nameUser">Nome do Usuário</th>
+                            <th data-i18n="type">Tipo</th>
+                            <th data-i18n="password">Senha</th>
+                            <th id="colAcoesUsuarios" data-i18n="actions">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaUsuarios"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
     <footer>
         <div class="container">
             <p>2026 - Projeto Integrador I - Univesp</p>
         </div>
     </footer>
-
     <script src="app.js"></script>
 </body>
 </html>
