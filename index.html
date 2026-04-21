@@ -18,8 +18,23 @@
 </head>
 <body>
     <header>
-        <div class="container">
-            <h1>Agenda Corporativa Digital</h1>
+        <h1 data-i18n="title">Agenda Corporativa</h1>
+        <div class="top-controls">
+            <select id="langSwitch" class="lang-minimal">
+                <option value="pt">PT</option>
+                <option value="en">EN</option>
+                <option value="es">ES</option>
+                <option value="fr">FR</option>
+                <option value="de">DE</option>
+                <option value="it">IT</option>
+            </select>
+            <div class="theme-control">
+                <span id="themeIcon">🌙</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span></span>
+                </label>
+            </div>
         </div>
     </header>
 
