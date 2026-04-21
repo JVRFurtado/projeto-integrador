@@ -1,89 +1,126 @@
 /* REMOVE SCROLL LATERAL */
 html, body {
-  overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 /* VARIÁVEIS */
 :root {
-  --bg: #eef2f7;
-  --card: #ffffff;
-  --text: #333;
-  --primary: #0077b6;
-  --border: #dcdcdc;
+    --bg: #eef2f7;
+    --card: #ffffff;
+    --text: #333;
+    --primary: #0077b6;
+    --border: #dcdcdc;
 }
 
 html.dark {
-  --bg: #121212;
-  --card: #1e1e1e;
-  --text: #f1f1f1;
-  --primary: #4dabf7;
-  --border: #333;
+    --bg: #121212;
+    --card: #1e1e1e;
+    --text: #f1f1f1;
+    --primary: #4dabf7;
+    --border: #333;
 }
 
 /* BASE */
 body {
-  margin: 0;
-  font-family: "Segoe UI", sans-serif;
-  background: var(--bg);
-  color: var(--text);
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
 
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 #dashboard {
-  flex: 1;
+    flex: 1;
 }
 
 /* HEADER */
 header {
-  background: var(--primary);
-  color: white;
-  padding: 15px;
+    background: var(--primary);
+    color: white;
+    padding: 15px;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* CONTROLES */
 .top-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .theme-control {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
 }
 
 /* ÍCONE */
 #themeIcon {
-  font-size: 16px;
+    font-size: 16px;
 }
 
 /* LANG */
 .lang-minimal {
-  background: transparent;
-  border: none;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
+    background: transparent;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .lang-minimal option {
-  color: var(--text);
-  background: var(--card);
+    color: var(--text);
+    background: var(--card);
 }
 
 /* LOGIN CENTRAL */
 .login-wrapper {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* CARD */
+.card {
+    background: var(--card);
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 320px;
+}
+
+/* FORM */
+input, select {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+}
+
+button {
+    padding: 10px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
