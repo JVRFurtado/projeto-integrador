@@ -41,51 +41,41 @@
         <div class="card login-card">
             <h2 data-i18n="login">Login</h2>
             <form id="loginForm">
-                <input id="username" data-i18n="user" placeholder="Usuário" required>
+                <input id="username" data-i18n="nameUser" placeholder="Usuário" required>
                 <input id="password" type="password" data-i18n="password" placeholder="Senha" required>
                 <button data-i18n="enter">Entrar</button>
             </form>
         </div>
     </section>
-    <main>
-        <section class="formulario">
-            <div class="container">
-                <h2>Cadastro de Contato</h2>
-                <form id="formCadastro">
-                    <label for="nome">Nome:</label>
-                    <input type="text" id="nome" required>
-
-                    <label for="departamento">Departamento:</label>
-                    <input type="text" id="departamento" required>
-
-                    <label for="ramal">Ramal:</label>
-                    <input type="text" id="ramal" required>
-
-                    <button type="submit">Cadastrar</button>
-                </form>
-            </div>
-        </section>
-
-        <section class="consulta">
-            <div class="container">
-                <h2>Consulta de Contatos</h2>
-                <input type="text" id="buscar" placeholder="Pesquisar por nome ou departamento" oninput="filtrarContatos()">
-                <table id="tabelaContatos">
+    <section id="dashboard" style="display:none;">
+        <div class="tabs">
+            <button onclick="mostrarAba('contatos')" id="btnContatos" data-i18n="contacts">Contatos</button>
+            <button onclick="mostrarAba('usuarios')" id="btnUsuarios" data-i18n="users">Usuários</button>
+            <button onclick="logout()" data-i18n="logout">Sair</button>
+        </div>
+        <div id="abaContatos" class="card">
+            <h2 data-i18n="contacts">Contatos</h2>
+            <form id="formCadastro" class="form-grid">
+                <input id="nome" data-i18n="name" placeholder="Nome" required>
+                <input id="departamento" data-i18n="department" placeholder="Departamento" required>
+                <input id="ramal" data-i18n="extension" placeholder="Ramal" required>
+                <button data-i18n="save">Salvar</button>
+            </form>
+            <input id="buscar" data-i18n="search" placeholder="Buscar..." oninput="filtrarContatos()">
+            <div class="table-container">
+                <table>
                     <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>Departamentos</th>
-                            <th>Ramal</th>
-                            <th>Ações</th>
+                            <th data-i18n="name">Nome</th>
+                            <th data-i18n="department">Departamento</th>
+                            <th data-i18n="extension">Ramal</th>
+                            <th id="colAcoes" data-i18n="actions">Ações</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Contatos serão listados aqui -->
-                    </tbody>
+                    <tbody id="tabelaContatos"></tbody>
                 </table>
             </div>
-        </section>
-    </main>
+        </div>
 
     <footer>
         <div class="container">
