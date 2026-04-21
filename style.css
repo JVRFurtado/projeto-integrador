@@ -46,3 +46,44 @@ header {
   justify-content: space-between;
   align-items: center;
 }
+
+/* CONTROLES */
+.top-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ÍCONE */
+#themeIcon {
+  font-size: 16px;
+}
+
+/* LANG */
+.lang-minimal {
+  background: transparent;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.lang-minimal option {
+  color: var(--text);
+  background: var(--card);
+}
+
+/* LOGIN CENTRAL */
+.login-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
