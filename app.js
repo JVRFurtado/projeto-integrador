@@ -227,3 +227,78 @@ async function removerContato(id) {
     await apiFetch(`${API_URL}/pessoas/${id}`, { method: "DELETE" });
     exibirContatos();
 }
+
+/* ================= USUÁRIOS ================= */
+async function carregarUsuarios() {
+    const res = await apiFetch(`${API_URL}/usuarios/`);
+    listaUsuarios = await res.json();
+    renderUsuarios(listaUsuarios);
+}
+
+function renderUsuarios(lista) {
+    tabelaUsuarios.innerHTML = "";
+
+    lista.forEach(u => {
+        const podeEditarSenha =
+            u.nome === currentUser || u.aotipousuario !== "admin";
+
+        tabelaUsuarios.innerHTML += `
+            <tr>
+                <td>${u.nome}</td>
+                <td>${u.aotipousuario}</td>
+                <td>
+                    ${podeEditarSenha
+                        ? `<input type="password" id="senha-${u.id}" data-i18n="newPass" placeholder="Nova senha">`
+                        : "🔒"}
+                </td>
+                <td>
+                    <button onclick="salvarUsuario(${u.id})">💾</button>
+                    <button onclick="removerUsuario(${u.id})">🗑️</button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+async function criarUsuario() {
+    if (userNome.value.length <= 0 || null)
+        return alerta("validName");
+
+    if (userSenha.value.length < 6)
+        return alerta("minLength");
+
+    await apiFetch(`${API_URL}/usuarios/`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            nome: userNome.value,
+            senha: userSenha.value,
+            tipo: userTipo.value
+        })
+    });
+
+    userNome.value = "";
+    userSenha.value = "";
+
+    carregarUsuarios();
+}
+
+async function salvarUsuario(id) {
+    const senha = document.getElementById(`senha-${id}`)?.value;
+
+    await apiFetch(`${API_URL}/usuarios/${id}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            senha: senha || undefined
+        })
+    });
+
+    carregarUsuarios();
+}
+
+async function removerUsuario(id) {
+    if (!confirm("Excluir?")) return;
+    await apiFetch(`${API_URL}/usuarios/${id}`, { method: "DELETE" });
+    carregarUsuarios();
+}
