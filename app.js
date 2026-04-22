@@ -23,13 +23,21 @@ loginForm.onsubmit = async (e) => {
     e.preventDefault();
 
     try {
+        const formData = new URLSearchParams();
+        formData.append("username", username.value);
+        formData.append("password", password.value);
+
         const res = await fetch(`${API_URL}/token`, {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `username=${username.value}&password=${password.value}`
+            body: formData
         });
 
-        if (!res.ok) return alerta("loginInvalid");
+        if (!res.ok) {
+            const err = await res.text();
+            console.error("ERRO LOGIN:", err);
+            return alerta("loginInvalid");
+        }
 
         const data = await res.json();
 
@@ -41,7 +49,8 @@ loginForm.onsubmit = async (e) => {
 
         await carregarUsuario();
 
-    } catch {
+    } catch (e) {
+        console.error("ERRO FETCH LOGIN:", e);
         alerta("serverOffline");
     }
 };
@@ -105,22 +114,27 @@ async function apiFetch(url, options = {}) {
 
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
+            console.error("API ERROR:", err);
             alerta(err.detail || "genericError");
         }
 
         return res;
 
-    } catch {
+    } catch (e) {
+        console.error("API FETCH ERROR:", e);
         alerta("connectionError");
         logout();
     }
 }
 
 async function refreshToken() {
+    const formData = new URLSearchParams();
+    formData.append("token", refresh);
+
     const res = await fetch(`${API_URL}/refresh`, {
         method: "POST",
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body: `token=${refresh}`
+        body: formData
     });
 
     if (!res.ok) return logout();
