@@ -1,4 +1,4 @@
-const API_URL = "";
+const API_URL = "https://projeto-integrador-back-production.up.railway.app/";
 
 let token = localStorage.getItem("token");
 let refresh = localStorage.getItem("refresh");
