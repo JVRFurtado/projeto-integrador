@@ -9,7 +9,6 @@ let listaContatos = [];
 let listaUsuarios = [];
 
 let editandoContato = null;
-let editandoUsuario = null;
 
 /* ================= ALERT ================= */
 function alerta(msg) {
