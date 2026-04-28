@@ -1,4 +1,4 @@
-const API_URL = "https://mindful-consideration-production-f667.up.railway.app";
+const API_URL = "projeto-integrador-back-production.up.railway.app";
 
 let token = localStorage.getItem("token");
 let refresh = localStorage.getItem("refresh");
