@@ -378,25 +378,25 @@ function renderUsuarios(lista) {
 }
 
 async function criarUsuario() {
-    if (userNome.value.length <= 0 || null)
-        return alerta("validName");
-
-    if (userSenha.value.length < 6)
-        return alerta("minLength");
 
     await apiFetch(
-    `${API_URL}/usuarios/`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            nome: userNome.value,
-            senha: userSenha.value,
-            tipo: userTipo.value
-        })
-    });
+        `${API_URL}/usuarios/`,
+        {
+            method: "POST",
 
-    userNome.value = "";
-    userSenha.value = "";
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                nome: userNome.value,
+                username: userUsername.value,
+                email: userEmail.value,
+                senha: userSenha.value,
+                tipo: userTipo.value
+            })
+        }
+    );
 
     carregarUsuarios();
 }
