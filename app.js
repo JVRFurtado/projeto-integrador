@@ -1,7 +1,7 @@
 const API_URL = "https://projeto-integrador-back-production.up.railway.app/";
 
 let token = localStorage.getItem("token");
-let refresh = localStorage.getItem("refresh");
+let refresh = null;
 let role = "";
 let currentUser = "";
 
@@ -21,36 +21,45 @@ function alerta(msg) {
 /* ================= LOGIN ================= */
 loginForm.onsubmit = async (e) => {
     e.preventDefault();
-
     try {
         const formData = new URLSearchParams();
-        formData.append("username", username.value);
-        formData.append("password", password.value);
+        formData.append(
+            "username",
+            username.value
+        );
 
-        const res = await fetch(`${API_URL}/token`, {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: formData
-        });
+        formData.append(
+            "password",
+            password.value
+        );
+
+        const res = await fetch(
+            `${API_URL}/auth/login`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                    "application/x-www-form-urlencoded"
+                },
+                body: formData
+            }
+        );
 
         if (!res.ok) {
-            const err = await res.text();
-            console.error("ERRO LOGIN:", err);
-            return alerta("loginInvalid");
+            alerta("loginInvalid");
+            return;
         }
 
         const data = await res.json();
-
         token = data.access_token;
-        refresh = data.refresh_token;
-
-        localStorage.setItem("token", token);
-        localStorage.setItem("refresh", refresh);
-
+        localStorage.setItem(
+            "token",
+            token
+        );
         await carregarUsuario();
-
+        
     } catch (e) {
-        console.error("ERRO FETCH LOGIN:", e);
+        console.error(e);
         alerta("serverOffline");
     }
 };
@@ -71,12 +80,12 @@ window.onload = async () => {
 
 /* ================= USER ================= */
 async function carregarUsuario() {
-    const res = await apiFetch(`${API_URL}/users/me`);
+    const res = await apiFetch(
+        `${API_URL}/users/me`
+    );
     const user = await res.json();
-
     role = user.role;
     currentUser = user.nome;
-
     entrarSistema();
 }
 
@@ -84,7 +93,10 @@ function entrarSistema() {
     loginSection.style.display = "none";
     dashboard.style.display = "block";
 
-    if (role !== "admin") {
+    if (
+        role !== "admin" &&
+        role !== "gestor"
+    ) {
         btnUsuarios.style.display = "none";
         btnContatos.style.display = "none";
         formCadastro.style.display = "none";
@@ -97,76 +109,69 @@ function entrarSistema() {
 }
 
 /* ================= API ================= */
-async function apiFetch(url, options = {}) {
+async function apiFetch(
+    url,
+    options = {}
+) {
+
     try {
-        let res = await fetch(url, {
+        const res = await fetch(url, {
             ...options,
             headers: {
                 ...(options.headers || {}),
-                Authorization: `Bearer ${token}`
+                Authorization:
+                `Bearer ${token}`
             }
         });
 
-        if (res.status === 401 && refresh) {
-            await refreshToken();
-            return apiFetch(url, options);
+        if (res.status === 401) {
+            logout();
+            return;
         }
 
         if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            console.error("API ERROR:", err);
-            alerta(err.detail || "genericError");
+            const err = await res.json()
+            .catch(() => ({}));
+            console.error(err);
+            alerta(
+                err.detail || "genericError"
+            );
         }
-
         return res;
-
     } catch (e) {
-        console.error("API FETCH ERROR:", e);
+        console.error(e);
         alerta("connectionError");
-        logout();
     }
-}
-
-async function refreshToken() {
-    const formData = new URLSearchParams();
-    formData.append("token", refresh);
-
-    const res = await fetch(`${API_URL}/refresh`, {
-        method: "POST",
-        headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body: formData
-    });
-
-    if (!res.ok) return logout();
-
-    const data = await res.json();
-    token = data.access_token;
-    localStorage.setItem("token", token);
 }
 
 /* ================= CONTATOS ================= */
 formCadastro.onsubmit = async (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("nome", nome.value);
-    formData.append("departamento", departamento.value);
-    formData.append("ramal", ramal.value);
-
-    await apiFetch(`${API_URL}/pessoas/`, {
-        method: "POST",
-        body: formData
-    });
-
+    await apiFetch(
+        `${API_URL}/pessoas/`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type":
+                "application/json"
+            },
+            body: JSON.stringify({
+                nome: nome.value,
+                departamento: departamento.value,
+                ramal: ramal.value
+            })
+        }
+    );
     nome.value = "";
     departamento.value = "";
     ramal.value = "";
-
     exibirContatos();
 };
 
 async function exibirContatos() {
-    const res = await apiFetch(`${API_URL}/pessoas/`);
+    const res = await apiFetch(
+        `${API_URL}/pessoas/`
+    );
     listaContatos = await res.json();
     renderContatos(listaContatos);
 }
@@ -254,7 +259,7 @@ function renderUsuarios(lista) {
 
     lista.forEach(u => {
         const podeEditarSenha =
-            u.nome === currentUser || u.aotipousuario !== "admin";
+            u.nome || u.txnome === currentUser || u.aotipousuario !== "admin";
 
         tabelaUsuarios.innerHTML += `
             <tr>
@@ -281,7 +286,8 @@ async function criarUsuario() {
     if (userSenha.value.length < 6)
         return alerta("minLength");
 
-    await apiFetch(`${API_URL}/usuarios/`, {
+    await apiFetch(
+    `${API_URL}/usuarios/`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
@@ -434,7 +440,8 @@ function filtrarUsuarios() {
     const termo = buscarUsuarios.value.toLowerCase();
 
     const filtrados = listaUsuarios.filter(u =>
-        u.nome.toLowerCase().includes(termo)
+        (u.nome || u.txnome)
+        .toLowerCase().includes(termo)
     );
 
     renderUsuarios(filtrados);
