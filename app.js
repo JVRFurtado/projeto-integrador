@@ -1,7 +1,44 @@
-const API_URL = "https://projeto-integrador-back-production.up.railway.app/";
+const API_URL = "https://projeto-integrador-back-production.up.railway.app";
+
+const loginForm = document.getElementById("loginForm");
+const formCadastro = document.getElementById("formCadastro");
+
+const dashboard = document.getElementById("dashboard");
+const loginSection = document.getElementById("loginSection");
+
+const btnUsuarios = document.getElementById("btnUsuarios");
+const btnContatos = document.getElementById("btnContatos");
+
+const tabelaContatos = document.getElementById("tabelaContatos");
+const tabelaUsuarios = document.getElementById("tabelaUsuarios");
+
+const colAcoes = document.getElementById("colAcoes");
+
+const nome = document.getElementById("nome");
+const departamento = document.getElementById("departamento");
+const ramal = document.getElementById("ramal");
+
+const username = document.getElementById("username");
+const password = document.getElementById("password");
+
+const userNome = document.getElementById("userNome");
+const userSenha = document.getElementById("userSenha");
+const userTipo = document.getElementById("userTipo");
+
+const abaContatos = document.getElementById("abaContatos");
+const abaUsuarios = document.getElementById("abaUsuarios");
+
+const buscar = document.getElementById("buscar");
+const buscarUsuarios = document.getElementById("buscarUsuarios");
+
+const tipoFiltro = document.getElementById("tipoFiltro");
+
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon = document.getElementById("themeIcon");
+
+const langSwitch = document.getElementById("langSwitch");
 
 let token = localStorage.getItem("token");
-let refresh = null;
 let role = "";
 let currentUser = "";
 
