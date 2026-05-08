@@ -34,6 +34,9 @@
                     <input type="checkbox" id="themeToggle">
                     <span></span>
                 </label>
+            <button id="logoutBtn" class="logout-btn" onclick="logout()" data-i18n="logout">
+                Sair
+            </button>
             </div>
         </div>
     </header>
@@ -51,7 +54,6 @@
         <div class="tabs">
             <button onclick="mostrarAba('contatos')" id="btnContatos" data-i18n="contacts">Contatos</button>
             <button onclick="mostrarAba('usuarios')" id="btnUsuarios" data-i18n="users">Usuários</button>
-            <button onclick="logout()" data-i18n="logout">Sair</button>
         </div>
         <div id="abaContatos" class="card">
             <h2 data-i18n="contacts">Contatos</h2>
@@ -61,14 +63,31 @@
                 <input id="ramal" data-i18n="extension" placeholder="Ramal" required>
                 <button data-i18n="save">Salvar</button>
             </form>
-            <input id="buscar" data-i18n="search" placeholder="Buscar..." oninput="filtrarContatos()">
+            <div class="filter-wrapper">
+                <label for="buscar" data-i18n="filter">Filtrar</label>
+
+                <div class="filter-controls">
+                    <select id="tipoFiltro" onchange="filtrarContatos()">
+                        <option value="nome">Contato</option>
+                        <option value="departamento">Departamento</option>
+                        <option value="ramal">Ramal</option>
+                    </select>
+
+                    <input
+                        id="buscar"
+                        data-i18n="search"
+                        placeholder="Buscar..."
+                        oninput="filtrarContatos()"
+                    >
+                </div>
+            </div>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th data-i18n="name">Nome</th>
-                            <th data-i18n="department">Departamento</th>
                             <th data-i18n="extension">Ramal</th>
+                            <th data-i18n="department">Departamento</th>
+                            <th data-i18n="responsible">Responsável</th>
                             <th id="colAcoes" data-i18n="actions">Ações</th>
                         </tr>
                     </thead>
