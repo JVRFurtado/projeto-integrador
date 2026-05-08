@@ -214,20 +214,47 @@ async function exibirContatos() {
 }
 
 function renderContatos(lista) {
+
     tabelaContatos.innerHTML = "";
 
     lista.forEach(c => {
 
-        if (editandoContato === c.id && role === "admin") {
+        if (
+            editandoContato === c.id &&
+            role === "admin"
+        ) {
 
             tabelaContatos.innerHTML += `
                 <tr>
-                    <td><input value="${c.ramal}" id="c-ramal-${c.id}"></td>
-                    <td><input value="${c.departamento}" id="c-dep-${c.id}"></td>
-                    <td><input value="${c.nome}" id="c-nome-${c.id}"></td>
                     <td>
-                        <button onclick="salvarContato(${c.id})">💾</button>
-                        <button onclick="cancelarEdicao()">❌</button>
+                        <input
+                            value="${c.ramal}"
+                            id="c-ramal-${c.id}"
+                        >
+                    </td>
+
+                    <td>
+                        <input
+                            value="${c.departamento}"
+                            id="c-dep-${c.id}"
+                        >
+                    </td>
+
+                    <td>
+                        <input
+                            value="${c.nome}"
+                            id="c-nome-${c.id}"
+                        >
+                    </td>
+
+                    <td>
+                        <button onclick="salvarContato(${c.id})">
+                            💾
+                        </button>
+
+                        <button onclick="cancelarEdicao()">
+                            ❌
+                        </button>
                     </td>
                 </tr>
             `;
@@ -240,12 +267,20 @@ function renderContatos(lista) {
                     <td>${c.departamento}</td>
                     <td>${c.nome}</td>
 
-                    ${role === "admin" ? `
-                    <td>
-                        <button onclick="editarContato(${c.id})">✏️</button>
-                        <button onclick="removerContato(${c.id})">🗑️</button>
-                    </td>
-                    ` : ""}
+                    ${role === "admin"
+                        ? `
+                        <td>
+                            <button onclick="editarContato(${c.id})">
+                                ✏️
+                            </button>
+
+                            <button onclick="removerContato(${c.id})">
+                                🗑️
+                            </button>
+                        </td>
+                        `
+                        : ""
+                    }
                 </tr>
             `;
         }
@@ -253,28 +288,54 @@ function renderContatos(lista) {
 }
 
 function editarContato(id) {
+
     editandoContato = id;
+
     renderContatos(listaContatos);
 }
 
+
 function cancelarEdicao() {
+
     editandoContato = null;
+
     renderContatos(listaContatos);
 }
+
 
 async function salvarContato(id) {
 
-    const nome = document.getElementById(`c-nome-${id}`).value;
-    const departamento = document.getElementById(`c-dep-${id}`).value;
-    const ramal = document.getElementById(`c-ramal-${id}`).value;
+    const nome = document.getElementById(
+        `c-nome-${id}`
+    ).value;
 
-    await apiFetch(`${API_URL}/pessoas/${id}`, {
-        method: "PUT",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ nome, departamento, ramal })
-    });
+    const departamento = document.getElementById(
+        `c-dep-${id}`
+    ).value;
+
+    const ramal = document.getElementById(
+        `c-ramal-${id}`
+    ).value;
+
+    await apiFetch(
+        `${API_URL}/pessoas/${id}`,
+        {
+            method: "PUT",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                nome,
+                departamento,
+                ramal
+            })
+        }
+    );
 
     editandoContato = null;
+
     exibirContatos();
 }
 
@@ -388,10 +449,10 @@ function aplicarTemaAutomatico() {
 
     if (isDark) {
         document.documentElement.classList.add("dark");
-        themeToggle.checked = true; // 🔥 FIX
+        themeToggle.checked = true;
     } else {
         document.documentElement.classList.remove("dark");
-        themeToggle.checked = false; // 🔥 FIX
+        themeToggle.checked = false;
     }
 
     atualizarIconeTema();
