@@ -180,9 +180,9 @@ function renderContatos(lista) {
 
             tabelaContatos.innerHTML += `
                 <tr>
-                    <td><input value="${c.nome}" id="c-nome-${c.id}"></td>
-                    <td><input value="${c.departamento}" id="c-dep-${c.id}"></td>
                     <td><input value="${c.ramal}" id="c-ramal-${c.id}"></td>
+                    <td><input value="${c.departamento}" id="c-dep-${c.id}"></td>
+                    <td><input value="${c.nome}" id="c-nome-${c.id}"></td>
                     <td>
                         <button onclick="salvarContato(${c.id})">💾</button>
                         <button onclick="cancelarEdicao()">❌</button>
@@ -194,9 +194,9 @@ function renderContatos(lista) {
 
             tabelaContatos.innerHTML += `
                 <tr>
-                    <td>${c.nome}</td>
-                    <td>${c.departamento}</td>
                     <td>${c.ramal}</td>
+                    <td>${c.departamento}</td>
+                    <td>${c.nome}</td>
 
                     ${role === "admin" ? `
                     <td>
@@ -370,12 +370,12 @@ function atualizarIconeTema() {
 
 /* ================= I18N ================= */
 const i18n = {
-    "pt": { "title":"Agenda Corporativa", "login":"Iniciar sessão", "enter":"Entrar", "contacts":"Contatos", "users":"Usuários", "password":"Senha", "logout":"Sair", "save":"Salvar", "create":"Criar", "name":"Nome", "department":"Departamento", "extension":"Ramal", "actions":"Ações", "search":"Buscar...", "searchUsers":"Buscar usuário...", "nameUser":"Nome de usuário", "standard":"Padrão", "admin":"Admin", "newPass":"Nova senha", "type":"Tipo", "validName":"Adicione um nome de usuário válido", "minLength":"Senha deve ter no mínimo 6 caracteres", "loginInvalid":"Login inválido", "serverOffline":"Servidor offline", "connectionError":"Erro de conexão com servidor", "genericError":"Erro", },
-    "en": { "title":"Corporate Directory", "login":"Login", "enter":"Login", "contacts":"Contacts", "users":"Users", "password":"Password", "logout":"Logout", "save":"Save", "create":"Create", "name":"Name", "department":"Department", "extension":"Extension", "actions":"Actions", "search":"Search...", "searchUsers":"Search for users...", "nameUser":"Username", "standard":"Standard", "admin":"Admin", "newPass":"New password", "type":"Role", "validName":"Please provide a valid username", "minLength":"Password must be at least 6 characters", "loginInvalid":"Invalid login", "serverOffline":"Server offline", "connectionError":"Server connection error", "genericError":"Error", },
-    "es": { "title":"Directorio Corporativo", "login":"Iniciar sesión", "enter":"Entrar", "contacts":"Contactos", "users":"Usuarios", "password":"Contraseña", "logout":"Cerrar sesión", "save":"Guardar", "create":"Crear", "name":"Nombre", "department":"Departamento", "extension":"Extensión", "actions":"Acciones", "search":"Buscar...", "searchUsers":"Buscar usuario...", "nameUser":"Nombre de usuario", "standard":"Estándar", "admin":"Administrador", "newPass":"Nueva contraseña", "type":"Rol", "validName":"Por favor, ingresa un nombre de usuario válido", "minLength":"La contraseña debe tener al menos 6 caracteres", "loginInvalid":"Inicio de sesión inválido", "serverOffline":"Servidor fuera de línea", "connectionError":"Error de conexión con el servidor", "genericError":"Error" },
-    "fr": { "title":"Annuaire d'entreprise", "login":"Se connecter", "enter":"Entrer", "contacts":"Contacts", "users":"Utilisateurs", "password":"Mot de passe", "logout":"Se déconnecter", "save":"Sauvegarder", "create":"Créer", "name":"Nom", "department":"Département", "extension":"Poste", "actions":"Actions", "search":"Rechercher...", "searchUsers":"Rechercher un utilisateur...", "nameUser":"Nom d'utilisateur", "standard":"Standard", "admin":"Administrateur", "newPass":"Nouveau mot de passe", "type":"Rôle", "validName":"Veuillez fournir un nom d'utilisateur valide", "minLength":"Le mot de passe doit contenir au moins 6 caractères", "loginInvalid":"Connexion invalide", "serverOffline":"Serveur hors ligne", "connectionError":"Erreur de connexion au serveur", "genericError":"Erreur" },
-    "de": { "title":"Firmenverzeichnis", "login":"Anmelden", "enter":"Einloggen", "contacts":"Kontakte", "users":"Benutzer", "password":"Passwort", "logout":"Abmelden", "save":"Speichern", "create":"Erstellen", "name":"Name", "department":"Abteilung", "extension":"Durchwahl", "actions":"Aktionen", "search":"Suchen...", "searchUsers":"Benutzer suchen...", "nameUser":"Benutzername", "standard":"Standard", "admin":"Administrator", "newPass":"Neues Passwort", "type":"Rolle", "validName":"Bitte geben Sie einen gültigen Benutzernamen ein", "minLength":"Das Passwort muss mindestens 6 Zeichen lang sein", "loginInvalid":"Ungültige Anmeldung", "serverOffline":"Server offline", "connectionError":"Serververbindungsfehler", "genericError":"Fehler" },
-    "it": { "title":"Rubrica Aziendale", "login":"Accedi", "enter":"Entra", "contacts":"Contatti", "users":"Utenti", "password":"Password", "logout":"Esci", "save":"Salva", "create":"Crea", "name":"Nome", "department":"Dipartimento", "extension":"Interno", "actions":"Azioni", "search":"Cerca...", "searchUsers":"Cerca utente...", "nameUser":"Nome utente", "standard":"Standard", "admin":"Amministratore", "newPass":"Nuova password", "type":"Ruolo", "validName":"Inserisci un nome utente valido", "minLength":"La password deve contenere almeno 6 caratteri", "loginInvalid":"Accesso non valido", "serverOffline":"Server offline", "connectionError":"Errore di connessione al server", "genericError":"Errore" }
+    "pt": { "title":"Agenda Corporativa", "login":"Iniciar sessão", "enter":"Entrar", "contacts":"Contatos", "users":"Usuários", "password":"Senha", "logout":"Sair", "save":"Salvar", "create":"Criar", "name":"Nome", "department":"Departamento", "extension":"Ramal", "actions":"Ações", "search":"Buscar...", "searchUsers":"Buscar usuário...", "nameUser":"Nome de usuário", "standard":"Padrão", "admin":"Admin", "newPass":"Nova senha", "type":"Tipo", "validName":"Adicione um nome de usuário válido", "minLength":"Senha deve ter no mínimo 6 caracteres", "loginInvalid":"Login inválido", "serverOffline":"Servidor offline", "connectionError":"Erro de conexão com servidor", "genericError":"Erro", "filter":"Filtrar","responsible":"Responsável" },
+    "en": { "title":"Corporate Directory", "login":"Login", "enter":"Login", "contacts":"Contacts", "users":"Users", "password":"Password", "logout":"Logout", "save":"Save", "create":"Create", "name":"Name", "department":"Department", "extension":"Extension", "actions":"Actions", "search":"Search...", "searchUsers":"Search for users...", "nameUser":"Username", "standard":"Standard", "admin":"Admin", "newPass":"New password", "type":"Role", "validName":"Please provide a valid username", "minLength":"Password must be at least 6 characters", "loginInvalid":"Invalid login", "serverOffline":"Server offline", "connectionError":"Server connection error", "genericError":"Error", "filter":"Filter", "responsible":"Responsible", },
+    "es": { "title":"Directorio Corporativo", "login":"Iniciar sesión", "enter":"Entrar", "contacts":"Contactos", "users":"Usuarios", "password":"Contraseña", "logout":"Cerrar sesión", "save":"Guardar", "create":"Crear", "name":"Nombre", "department":"Departamento", "extension":"Extensión", "actions":"Acciones", "search":"Buscar...", "searchUsers":"Buscar usuario...", "nameUser":"Nombre de usuario", "standard":"Estándar", "admin":"Administrador", "newPass":"Nueva contraseña", "type":"Rol", "validName":"Por favor, ingresa un nombre de usuario válido", "minLength":"La contraseña debe tener al menos 6 caracteres", "loginInvalid":"Inicio de sesión inválido", "serverOffline":"Servidor fuera de línea", "connectionError":"Error de conexión con el servidor", "genericError":"Error", "filter":"Filtro","responsible":"Responsable" },
+    "fr": { "title":"Annuaire d'entreprise", "login":"Se connecter", "enter":"Entrer", "contacts":"Contacts", "users":"Utilisateurs", "password":"Mot de passe", "logout":"Se déconnecter", "save":"Sauvegarder", "create":"Créer", "name":"Nom", "department":"Département", "extension":"Poste", "actions":"Actions", "search":"Rechercher...", "searchUsers":"Rechercher un utilisateur...", "nameUser":"Nom d'utilisateur", "standard":"Standard", "admin":"Administrateur", "newPass":"Nouveau mot de passe", "type":"Rôle", "validName":"Veuillez fournir un nom d'utilisateur valide", "minLength":"Le mot de passe doit contenir au moins 6 caractères", "loginInvalid":"Connexion invalide", "serverOffline":"Serveur hors ligne", "connectionError":"Erreur de connexion au serveur", "genericError":"Erreur", "filter":"Filtre","responsible":"Responsable" },
+    "de": { "title":"Firmenverzeichnis", "login":"Anmelden", "enter":"Einloggen", "contacts":"Kontakte", "users":"Benutzer", "password":"Passwort", "logout":"Abmelden", "save":"Speichern", "create":"Erstellen", "name":"Name", "department":"Abteilung", "extension":"Durchwahl", "actions":"Aktionen", "search":"Suchen...", "searchUsers":"Benutzer suchen...", "nameUser":"Benutzername", "standard":"Standard", "admin":"Administrator", "newPass":"Neues Passwort", "type":"Rolle", "validName":"Bitte geben Sie einen gültigen Benutzernamen ein", "minLength":"Das Passwort muss mindestens 6 Zeichen lang sein", "loginInvalid":"Ungültige Anmeldung", "serverOffline":"Server offline", "connectionError":"Serververbindungsfehler", "genericError":"Fehler", "filter":"Filter","responsible":"Verantwortlich" },
+    "it": { "title":"Rubrica Aziendale", "login":"Accedi", "enter":"Entra", "contacts":"Contatti", "users":"Utenti", "password":"Password", "logout":"Esci", "save":"Salva", "create":"Crea", "name":"Nome", "department":"Dipartimento", "extension":"Interno", "actions":"Azioni", "search":"Cerca...", "searchUsers":"Cerca utente...", "nameUser":"Nome utente", "standard":"Standard", "admin":"Amministratore", "newPass":"Nuova password", "type":"Ruolo", "validName":"Inserisci un nome utente valido", "minLength":"La password deve contenere almeno 6 caratteri", "loginInvalid":"Accesso non valido", "serverOffline":"Server offline", "connectionError":"Errore di connessione al server", "genericError":"Errore", "filter":"Filtro","responsible":"Responsabile" }
 };
 
 langSwitch.onchange = () => {
@@ -415,13 +415,17 @@ function aplicarIdiomaAuto() {
 
 /* ================= FILTRAR ================= */
 function filtrarContatos() {
-    const termo = buscar.value.toLowerCase();
+    const termo = buscar.value.toLowerCase().trim();
+    const tipo = tipoFiltro.value;
 
-    const filtrados = listaContatos.filter(c =>
-        c.nome.toLowerCase().includes(termo) ||
-        c.departamento.toLowerCase().includes(termo) ||
-        c.ramal.toLowerCase().includes(termo)
-    );
+    if (!termo) {
+        return renderContatos(listaContatos);
+    }
+
+    const filtrados = listaContatos.filter(contato => {
+        const valor = contato[tipo]?.toLowerCase() || "";
+        return valor.includes(termo);
+    });
 
     renderContatos(filtrados);
 }

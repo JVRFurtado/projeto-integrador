@@ -8,7 +8,7 @@ html, body {
     --bg: #eef2f7;
     --card: #ffffff;
     --text: #333;
-    --primary: #0077b6;
+    --primary: #c62828;
     --border: #dcdcdc;
 }
 
@@ -16,7 +16,7 @@ html.dark {
     --bg: #121212;
     --card: #1e1e1e;
     --text: #f1f1f1;
-    --primary: #4dabf7;
+    --primary: #ef5350;
     --border: #333;
 }
 
@@ -59,6 +59,13 @@ header {
     align-items: center;
     gap: 6px;
     flex-shrink: 0;
+}
+
+.logout-btn {
+    width: auto !important;
+    padding: 8px 14px;
+    font-size: 14px;
+    white-space: nowrap;
 }
 
 /* ÍCONE */
@@ -240,6 +247,10 @@ footer {
 
     input, select, button {
         width: 100%;
+        box-sizing: border-box;
+    }
+
+    button {
         box-sizing: border-box;
     }
 }
