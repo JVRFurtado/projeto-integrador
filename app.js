@@ -406,34 +406,89 @@ function renderUsuarios(lista) {
 
     lista.forEach(u => {
 
+        const tipoUsuario =
+            u.tipo ||
+            u.role ||
+            u.aotipousuario ||
+            "padrao";
+
+        const nomeUsuario =
+            u.nome ||
+            u.txnome ||
+            "";
+
+        const usernameUsuario =
+            u.username ||
+            u.txusername ||
+            "";
+
+        const emailUsuario =
+            u.email ||
+            u.txemail ||
+            "";
+
+        const adminEditandoOutroAdmin =
+            role === "admin" &&
+            tipoUsuario === "admin" &&
+            nomeUsuario !== currentUser;
+
+        const podeEditarSenha =
+            !adminEditandoOutroAdmin;
+
+        const podeExcluir =
+            nomeUsuario !== currentUser;
+
         tabelaUsuarios.innerHTML += `
             <tr>
 
-                <td>${u.nome || ""}</td>
+                <td>${nomeUsuario}</td>
 
-                <td>${u.username || ""}</td>
+                <td>${usernameUsuario}</td>
 
-                <td>${u.email || ""}</td>
-
-                <td>${u.tipo || u.role || ""}</td>
+                <td>${emailUsuario}</td>
 
                 <td>
-                    <input
-                        type="password"
-                        id="senha-${u.id}"
-                        placeholder="${getTranslation("newPass")}"
-                    >
+                    ${tipoUsuario}
                 </td>
 
-                <td>
+                <td style="padding-right: 12px;">
 
-                    <button onclick="salvarUsuario(${u.id})">
-                        💾
-                    </button>
+                    ${
+                        podeEditarSenha
+                        ? `
+                            <input
+                                type="password"
+                                id="senha-${u.id}"
+                                placeholder="${getTranslation("newPass")}"
+                                style="min-width: 120px;"
+                            >
+                        `
+                        : "🔒"
+                    }
 
-                    <button onclick="removerUsuario(${u.id})">
-                        🗑️
-                    </button>
+                </td>
+
+                <td style="padding-left: 12px; white-space: nowrap;">
+
+                    ${
+                        podeEditarSenha
+                        ? `
+                            <button onclick="salvarUsuario(${u.id})">
+                                💾
+                            </button>
+                        `
+                        : ""
+                    }
+
+                    ${
+                        podeExcluir
+                        ? `
+                            <button onclick="removerUsuario(${u.id})">
+                                🗑️
+                            </button>
+                        `
+                        : "🔐"
+                    }
 
                 </td>
 
@@ -441,7 +496,6 @@ function renderUsuarios(lista) {
         `;
     });
 }
-
 async function criarUsuario() {
 
     if (userSenha.value.length < 6) {
@@ -475,7 +529,34 @@ async function criarUsuario() {
 
 async function salvarUsuario(id) {
 
-    const senha = document.getElementById(`senha-${id}`).value;
+    const usuario = listaUsuarios.find(u => u.id === id);
+
+    if (!usuario) return;
+
+    const nomeUsuario =
+        usuario.nome ||
+        usuario.txnome ||
+        "";
+
+    const tipoUsuario =
+        usuario.tipo ||
+        usuario.role ||
+        usuario.aotipousuario ||
+        "padrao";
+
+    /* ADMIN NÃO PODE ALTERAR SENHA DE OUTRO ADMIN */
+    if (
+        role === "admin" &&
+        tipoUsuario === "admin" &&
+        nomeUsuario !== currentUser
+    ) {
+
+        alert("Você não pode alterar a senha de outro admin.");
+
+        return;
+    }
+
+    const senha = document.getElementById(`senha-${id}`)?.value;
 
     if (!senha) return;
 
@@ -495,6 +576,43 @@ async function salvarUsuario(id) {
 }
 
 async function removerUsuario(id) {
+
+    const usuario = listaUsuarios.find(u => u.id === id);
+
+    if (!usuario) return;
+
+    const nomeUsuario =
+        usuario.nome ||
+        usuario.txnome ||
+        "";
+
+    const tipoUsuario =
+        usuario.tipo ||
+        usuario.role ||
+        usuario.aotipousuario ||
+        "padrao";
+
+    /* NÃO DEIXA ADMIN EXCLUIR A SI MESMO */
+    if (
+        nomeUsuario === currentUser &&
+        tipoUsuario === "admin"
+    ) {
+
+        alert("O administrador não pode excluir a própria conta.");
+
+        return;
+    }
+
+    /* ADMIN NÃO PODE EXCLUIR OUTRO ADMIN */
+    if (
+        role === "admin" &&
+        tipoUsuario === "admin"
+    ) {
+
+        alert("Admins não podem excluir outros admins.");
+
+        return;
+    }
 
     if (!confirm("Excluir?")) return;
 
