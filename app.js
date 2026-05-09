@@ -211,22 +211,35 @@ function entrarSistema() {
 
     logoutBtn.style.display = "inline-block";
 
+    /* ================= USUÁRIO PADRÃO ================= */
+
     if (role !== "admin" && role !== "gestor") {
 
         btnUsuarios.style.display = "none";
+
+        /* ESCONDE BOTÃO CONTATOS */
+        btnContatos.style.display = "none";
+
+        /* ESCONDE FORM DE CADASTRO */
+        formCadastro.style.display = "none";
+
+        /* ESCONDE COLUNA AÇÕES */
+        colAcoes.style.display = "none";
 
         abaUsuarios.style.display = "none";
 
     } else {
 
-        btnUsuarios.style.display = "block";
+        /* ADMIN/GESTOR */
 
         carregarUsuarios();
+
+        /* COMEÇA NA ABA CONTATOS */
+        mostrarAba("contatos");
     }
 
     exibirContatos();
 }
-
 /* ================= LOGOUT ================= */
 
 function logout() {
@@ -284,51 +297,73 @@ function renderContatos(lista) {
 
     tabelaContatos.innerHTML = "";
 
+    const isAdmin =
+        role === "admin" ||
+        role === "gestor";
+
     lista.forEach(contato => {
 
-        const editando = editandoContato === contato.id;
+        const editando =
+            editandoContato === contato.id;
 
         tabelaContatos.innerHTML += `
             <tr>
 
                 <td>
-                    ${editando
+                    ${
+                        editando
                         ? `<input id="c-ramal-${contato.id}" value="${contato.ramal || ""}">`
                         : contato.ramal || ""
                     }
                 </td>
 
                 <td>
-                    ${editando
+                    ${
+                        editando
                         ? `<input id="c-dep-${contato.id}" value="${contato.departamento || ""}">`
                         : contato.departamento || ""
                     }
                 </td>
 
                 <td>
-                    ${editando
+                    ${
+                        editando
                         ? `<input id="c-nome-${contato.id}" value="${contato.nome || ""}">`
                         : contato.nome || ""
                     }
                 </td>
 
-                <td>
-                    ${
-                        role === "admin" || role === "gestor"
-                        ? (
-                            editando
-                            ? `
-                                <button onclick="salvarContato(${contato.id})">💾</button>
-                                <button onclick="cancelarEdicao()">❌</button>
-                            `
-                            : `
-                                <button onclick="editarContato(${contato.id})">✏️</button>
-                                <button onclick="removerContato(${contato.id})">🗑️</button>
-                            `
-                        )
-                        : "-"
-                    }
-                </td>
+                ${
+                    isAdmin
+                    ? `
+                        <td>
+
+                            ${
+                                editando
+                                ? `
+                                    <button onclick="salvarContato(${contato.id})">
+                                        💾
+                                    </button>
+
+                                    <button onclick="cancelarEdicao()">
+                                        ❌
+                                    </button>
+                                `
+                                : `
+                                    <button onclick="editarContato(${contato.id})">
+                                        ✏️
+                                    </button>
+
+                                    <button onclick="removerContato(${contato.id})">
+                                        🗑️
+                                    </button>
+                                `
+                            }
+
+                        </td>
+                    `
+                    : ""
+                }
 
             </tr>
         `;
@@ -447,11 +482,9 @@ function renderUsuarios(lista) {
 
                 <td>${emailUsuario}</td>
 
-                <td>
-                    ${tipoUsuario}
-                </td>
+                <td>${tipoUsuario}</td>
 
-                <td style="padding-right: 12px;">
+                <td class="user-password">
 
                     ${
                         podeEditarSenha
@@ -460,7 +493,6 @@ function renderUsuarios(lista) {
                                 type="password"
                                 id="senha-${u.id}"
                                 placeholder="${getTranslation("newPass")}"
-                                style="min-width: 120px;"
                             >
                         `
                         : "🔒"
@@ -468,27 +500,31 @@ function renderUsuarios(lista) {
 
                 </td>
 
-                <td style="padding-left: 12px; white-space: nowrap;">
+                <td>
 
-                    ${
-                        podeEditarSenha
-                        ? `
-                            <button onclick="salvarUsuario(${u.id})">
-                                💾
-                            </button>
-                        `
-                        : ""
-                    }
+                    <div class="user-actions">
 
-                    ${
-                        podeExcluir
-                        ? `
-                            <button onclick="removerUsuario(${u.id})">
-                                🗑️
-                            </button>
-                        `
-                        : "🔐"
-                    }
+                        ${
+                            podeEditarSenha
+                            ? `
+                                <button onclick="salvarUsuario(${u.id})">
+                                    💾
+                                </button>
+                            `
+                            : ""
+                        }
+
+                        ${
+                            podeExcluir
+                            ? `
+                                <button onclick="removerUsuario(${u.id})">
+                                    🗑️
+                                </button>
+                            `
+                            : "🔐"
+                        }
+
+                    </div>
 
                 </td>
 
@@ -496,6 +532,7 @@ function renderUsuarios(lista) {
         `;
     });
 }
+
 async function criarUsuario() {
 
     if (userSenha.value.length < 6) {
@@ -629,13 +666,38 @@ async function removerUsuario(id) {
 
 function mostrarAba(aba) {
 
-    abaContatos.style.display =
-        aba === "contatos" ? "block" : "none";
+    const isAdmin =
+        role === "admin" ||
+        role === "gestor";
 
-    abaUsuarios.style.display =
-        aba === "usuarios" ? "block" : "none";
+    /* USUÁRIO PADRÃO */
+    if (!isAdmin) {
+
+        abaContatos.style.display = "block";
+        abaUsuarios.style.display = "none";
+
+        return;
+    }
+
+    /* ADMIN/GESTOR */
+
+    if (aba === "contatos") {
+
+        abaContatos.style.display = "block";
+        abaUsuarios.style.display = "none";
+
+        btnContatos.style.display = "none";
+        btnUsuarios.style.display = "block";
+
+    } else {
+
+        abaContatos.style.display = "none";
+        abaUsuarios.style.display = "block";
+
+        btnContatos.style.display = "block";
+        btnUsuarios.style.display = "none";
+    }
 }
-
 /* ================= DARK MODE ================= */
 
 function aplicarTemaAutomatico() {
