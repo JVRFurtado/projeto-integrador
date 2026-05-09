@@ -61,9 +61,13 @@ function alerta(msg) {
 
 /* ================= LOGIN ================= */
 loginForm.onsubmit = async (e) => {
+
     e.preventDefault();
+
     try {
+
         const formData = new URLSearchParams();
+
         formData.append(
             "username",
             loginUsername.value
@@ -78,10 +82,12 @@ loginForm.onsubmit = async (e) => {
             `${API_URL}/auth/login`,
             {
                 method: "POST",
+
                 headers: {
                     "Content-Type":
                     "application/x-www-form-urlencoded"
                 },
+
                 body: formData
             }
         );
@@ -92,15 +98,20 @@ loginForm.onsubmit = async (e) => {
         }
 
         const data = await res.json();
+
         token = data.access_token;
+
         localStorage.setItem(
             "token",
             token
         );
+
         await carregarUsuario();
-        
+
     } catch (e) {
+
         console.error(e);
+
         alerta("serverOffline");
     }
 };
