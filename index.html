@@ -262,12 +262,43 @@
 
         </div>
 
-        <input
-            id="buscarUsuarios"
-            data-i18n="searchUsers"
-            placeholder="Buscar usuário..."
-            oninput="filtrarUsuarios()"
-        >
+        <div class="filter-wrapper">
+
+            <label
+                for="buscarUsuarios"
+                data-i18n="filter"
+            >
+                Filtrar
+            </label>
+
+            <div class="filter-controls">
+
+                <select
+                    id="tipoFiltroUsuarios"
+                    onchange="filtrarUsuarios()"
+                >
+                    <option value="nome">
+                        Nome
+                    </option>
+
+                    <option value="username">
+                        Username
+                    </option>
+
+                    <option value="email">
+                        Email
+                    </option>
+                </select>
+
+                <input
+                    id="buscarUsuarios"
+                    data-i18n="searchUsers"
+                    placeholder="Buscar usuário..."
+                    oninput="filtrarUsuarios()"
+                >
+
+            </div>
+        </div>
 
         <div class="table-container">
 
