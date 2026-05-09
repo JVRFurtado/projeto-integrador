@@ -254,3 +254,72 @@ footer {
         box-sizing: border-box;
     }
 }
+
+/* =========================================
+   FIX SELECT DARK MODE
+========================================= */
+
+html.dark select {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+html.dark option {
+    background: var(--card);
+    color: var(--text);
+}
+
+/* =========================================
+   TABELAS
+========================================= */
+
+#tabelaUsuarios td,
+#tabelaUsuarios th,
+#tabelaContatos td,
+#tabelaContatos th {
+    vertical-align: middle;
+}
+
+/* =========================================
+   AÇÕES USUÁRIOS
+========================================= */
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-width: 110px;
+}
+
+.user-password {
+    min-width: 140px;
+    padding-right: 10px;
+}
+
+.user-password input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* =========================================
+   MOBILE USERS TABLE
+========================================= */
+
+@media (max-width: 768px) {
+
+    #abaUsuarios table {
+        min-width: 820px;
+    }
+
+    .user-actions {
+        min-width: 120px;
+        gap: 6px;
+    }
+
+    .user-password {
+        min-width: 160px;
+    }
+}
