@@ -36,6 +36,7 @@ const buscar = document.getElementById("buscar");
 const buscarUsuarios = document.getElementById("buscarUsuarios");
 
 const tipoFiltro = document.getElementById("tipoFiltro");
+const tipoFiltroUsuarios = document.getElementById("tipoFiltroUsuarios");
 
 const themeToggle = document.getElementById("themeToggle");
 const themeIcon = document.getElementById("themeIcon");
@@ -1022,23 +1023,33 @@ function filtrarContatos() {
 
 function filtrarUsuarios() {
 
-    const termo =
-        buscarUsuarios.value.toLowerCase();
+    const termo = buscarUsuarios.value
+        .toLowerCase()
+        .trim();
+
+    const tipo = tipoFiltroUsuarios.value;
+
+    if (!termo) {
+        return renderUsuarios(listaUsuarios);
+    }
 
     const filtrados = listaUsuarios.filter(u => {
 
-        const nome =
-            (u.nome || "")
-            .toLowerCase();
+        let valor = "";
 
-        const username =
-            (u.username || "")
-            .toLowerCase();
+        if (tipo === "nome") {
+            valor = (u.nome || "").toLowerCase();
+        }
 
-        return (
-            nome.includes(termo) ||
-            username.includes(termo)
-        );
+        if (tipo === "username") {
+            valor = (u.username || "").toLowerCase();
+        }
+
+        if (tipo === "email") {
+            valor = (u.email || "").toLowerCase();
+        }
+
+        return valor.includes(termo);
     });
 
     renderUsuarios(filtrados);
