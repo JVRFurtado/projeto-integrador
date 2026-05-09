@@ -24,7 +24,10 @@
 <body>
 
 <header>
-    <h1 data-i18n="title">Agenda Corporativa</h1>
+
+    <h1 data-i18n="title">
+        Agenda Corporativa
+    </h1>
 
     <div class="top-controls">
 
@@ -64,19 +67,23 @@
 
     <div class="card login-card">
 
-        <h2 data-i18n="login">Login</h2>
+        <h2 data-i18n="login">
+            Login
+        </h2>
 
         <form id="loginForm">
 
             <input
                 id="loginUsername"
-                placeholder="Usuário ou Email"
+                data-i18n="nameUser"
+                placeholder="Nome"
                 required
             >
 
             <input
                 id="loginPassword"
                 type="password"
+                data-i18n="password"
                 placeholder="Senha"
                 required
             >
@@ -115,24 +122,29 @@
     <!-- CONTATOS -->
     <div id="abaContatos" class="card">
 
-        <h2 data-i18n="contacts">Contatos</h2>
+        <h2 data-i18n="contacts">
+            Contatos
+        </h2>
 
         <form id="formCadastro" class="form-grid">
 
             <input
                 id="nome"
+                data-i18n="name"
                 placeholder="Nome"
                 required
             >
 
             <input
                 id="departamento"
+                data-i18n="department"
                 placeholder="Departamento"
                 required
             >
 
             <input
                 id="ramal"
+                data-i18n="extension"
                 placeholder="Ramal"
                 required
             >
@@ -165,6 +177,7 @@
 
                 <input
                     id="buscar"
+                    data-i18n="search"
                     placeholder="Buscar..."
                     oninput="filtrarContatos()"
                 >
@@ -178,10 +191,10 @@
 
                 <thead>
                     <tr>
-                        <th>Ramal</th>
-                        <th>Departamento</th>
-                        <th>Responsável</th>
-                        <th id="colAcoes">Ações</th>
+                        <th data-i18n="extension">Ramal</th>
+                        <th data-i18n="department">Departamento</th>
+                        <th data-i18n="responsible">Responsável</th>
+                        <th id="colAcoes" data-i18n="actions">Ações</th>
                     </tr>
                 </thead>
 
@@ -192,30 +205,31 @@
     </div>
 
     <!-- USUÁRIOS -->
-    <div
-        id="abaUsuarios"
-        class="card"
-        style="display:none;"
-    >
+    <div id="abaUsuarios" class="card" style="display:none;">
 
-        <h2 data-i18n="users">Usuários</h2>
+        <h2 data-i18n="users">
+            Usuários
+        </h2>
 
         <div class="form-grid">
 
             <input
                 id="userNome"
+                data-i18n="name"
                 placeholder="Nome"
                 required
             >
 
             <input
                 id="userUsername"
+                data-i18n="nameUser"
                 placeholder="Usuário"
                 required
             >
 
             <input
                 id="userEmail"
+                data-i18n="userEmail"
                 placeholder="Email"
                 required
             >
@@ -223,23 +237,26 @@
             <input
                 id="userSenha"
                 type="password"
+                data-i18n="password"
                 placeholder="Senha"
                 required
             >
 
             <select id="userTipo">
-
-                <option value="padrao">
+                <option value="padrao" data-i18n="standard">
                     Padrão
                 </option>
 
-                <option value="admin">
+                <option value="admin" data-i18n="admin">
                     Admin
                 </option>
-
             </select>
 
-            <button onclick="criarUsuario()">
+            <button
+                type="button"
+                onclick="criarUsuario()"
+                data-i18n="create"
+            >
                 Criar
             </button>
 
@@ -247,6 +264,7 @@
 
         <input
             id="buscarUsuarios"
+            data-i18n="searchUsers"
             placeholder="Buscar usuário..."
             oninput="filtrarUsuarios()"
         >
@@ -257,12 +275,12 @@
 
                 <thead>
                     <tr>
-                        <th>Nome</th>
-                        <th>Usuário</th>
-                        <th>Email</th>
-                        <th>Tipo</th>
-                        <th>Senha</th>
-                        <th>Ações</th>
+                        <th data-i18n="name">Nome</th>
+                        <th data-i18n="nameUser">Usuário</th>
+                        <th data-i18n="userEmail">Email</th>
+                        <th data-i18n="type">Tipo</th>
+                        <th data-i18n="password">Senha</th>
+                        <th data-i18n="actions">Ações</th>
                     </tr>
                 </thead>
 
