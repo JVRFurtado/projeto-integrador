@@ -75,11 +75,17 @@ header {
 
 /* LANG */
 .lang-minimal {
-    background: transparent;
-    border: none;
+    background: var(--primary);
+    border: 1px solid rgba(255,255,255,0.2);
     color: white;
     font-weight: bold;
     cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 6px;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
 .lang-minimal option {
@@ -322,4 +328,23 @@ html.dark option {
     .user-password {
         min-width: 160px;
     }
+}
+
+.filter-wrapper {
+    margin: 15px 0;
+}
+
+.filter-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-controls select {
+    min-width: 160px;
+}
+
+.filter-controls input {
+    flex: 1;
+    min-width: 220px;
 }
