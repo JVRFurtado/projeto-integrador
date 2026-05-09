@@ -2,135 +2,284 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+
     <script>
         const theme = localStorage.getItem("theme");
 
-         if (
+        if (
             theme === "dark" ||
             (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)
         ) {
             document.documentElement.classList.add("dark");
         }
     </script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Agenda Corporativa Digital</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <header>
-        <h1 data-i18n="title">Agenda Corporativa</h1>
-        <div class="top-controls">
-            <select id="langSwitch" class="lang-minimal">
-                <option value="pt">PT</option>
-                <option value="en">EN</option>
-                <option value="es">ES</option>
-                <option value="fr">FR</option>
-                <option value="de">DE</option>
-                <option value="it">IT</option>
-            </select>
-            <div class="theme-control">
-                <span id="themeIcon">🌙</span>
-                <label class="switch">
-                    <input type="checkbox" id="themeToggle">
-                    <span></span>
-                </label>
-            <button id="logoutBtn" class="logout-btn" onclick="logout()" data-i18n="logout">
+
+<header>
+    <h1 data-i18n="title">Agenda Corporativa</h1>
+
+    <div class="top-controls">
+
+        <select id="langSwitch" class="lang-minimal">
+            <option value="pt">PT</option>
+            <option value="en">EN</option>
+            <option value="es">ES</option>
+            <option value="fr">FR</option>
+            <option value="de">DE</option>
+            <option value="it">IT</option>
+        </select>
+
+        <div class="theme-control">
+
+            <span id="themeIcon">🌙</span>
+
+            <label class="switch">
+                <input type="checkbox" id="themeToggle">
+                <span></span>
+            </label>
+
+            <button
+                id="logoutBtn"
+                class="logout-btn"
+                onclick="logout()"
+                data-i18n="logout"
+            >
                 Sair
             </button>
-            </div>
-        </div>
-    </header>
-    <section id="loginSection" class="login-wrapper">
-        <div class="card login-card">
-            <h2 data-i18n="login">Login</h2>
-            <form id="loginForm">
-                <input id="username" data-i18n="nameUser" placeholder="Nome" required>
-                <input id="password" type="password" data-i18n="password" placeholder="Senha" required>
-                <button data-i18n="enter">Entrar</button>
-            </form>
-        </div>
-    </section>
-    <section id="dashboard" style="display:none;">
-        <div class="tabs">
-            <button onclick="mostrarAba('contatos')" id="btnContatos" data-i18n="contacts">Contatos</button>
-            <button onclick="mostrarAba('usuarios')" id="btnUsuarios" data-i18n="users">Usuários</button>
-        </div>
-        <div id="abaContatos" class="card">
-            <h2 data-i18n="contacts">Contatos</h2>
-            <form id="formCadastro" class="form-grid">
-                <input id="nome" data-i18n="name" placeholder="Nome" required>
-                <input id="departamento" data-i18n="department" placeholder="Departamento" required>
-                <input id="ramal" data-i18n="extension" placeholder="Ramal" required>
-                <button data-i18n="save">Salvar</button>
-            </form>
-            <div class="filter-wrapper">
-                <label for="buscar" data-i18n="filter">Filtrar</label>
 
-                <div class="filter-controls">
-                    <select id="tipoFiltro" onchange="filtrarContatos()">
-                        <option value="nome">Contato</option>
-                        <option value="departamento">Departamento</option>
-                        <option value="ramal">Ramal</option>
-                    </select>
-
-                    <input
-                        id="buscar"
-                        data-i18n="search"
-                        placeholder="Buscar..."
-                        oninput="filtrarContatos()"
-                    >
-                </div>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th data-i18n="extension">Ramal</th>
-                            <th data-i18n="department">Departamento</th>
-                            <th data-i18n="responsible">Responsável</th>
-                            <th id="colAcoes" data-i18n="actions">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabelaContatos"></tbody>
-                </table>
-            </div>
         </div>
-        <div id="abaUsuarios" class="card" style="display:none;">
-            <h2 data-i18n="users">Usuários</h2>
-            <div class="form-grid">
-                <input id="userNome" placeholder="Nome" required>
-                <input id="userUsername" placeholder="Usuário" required>
-                <input id="userEmail" placeholder="Email" required>
-                <input id="userSenha" type="password" placeholder="Senha" required>
-                <select id="userTipo">
-                    <option value="padrao" data-i18n="standard">Padrão</option>
-                    <option value="admin" data-i18n="admin">Admin</option>
+    </div>
+</header>
+
+<!-- LOGIN -->
+<section id="loginSection" class="login-wrapper">
+
+    <div class="card login-card">
+
+        <h2 data-i18n="login">Login</h2>
+
+        <form id="loginForm">
+
+            <input
+                id="loginUsername"
+                placeholder="Usuário ou Email"
+                required
+            >
+
+            <input
+                id="loginPassword"
+                type="password"
+                placeholder="Senha"
+                required
+            >
+
+            <button data-i18n="enter">
+                Entrar
+            </button>
+
+        </form>
+    </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dashboard" style="display:none;">
+
+    <div class="tabs">
+
+        <button
+            onclick="mostrarAba('contatos')"
+            id="btnContatos"
+            data-i18n="contacts"
+        >
+            Contatos
+        </button>
+
+        <button
+            onclick="mostrarAba('usuarios')"
+            id="btnUsuarios"
+            data-i18n="users"
+        >
+            Usuários
+        </button>
+
+    </div>
+
+    <!-- CONTATOS -->
+    <div id="abaContatos" class="card">
+
+        <h2 data-i18n="contacts">Contatos</h2>
+
+        <form id="formCadastro" class="form-grid">
+
+            <input
+                id="nome"
+                placeholder="Nome"
+                required
+            >
+
+            <input
+                id="departamento"
+                placeholder="Departamento"
+                required
+            >
+
+            <input
+                id="ramal"
+                placeholder="Ramal"
+                required
+            >
+
+            <button data-i18n="save">
+                Salvar
+            </button>
+
+        </form>
+
+        <div class="filter-wrapper">
+
+            <label
+                for="buscar"
+                data-i18n="filter"
+            >
+                Filtrar
+            </label>
+
+            <div class="filter-controls">
+
+                <select
+                    id="tipoFiltro"
+                    onchange="filtrarContatos()"
+                >
+                    <option value="nome">Contato</option>
+                    <option value="departamento">Departamento</option>
+                    <option value="ramal">Ramal</option>
                 </select>
-                <button onclick="criarUsuario()" data-i18n="create">Criar</button>
-            </div>
-            <input id="buscarUsuarios" data-i18n="searchUsers" placeholder="Buscar usuário..." oninput="filtrarUsuarios()">
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th data-i18n="name">Nome</th>
-                            <th data-i18n="nameUser">Usuário</th>
-                            <th data-i18n="userEmail">Email</th>
-                            <th data-i18n="type">Tipo</th>
-                            <th data-i18n="password">Senha</th>
-                            <th id="colAcoesUsuarios" data-i18n="actions">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabelaUsuarios"></tbody>
-                </table>
+
+                <input
+                    id="buscar"
+                    placeholder="Buscar..."
+                    oninput="filtrarContatos()"
+                >
+
             </div>
         </div>
-    </section>
-    <footer>
-        <div class="container">
-            <p>2026 - Projeto Integrador I - Univesp</p>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Ramal</th>
+                        <th>Departamento</th>
+                        <th>Responsável</th>
+                        <th id="colAcoes">Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabelaContatos"></tbody>
+
+            </table>
         </div>
-    </footer>
-    <script src="app.js"></script>
+    </div>
+
+    <!-- USUÁRIOS -->
+    <div
+        id="abaUsuarios"
+        class="card"
+        style="display:none;"
+    >
+
+        <h2 data-i18n="users">Usuários</h2>
+
+        <div class="form-grid">
+
+            <input
+                id="userNome"
+                placeholder="Nome"
+                required
+            >
+
+            <input
+                id="userUsername"
+                placeholder="Usuário"
+                required
+            >
+
+            <input
+                id="userEmail"
+                placeholder="Email"
+                required
+            >
+
+            <input
+                id="userSenha"
+                type="password"
+                placeholder="Senha"
+                required
+            >
+
+            <select id="userTipo">
+
+                <option value="padrao">
+                    Padrão
+                </option>
+
+                <option value="admin">
+                    Admin
+                </option>
+
+            </select>
+
+            <button onclick="criarUsuario()">
+                Criar
+            </button>
+
+        </div>
+
+        <input
+            id="buscarUsuarios"
+            placeholder="Buscar usuário..."
+            oninput="filtrarUsuarios()"
+        >
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Usuário</th>
+                        <th>Email</th>
+                        <th>Tipo</th>
+                        <th>Senha</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabelaUsuarios"></tbody>
+
+            </table>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>2026 - Projeto Integrador I - Univesp</p>
+    </div>
+</footer>
+
+<script src="app.js"></script>
+
 </body>
 </html>
