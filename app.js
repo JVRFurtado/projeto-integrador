@@ -18,10 +18,14 @@ const nome = document.getElementById("nome");
 const departamento = document.getElementById("departamento");
 const ramal = document.getElementById("ramal");
 
-const username = document.getElementById("username");
-const password = document.getElementById("password");
+/* LOGIN */
+const loginUsername = document.getElementById("loginUsername");
+const loginPassword = document.getElementById("loginPassword");
 
+/* USERS */
 const userNome = document.getElementById("userNome");
+const userUsername = document.getElementById("userUsername");
+const userEmail = document.getElementById("userEmail");
 const userSenha = document.getElementById("userSenha");
 const userTipo = document.getElementById("userTipo");
 
@@ -37,12 +41,6 @@ const themeToggle = document.getElementById("themeToggle");
 const themeIcon = document.getElementById("themeIcon");
 
 const langSwitch = document.getElementById("langSwitch");
-
-const userUsername = document.getElementById("userUsername");
-const userEmail = document.getElementById("userEmail");
-const userNome = document.getElementById("userNome");
-const userSenha = document.getElementById("userSenha");
-const userTipo = document.getElementById("userTipo");
 
 let token = localStorage.getItem("token");
 let role = "";
@@ -68,12 +66,12 @@ loginForm.onsubmit = async (e) => {
         const formData = new URLSearchParams();
         formData.append(
             "username",
-            username.value
+            loginUsername.value
         );
 
         formData.append(
             "password",
-            password.value
+            loginPassword.value
         );
 
         const res = await fetch(
@@ -227,11 +225,12 @@ function renderUsuarios(lista) {
 
         tabelaUsuarios.innerHTML += `
             <tr>
+
                 <td>${u.nome}</td>
 
-                <td>${u.username || ""}</td>
+                <td>${u.username}</td>
 
-                <td>${u.email || ""}</td>
+                <td>${u.email}</td>
 
                 <td>${u.aotipousuario}</td>
 
@@ -244,6 +243,7 @@ function renderUsuarios(lista) {
                 </td>
 
                 <td>
+
                     <button onclick="salvarUsuario(${u.id})">
                         💾
                     </button>
@@ -251,7 +251,9 @@ function renderUsuarios(lista) {
                     <button onclick="removerUsuario(${u.id})">
                         🗑️
                     </button>
+
                 </td>
+
             </tr>
         `;
     });
@@ -367,6 +369,11 @@ async function criarUsuario() {
             })
         }
     );
+
+    userNome.value = "";
+    userUsername.value = "";
+    userEmail.value = "";
+    userSenha.value = "";
 
     carregarUsuarios();
 }
