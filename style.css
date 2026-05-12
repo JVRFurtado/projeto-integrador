@@ -108,15 +108,18 @@ header h1 {
 /* =========================================
    BOTÃO IDIOMAS
 ========================================= */
-
 .lang-minimal {
+    background: transparent;
+    color: white;
+   
     width: auto !important;
 
     min-width: 78px;
     height: 40px;
 
     padding: 0 12px;
-
+   
+    border: none;
     border-radius: 8px;
 
     font-size: 14px;
