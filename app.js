@@ -290,8 +290,6 @@ formCadastro.onsubmit = async (e) => {
     ramal.value = "";
 
     await exibirContatos();
-
-    alerta("save");
 };
 
 async function exibirContatos() {
@@ -462,8 +460,6 @@ async function salvarContato(id) {
     editandoContato = null;
 
     await exibirContatos();
-
-    alerta("save");
 }
 
 async function removerContato(id) {
@@ -484,8 +480,6 @@ async function removerContato(id) {
     if (!res) return;
 
     await exibirContatos();
-
-    alerta("save");
 }
 
 /* ================= USUÁRIOS ================= */
@@ -657,8 +651,6 @@ async function criarUsuario() {
     userSenha.value = "";
 
     await carregarUsuarios();
-
-    alerta("save");
 }
 
 async function salvarUsuario(id) {
@@ -711,8 +703,6 @@ async function salvarUsuario(id) {
     if (!res) return;
 
     await carregarUsuarios();
-
-    alerta("save");
 }
 
 async function removerUsuario(id) {
@@ -760,8 +750,6 @@ async function removerUsuario(id) {
     if (!res) return;
 
     await carregarUsuarios();
-
-    alerta("save");
 }
 
 /* ================= ABAS ================= */
