@@ -306,14 +306,30 @@ function renderContatos(lista) {
         role === "admin" ||
         role === "gestor";
 
+    if (!Array.isArray(lista)) {
+        lista = [];
+    }
+
     lista.forEach(contato => {
 
-        const contatoId =
-            contatoId ||
-            contato.idpessoa;
+        /* IGNORA CONTATOS INVÁLIDOS */
+        if (!contato || !contato.id) {
+            return;
+        }
+
+        const contatoId = Number(contato.id);
 
         const editando =
             editandoContato === contatoId;
+
+        const nomeContato =
+            contato.nome || "";
+
+        const departamentoContato =
+            contato.departamento || "";
+
+        const ramalContato =
+            contato.ramal || "";
 
         tabelaContatos.innerHTML += `
             <tr>
@@ -321,24 +337,39 @@ function renderContatos(lista) {
                 <td>
                     ${
                         editando
-                        ? `<input id="c-ramal-${contato.id}" value="${contato.ramal || ""}">`
-                        : contato.ramal || ""
+                        ? `
+                            <input
+                                id="c-ramal-${contatoId}"
+                                value="${ramalContato}"
+                            >
+                        `
+                        : ramalContato
                     }
                 </td>
 
                 <td>
                     ${
                         editando
-                        ? `<input id="c-dep-${contato.id}" value="${contato.departamento || ""}">`
-                        : contato.departamento || ""
+                        ? `
+                            <input
+                                id="c-dep-${contatoId}"
+                                value="${departamentoContato}"
+                            >
+                        `
+                        : departamentoContato
                     }
                 </td>
 
                 <td>
                     ${
                         editando
-                        ? `<input id="c-nome-${contato.id}" value="${contato.nome || ""}">`
-                        : contato.nome || ""
+                        ? `
+                            <input
+                                id="c-nome-${contatoId}"
+                                value="${nomeContato}"
+                            >
+                        `
+                        : nomeContato
                     }
                 </td>
 
@@ -350,7 +381,7 @@ function renderContatos(lista) {
                             ${
                                 editando
                                 ? `
-                                    <button onclick="salvarContato(${contato.id})">
+                                    <button onclick="salvarContato(${contatoId})">
                                         💾
                                     </button>
 
@@ -359,11 +390,11 @@ function renderContatos(lista) {
                                     </button>
                                 `
                                 : `
-                                    <button onclick="editarContato(${contato.id})">
+                                    <button onclick="editarContato(${contatoId})">
                                         ✏️
                                     </button>
 
-                                    <button onclick="removerContato(${contato.id})">
+                                    <button onclick="removerContato(${contatoId})">
                                         🗑️
                                     </button>
                                 `
@@ -390,7 +421,7 @@ function cancelarEdicao() {
 
     editandoContato = null;
 
-    renderContatos(listaContatos);
+    renderContatos(listaContatos || []);
 }
 
 async function salvarContato(id) {
@@ -420,15 +451,55 @@ async function salvarContato(id) {
 
 async function removerContato(id) {
 
-    if (!confirm("Excluir?")) return;
+    if (!confirm("Excluir contato?")) {
+        return;
+    }
 
-    const res = await apiFetch(`${API_URL}/pessoas/${id}`, {
-        method: "DELETE"
-    });
+    editandoContato = null;
 
-    if (!res) return;
+    try {
 
-    exibirContatos();
+        const res = await fetch(
+            `${API_URL}/pessoas/${id}`,
+            {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!res.ok) {
+
+            let erro = {};
+
+            try {
+                erro = await res.json();
+            } catch {}
+
+            console.error(erro);
+
+            alert(
+                erro.detail ||
+                "Erro ao excluir contato"
+            );
+
+            return;
+        }
+
+        listaContatos =
+            listaContatos.filter(
+                c => c.id !== id
+            );
+
+        renderContatos(listaContatos);
+
+    } catch (e) {
+
+        console.error(e);
+
+        alert("Erro de conexão com servidor");
+    }
 }
 
 /* ================= USUÁRIOS ================= */
