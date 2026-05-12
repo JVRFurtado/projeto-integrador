@@ -339,82 +339,82 @@ function renderContatos(lista) {
         const ramalContato =
             contato.ramal || "";
 
-        tabelaContatos.innerHTML += `
-            <tr>
+        const tr = document.createElement("tr");
 
-                <td>
-                    ${
-                        editando
-                        ? `
-                            <input
-                                id="c-ramal-${contatoId}"
-                                value="${ramalContato}"
-                            >
-                        `
-                        : ramalContato
-                    }
-                </td>
-
-                <td>
-                    ${
-                        editando
-                        ? `
-                            <input
-                                id="c-dep-${contatoId}"
-                                value="${departamentoContato}"
-                            >
-                        `
-                        : departamentoContato
-                    }
-                </td>
-
-                <td>
-                    ${
-                        editando
-                        ? `
-                            <input
-                                id="c-nome-${contatoId}"
-                                value="${nomeContato}"
-                            >
-                        `
-                        : nomeContato
-                    }
-                </td>
-
+        tr.innerHTML = `
+            <td>
                 ${
-                    isAdmin
+                    editando
                     ? `
-                        <td>
-
-                            ${
-                                editando
-                                ? `
-                                    <button onclick="salvarContato(${contatoId})">
-                                        💾
-                                    </button>
-
-                                    <button onclick="cancelarEdicao()">
-                                        ❌
-                                    </button>
-                                `
-                                : `
-                                    <button onclick="editarContato(${contatoId})">
-                                        ✏️
-                                    </button>
-
-                                    <button onclick="removerContato(${contatoId})">
-                                        🗑️
-                                    </button>
-                                `
-                            }
-
-                        </td>
+                        <input
+                            id="c-ramal-${contatoId}"
+                            value="${ramalContato}"
+                        >
                     `
-                    : ""
+                    : ramalContato
                 }
+            </td>
 
-            </tr>
+            <td>
+                ${
+                    editando
+                    ? `
+                        <input
+                            id="c-dep-${contatoId}"
+                            value="${departamentoContato}"
+                        >
+                    `
+                    : departamentoContato
+                }
+            </td>
+
+            <td>
+            ${
+                editando
+                ? `
+                    <input
+                        id="c-nome-${contatoId}"
+                        value="${nomeContato}"
+                    >
+                    `
+                    : nomeContato
+                }
+            </td>
+    
+            ${
+                isAdmin
+                ? `
+                    <td>
+
+                        ${
+                            editando
+                            ? `
+                                <button onclick="salvarContato(${contatoId})">
+                                    💾
+                                </button>
+
+                                <button onclick="cancelarEdicao()">
+                                    ❌
+                                </button>
+                            `
+                            : `
+                                <button onclick="editarContato(${contatoId})">
+                                    ✏️
+                                </button>
+
+                                <button onclick="removerContato(${contatoId})">
+                                    🗑️
+                                </button>
+                            `
+                        }
+
+                    </td>
+                `
+                : ""
+            }
         `;
+
+        tabelaContatos.appendChild(tr);
     });
 }
 
@@ -554,160 +554,10 @@ function renderUsuarios(lista) {
 
         const id = u.id || u.idpessoa;
 
-        const nome =
-            u.nome ||
-            u.txnome ||
-            "";
-
-        const username =
-            u.username ||
-            u.txusername ||
-            "";
-
-        const email =
-            u.email ||
-            u.txemail ||
-            "";
-
-        const tipo =
-            u.tipo ||
-            u.aotipousuario ||
-            "padrao";
-
-        const editando =
-            editandoUsuarios[id] || {
-                nome,
-                username,
-                email,
-                tipo,
-                senha: ""
-            };
-
-        const adminEditandoOutroAdmin =
-            role === "admin" &&
-            tipo === "admin" &&
-            nome !== currentUser;
-
-        tabelaUsuarios.innerHTML += `
-            <tr>
-
-                <td>
-                    <input
-                        value="${editando.nome}"
-                        onchange="
-                            editandoUsuarios[${id}].nome=this.value
-                        "
-                    >
-                </td>
-
-                <td>
-                    <input
-                        value="${editando.username}"
-                        onchange="
-                            editandoUsuarios[${id}].username=this.value
-                        "
-                    >
-                </td>
-
-                <td>
-                    <input
-                        value="${editando.email}"
-                        onchange="
-                            editandoUsuarios[${id}].email=this.value
-                        "
-                    >
-                </td>
-
-                <td>
-
-                    ${
-                        adminEditandoOutroAdmin
-                        ? `
-                            <span class="badge-admin">
-                                admin
-                            </span>
-                        `
-                        : `
-                            <select
-                                onchange="
-                                    editandoUsuarios[${id}].tipo=this.value
-                                "
-                            >
-                                <option
-                                    value="padrao"
-                                    ${
-                                        editando.tipo === "padrao"
-                                        ? "selected"
-                                        : ""
-                                    }
-                                >
-                                    padrão
-                                </option>
-
-                                <option
-                                    value="admin"
-                                    ${
-                                        editando.tipo === "admin"
-                                        ? "selected"
-                                        : ""
-                                    }
-                                >
-                                    admin
-                                </option>
-                            </select>
-                        `
-                    }
-
-                </td>
-
-                <td class="user-password">
-
-                    ${
-                        adminEditandoOutroAdmin
-                        ? "🔒"
-                        : `
-                            <input
-                                type="password"
-                                placeholder="Nova senha"
-                                onchange="
-                                    editandoUsuarios[${id}].senha=this.value
-                                "
-                            >
-                        `
-                    }
-
-                </td>
-
-                <td>
-
-                    <div class="user-actions">
-
-                        ${
-                            adminEditandoOutroAdmin
-                            ? "🔒"
-                            : `
-                                <button onclick="salvarUsuario(${id})">
-                                    💾
-                                </button>
-                            `
-                        }
-
-                        ${
-                            nome === currentUser
-                            ? "🔐"
-                            : `
-                                <button onclick="removerUsuario(${id})">
-                                    🗑️
-                                </button>
-                            `
-                        }
-
-                    </div>
-
-                </td>
-
-            </tr>
-        `;
+        const nome = u.nome || u.txnome || "";
+        const username = u.username || u.txusername || "";
+        const email = u.email || u.txemail || "";
+        const tipo = u.tipo || u.aotipousuario || "padrao";
 
         if (!editandoUsuarios[id]) {
 
@@ -719,6 +569,104 @@ function renderUsuarios(lista) {
                 senha: ""
             };
         }
+
+        const editando = editandoUsuarios[id];
+
+        const adminEditandoOutroAdmin =
+            role === "admin" &&
+            tipo === "admin" &&
+            nome !== currentUser;
+
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td>
+                <input
+                    id="u-nome-${id}"
+                    value="${editando.nome}"
+                >
+            </td>
+
+            <td>
+                <input
+                    id="u-username-${id}"
+                    value="${editando.username}"
+                >
+            </td>
+
+            <td>
+                <input
+                    id="u-email-${id}"
+                    value="${editando.email}"
+                >
+            </td>
+
+            <td>
+                ${
+                    adminEditandoOutroAdmin
+                    ? `
+                        <span class="badge-admin">
+                            admin
+                        </span>
+                    `
+                    : `
+                        <select id="u-tipo-${id}">
+                            <option value="padrao"
+                                ${editando.tipo === "padrao" ? "selected" : ""}>
+                                padrão
+                            </option>
+
+                            <option value="admin"
+                                ${editando.tipo === "admin" ? "selected" : ""}>
+                                admin
+                            </option>
+                        </select>
+                    `
+                }
+            </td>
+
+            <td class="user-password">
+                ${
+                    adminEditandoOutroAdmin
+                    ? "🔒"
+                    : `
+                        <input
+                            id="u-senha-${id}"
+                            type="password"
+                            placeholder="Nova senha"
+                        >
+                    `
+                }
+            </td>
+
+            <td>
+                <div class="user-actions">
+
+                    ${
+                        adminEditandoOutroAdmin
+                        ? "🔒"
+                        : `
+                            <button onclick="salvarUsuario(${id})">
+                                💾
+                            </button>
+                        `
+                    }
+
+                    ${
+                        nome === currentUser
+                        ? "🔐"
+                        : `
+                            <button onclick="removerUsuario(${id})">
+                                🗑️
+                            </button>
+                        `
+                    }
+
+                </div>
+            </td>
+        `;
+
+        tabelaUsuarios.appendChild(tr);
     });
 }
 
@@ -745,12 +693,16 @@ async function criarUsuario() {
 
     if (!res) return;
 
+    const novoUsuario = await res.json();
+
+    listaUsuarios.unshift(novoUsuario);
+
+    renderUsuarios(listaUsuarios);
+
     userNome.value = "";
     userUsername.value = "";
     userEmail.value = "";
     userSenha.value = "";
-
-    carregarUsuarios();
 }
 
 async function salvarUsuario(id) {
@@ -764,14 +716,17 @@ async function salvarUsuario(id) {
     const email =
         document.getElementById(`u-email-${id}`).value.trim();
 
-    const tipo =
-        document.getElementById(`u-tipo-${id}`).value;
+    const tipoEl =
+        document.getElementById(`u-tipo-${id}`);
 
-    const senha =
-        document.getElementById(`u-senha-${id}`).value;
+    const senhaEl =
+        document.getElementById(`u-senha-${id}`);
+
+    const tipo = tipoEl ? tipoEl.value : "padrao";
+    const senha = senhaEl ? senhaEl.value : "";
 
     if (senha && senha.length < 6) {
-        alert("Senha deve ter no mínimo 6 caracteres");
+        alerta("minLength");
         return;
     }
 
@@ -799,10 +754,11 @@ async function salvarUsuario(id) {
 
     if (!res) return;
 
-    /* UPDATE LOCAL */
     listaUsuarios = listaUsuarios.map(u => {
 
-        if (u.id === id) {
+        const uid = u.id || u.idpessoa;
+
+        if (uid === id) {
             return {
                 ...u,
                 ...body
@@ -814,7 +770,7 @@ async function salvarUsuario(id) {
 
     renderUsuarios(listaUsuarios);
 
-    alert("Usuário atualizado");
+    alerta("save");
 }
 
 async function removerUsuario(id) {
@@ -864,7 +820,12 @@ async function removerUsuario(id) {
 
     if (!res) return;
 
-    carregarUsuarios();
+    listaUsuarios = listaUsuarios.filter(u => {
+        const uid = u.id || u.idpessoa;
+        return uid !== id;
+    });
+
+    renderUsuarios(listaUsuarios);
 }
 
 /* ================= ABAS ================= */
