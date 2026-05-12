@@ -154,14 +154,22 @@ async function apiFetch(url, options = {}) {
     try {
 
         const res = await fetch(url, {
+            cache: "no-store",
+
             ...options,
+
             headers: {
                 ...(options.headers || {}),
-                Authorization: `Bearer ${token}`
+
+                Authorization: `Bearer ${token}`,
+
+                "Cache-Control": "no-cache",
+                Pragma: "no-cache"
             }
         });
 
         if (res.status === 401) {
+
             logout();
             return null;
         }
@@ -494,11 +502,15 @@ async function removerContato(id) {
             `${API_URL}/pessoas/${id}`,
             {
                 method: "DELETE",
+
+                cache: "no-store",
+
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    "Cache-Control": "no-cache",
+                    Pragma: "no-cache"
                 }
-            }
-        );
+            };
 
         if (!res.ok) {
 
