@@ -56,6 +56,10 @@ let listaUsuarios = [];
 
 let editandoContato = null;
 
+let buscaUsuarios = "";
+let filtroUsuarios = "nome";
+let editandoUsuarios = {};
+
 /* ================= ALERT ================= */
 
 function alerta(msg) {
@@ -442,61 +446,139 @@ function renderUsuarios(lista) {
 
     lista.forEach(u => {
 
-        const tipoUsuario =
-            u.tipo ||
-            u.role ||
-            u.aotipousuario ||
-            "padrao";
+        const id = u.id || u.idpessoa;
 
-        const nomeUsuario =
+        const nome =
             u.nome ||
             u.txnome ||
             "";
 
-        const usernameUsuario =
+        const username =
             u.username ||
             u.txusername ||
             "";
 
-        const emailUsuario =
+        const email =
             u.email ||
             u.txemail ||
             "";
 
+        const tipo =
+            u.tipo ||
+            u.aotipousuario ||
+            "padrao";
+
+        const editando =
+            editandoUsuarios[id] || {
+                nome,
+                username,
+                email,
+                tipo,
+                senha: ""
+            };
+
         const adminEditandoOutroAdmin =
             role === "admin" &&
-            tipoUsuario === "admin" &&
-            nomeUsuario !== currentUser;
-
-        const podeEditarSenha =
-            !adminEditandoOutroAdmin;
-
-        const podeExcluir =
-            nomeUsuario !== currentUser;
+            tipo === "admin" &&
+            nome !== currentUser;
 
         tabelaUsuarios.innerHTML += `
             <tr>
 
-                <td>${nomeUsuario}</td>
+                <td>
+                    <input
+                        value="${editando.nome}"
+                        onchange="
+                            editandoUsuarios[${id}].nome=this.value
+                        "
+                    >
+                </td>
 
-                <td>${usernameUsuario}</td>
+                <td>
+                    <input
+                        value="${editando.username}"
+                        onchange="
+                            editandoUsuarios[${id}].username=this.value
+                        "
+                    >
+                </td>
 
-                <td>${emailUsuario}</td>
+                <td>
+                    <input
+                        value="${editando.email}"
+                        onchange="
+                            editandoUsuarios[${id}].email=this.value
+                        "
+                    >
+                </td>
 
-                <td>${tipoUsuario}</td>
+                <td>
+
+                    ${
+                        adminEditandoOutroAdmin
+                        ? `
+                            <span class="badge-admin">
+                                admin
+                            </span>
+                        `
+                        : `
+                            <select
+                                onchange="
+                                    editandoUsuarios[${id}].tipo=this.value
+                                "
+                            >
+                                <option
+                                    value="padrao"
+                                    ${
+                                        editando.tipo === "padrao"
+                                        ? "selected"
+                                        : ""
+                                    }
+                                >
+                                    padrão
+                                </option>
+
+                                <option
+                                    value="gestor"
+                                    ${
+                                        editando.tipo === "gestor"
+                                        ? "selected"
+                                        : ""
+                                    }
+                                >
+                                    gestor
+                                </option>
+
+                                <option
+                                    value="admin"
+                                    ${
+                                        editando.tipo === "admin"
+                                        ? "selected"
+                                        : ""
+                                    }
+                                >
+                                    admin
+                                </option>
+                            </select>
+                        `
+                    }
+
+                </td>
 
                 <td class="user-password">
 
                     ${
-                        podeEditarSenha
-                        ? `
+                        adminEditandoOutroAdmin
+                        ? "🔒"
+                        : `
                             <input
                                 type="password"
-                                id="senha-${u.id}"
-                                placeholder="${getTranslation("newPass")}"
+                                placeholder="Nova senha"
+                                onchange="
+                                    editandoUsuarios[${id}].senha=this.value
+                                "
                             >
                         `
-                        : "🔒"
                     }
 
                 </td>
@@ -506,23 +588,23 @@ function renderUsuarios(lista) {
                     <div class="user-actions">
 
                         ${
-                            podeEditarSenha
-                            ? `
-                                <button onclick="salvarUsuario(${u.id})">
+                            adminEditandoOutroAdmin
+                            ? "🔒"
+                            : `
+                                <button onclick="salvarUsuario(${id})">
                                     💾
                                 </button>
                             `
-                            : ""
                         }
 
                         ${
-                            podeExcluir
-                            ? `
-                                <button onclick="removerUsuario(${u.id})">
+                            nome === currentUser
+                            ? "🔐"
+                            : `
+                                <button onclick="removerUsuario(${id})">
                                     🗑️
                                 </button>
                             `
-                            : "🔐"
                         }
 
                     </div>
@@ -531,6 +613,17 @@ function renderUsuarios(lista) {
 
             </tr>
         `;
+
+        if (!editandoUsuarios[id]) {
+
+            editandoUsuarios[id] = {
+                nome,
+                username,
+                email,
+                tipo,
+                senha: ""
+            };
+        }
     });
 }
 
@@ -567,48 +660,58 @@ async function criarUsuario() {
 
 async function salvarUsuario(id) {
 
-    const usuario = listaUsuarios.find(u => u.id === id);
+    const dados = editandoUsuarios[id];
 
-    if (!usuario) return;
+    if (!dados) return;
 
-    const nomeUsuario =
-        usuario.nome ||
-        usuario.txnome ||
-        "";
-
-    const tipoUsuario =
-        usuario.tipo ||
-        usuario.role ||
-        usuario.aotipousuario ||
-        "padrao";
-
-    /* ADMIN NÃO PODE ALTERAR SENHA DE OUTRO ADMIN */
     if (
-        role === "admin" &&
-        tipoUsuario === "admin" &&
-        nomeUsuario !== currentUser
+        dados.senha &&
+        dados.senha.length < 6
     ) {
 
-        alert("Você não pode alterar a senha de outro admin.");
+        alert("Senha deve ter no mínimo 6 caracteres");
 
         return;
     }
 
-    const senha = document.getElementById(`senha-${id}`)?.value;
-
-    if (!senha) return;
-
-    const res = await apiFetch(`${API_URL}/usuarios/${id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            senha
-        })
-    });
+    const res = await apiFetch(
+        `${API_URL}/usuarios/${id}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dados)
+        }
+    );
 
     if (!res) return;
+
+    alert("Usuário atualizado");
+
+    carregarUsuarios();
+}
+
+async function removerUsuario(id) {
+
+    if (
+        !confirm(
+            "Deseja realmente excluir?"
+        )
+    ) {
+        return;
+    }
+
+    const res = await apiFetch(
+        `${API_URL}/usuarios/${id}`,
+        {
+            method: "DELETE"
+        }
+    );
+
+    if (!res) return;
+
+    alert("Usuário removido");
 
     carregarUsuarios();
 }
