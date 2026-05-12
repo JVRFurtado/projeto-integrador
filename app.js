@@ -218,7 +218,7 @@ function entrarSistema() {
 
     /* ================= USUÁRIO PADRÃO ================= */
 
-    if (role !== "admin" && role !== "gestor") {
+    if (role !== "admin") {
 
         btnUsuarios.style.display = "none";
 
@@ -235,7 +235,7 @@ function entrarSistema() {
 
     } else {
 
-        /* ADMIN/GESTOR */
+        /* ADMIN */
 
         carregarUsuarios();
 
@@ -308,161 +308,110 @@ async function exibirContatos() {
     renderContatos(listaContatos);
 }
 
-function renderUsuarios(lista) {
+function renderContatos(lista) {
 
-    tabelaUsuarios.innerHTML = "";
+    tabelaContatos.innerHTML = "";
+
+    const isAdmin =
+        role === "admin"
 
     if (!Array.isArray(lista)) {
         lista = [];
     }
 
-    lista.forEach(u => {
+    lista.forEach(contato => {
 
-        const id = u.id || u.idpessoa;
+        if (!contato || !contato.id) {
+            return;
+        }
 
-        const nome =
-            u.nome ||
-            u.txnome ||
-            "";
+        const contatoId = Number(contato.id);
 
-        const username =
-            u.username ||
-            u.txusername ||
-            "";
+        const editando =
+            editandoContato === contatoId;
 
-        const email =
-            u.email ||
-            u.txemail ||
-            "";
+        const nomeContato =
+            contato.nome || "";
 
-        const tipo =
-            u.tipo ||
-            u.aotipousuario ||
-            "padrao";
+        const departamentoContato =
+            contato.departamento || "";
 
-        const adminEditandoOutroAdmin =
-            role === "admin" &&
-            tipo === "admin" &&
-            nome !== currentUser;
+        const ramalContato =
+            contato.ramal || "";
 
-        tabelaUsuarios.innerHTML += `
+        tabelaContatos.innerHTML += `
             <tr>
 
                 <td>
-                    <input
-                        id="u-nome-${id}"
-                        value="${nome}"
-                    >
-                </td>
-
-                <td>
-                    <input
-                        id="u-username-${id}"
-                        value="${username}"
-                    >
-                </td>
-
-                <td>
-                    <input
-                        id="u-email-${id}"
-                        value="${email}"
-                    >
-                </td>
-
-                <td>
-
                     ${
-                        adminEditandoOutroAdmin
+                        editando
                         ? `
-                            <span class="badge-admin">
-                                admin
-                            </span>
-                        `
-                        : `
-                            <select id="u-tipo-${id}">
-
-                                <option
-                                    value="padrao"
-                                    ${
-                                        tipo === "padrao"
-                                        ? "selected"
-                                        : ""
-                                    }
-                                >
-                                    padrão
-                                </option>
-
-                                <option
-                                    value="gestor"
-                                    ${
-                                        tipo === "gestor"
-                                        ? "selected"
-                                        : ""
-                                    }
-                                >
-                                    gestor
-                                </option>
-
-                                <option
-                                    value="admin"
-                                    ${
-                                        tipo === "admin"
-                                        ? "selected"
-                                        : ""
-                                    }
-                                >
-                                    admin
-                                </option>
-
-                            </select>
-                        `
-                    }
-
-                </td>
-
-                <td class="user-password">
-
-                    ${
-                        adminEditandoOutroAdmin
-                        ? "🔒"
-                        : `
                             <input
-                                type="password"
-                                id="u-senha-${id}"
-                                placeholder="Nova senha"
+                                id="c-ramal-${contatoId}"
+                                value="${ramalContato}"
                             >
                         `
+                        : ramalContato
                     }
-
                 </td>
 
                 <td>
-
-                    <div class="user-actions">
-
-                        ${
-                            adminEditandoOutroAdmin
-                            ? "🔒"
-                            : `
-                                <button onclick="salvarUsuario(${id})">
-                                    💾
-                                </button>
-                            `
-                        }
-
-                        ${
-                            nome === currentUser
-                            ? "🔐"
-                            : `
-                                <button onclick="removerUsuario(${id})">
-                                    🗑️
-                                </button>
-                            `
-                        }
-
-                    </div>
-
+                    ${
+                        editando
+                        ? `
+                            <input
+                                id="c-dep-${contatoId}"
+                                value="${departamentoContato}"
+                            >
+                        `
+                        : departamentoContato
+                    }
                 </td>
+
+                <td>
+                    ${
+                        editando
+                        ? `
+                            <input
+                                id="c-nome-${contatoId}"
+                                value="${nomeContato}"
+                            >
+                        `
+                        : nomeContato
+                    }
+                </td>
+
+                ${
+                    isAdmin
+                    ? `
+                        <td>
+
+                            ${
+                                editando
+                                ? `
+                                    <button onclick="salvarContato(${contatoId})">
+                                        💾
+                                    </button>
+
+                                    <button onclick="cancelarEdicao()">
+                                        ❌
+                                    </button>
+                                `
+                                : `
+                                    <button onclick="editarContato(${contatoId})">
+                                        ✏️
+                                    </button>
+
+                                    <button onclick="removerContato(${contatoId})">
+                                        🗑️
+                                    </button>
+                                `
+                            }
+
+                        </td>
+                    `
+                    : ""
+                }
 
             </tr>
         `;
@@ -696,17 +645,6 @@ function renderUsuarios(lista) {
                                 </option>
 
                                 <option
-                                    value="gestor"
-                                    ${
-                                        editando.tipo === "gestor"
-                                        ? "selected"
-                                        : ""
-                                    }
-                                >
-                                    gestor
-                                </option>
-
-                                <option
                                     value="admin"
                                     ${
                                         editando.tipo === "admin"
@@ -934,8 +872,7 @@ async function removerUsuario(id) {
 function mostrarAba(aba) {
 
     const isAdmin =
-        role === "admin" ||
-        role === "gestor";
+        role === "admin"
 
     /* USUÁRIO PADRÃO */
     if (!isAdmin) {
@@ -946,7 +883,7 @@ function mostrarAba(aba) {
         return;
     }
 
-    /* ADMIN/GESTOR */
+    /* ADMIN */
 
     if (aba === "contatos") {
 
