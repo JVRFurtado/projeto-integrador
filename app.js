@@ -308,8 +308,12 @@ function renderContatos(lista) {
 
     lista.forEach(contato => {
 
+        const contatoId =
+            contatoId ||
+            contato.idpessoa;
+
         const editando =
-            editandoContato === contato.id;
+            editandoContato === contatoId;
 
         tabelaContatos.innerHTML += `
             <tr>
