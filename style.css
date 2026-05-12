@@ -377,3 +377,86 @@ html.dark option {
     flex: 1;
     min-width: 220px;
 }
+
+/* =========================
+   TABELAS RESPONSIVAS
+========================= */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 10px;
+}
+
+table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: collapse;
+}
+
+td {
+    vertical-align: middle;
+}
+
+/* Inputs da tabela */
+td input,
+td select {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+/* Coluna ações */
+.user-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* Senha */
+.user-password {
+    min-width: 180px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    .card {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .filter-controls {
+        flex-direction: column;
+    }
+
+    .filter-controls input,
+    .filter-controls select {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    table {
+        min-width: 850px;
+    }
+
+    td,
+    th {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .user-actions button {
+        width: auto;
+        min-width: 40px;
+    }
+}
