@@ -574,14 +574,18 @@ function renderUsuarios(lista) {
             u.aotipousuario ||
             "padrao";
 
-        const editando =
-            editandoUsuarios[id] || {
+        if (!editandoUsuarios[id]) {
+
+            editandoUsuarios[id] = {
                 nome,
                 username,
                 email,
                 tipo,
                 senha: ""
             };
+        }
+
+        const editando = editandoUsuarios[id];
 
         const adminEditandoOutroAdmin =
             role === "admin" &&
@@ -593,6 +597,7 @@ function renderUsuarios(lista) {
 
                 <td>
                     <input
+                        id="u-nome-${id}"
                         value="${editando.nome}"
                         onchange="
                             editandoUsuarios[${id}].nome=this.value
@@ -602,6 +607,7 @@ function renderUsuarios(lista) {
 
                 <td>
                     <input
+                        id="u-username-${id}"
                         value="${editando.username}"
                         onchange="
                             editandoUsuarios[${id}].username=this.value
@@ -611,6 +617,7 @@ function renderUsuarios(lista) {
 
                 <td>
                     <input
+                        id="u-email-${id}"
                         value="${editando.email}"
                         onchange="
                             editandoUsuarios[${id}].email=this.value
@@ -629,6 +636,7 @@ function renderUsuarios(lista) {
                         `
                         : `
                             <select
+                                id="u-tipo-${id}"
                                 onchange="
                                     editandoUsuarios[${id}].tipo=this.value
                                 "
@@ -667,6 +675,7 @@ function renderUsuarios(lista) {
                         ? "🔒"
                         : `
                             <input
+                                id="u-senha-${id}"
                                 type="password"
                                 placeholder="Nova senha"
                                 onchange="
@@ -708,70 +717,63 @@ function renderUsuarios(lista) {
 
             </tr>
         `;
-
-        if (!editandoUsuarios[id]) {
-
-            editandoUsuarios[id] = {
-                nome,
-                username,
-                email,
-                tipo,
-                senha: ""
-            };
-        }
     });
 }
 
 async function criarUsuario() {
 
     if (userSenha.value.length < 6) {
+
         alerta("minLength");
         return;
     }
 
-    const res = await apiFetch(`${API_URL}/usuarios/`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nome: userNome.value.trim(),
-            username: userUsername.value.trim(),
-            email: userEmail.value.trim(),
-            senha: userSenha.value,
-            tipo: userTipo.value
-        })
-    });
+    const res = await apiFetch(
+        `${API_URL}/usuarios/`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nome: userNome.value.trim(),
+                username: userUsername.value.trim(),
+                email: userEmail.value.trim(),
+                senha: userSenha.value,
+                tipo: userTipo.value
+            })
+        }
+    );
 
     if (!res) return;
+
+    const novoUsuario = await res.json();
+
+    listaUsuarios.unshift(novoUsuario);
+
+    renderUsuarios(listaUsuarios);
 
     userNome.value = "";
     userUsername.value = "";
     userEmail.value = "";
     userSenha.value = "";
-
-    carregarUsuarios();
 }
 
 async function salvarUsuario(id) {
 
-    const nome =
-        document.getElementById(`u-nome-${id}`).value.trim();
+    const dados = editandoUsuarios[id];
 
-    const username =
-        document.getElementById(`u-username-${id}`).value.trim();
+    if (!dados) return;
 
-    const email =
-        document.getElementById(`u-email-${id}`).value.trim();
-
-    const tipo =
-        document.getElementById(`u-tipo-${id}`).value;
-
-    const senha =
-        document.getElementById(`u-senha-${id}`).value;
+    const nome = dados.nome.trim();
+    const username = dados.username.trim();
+    const email = dados.email.trim();
+    const tipo = dados.tipo;
+    const senha = dados.senha;
 
     if (senha && senha.length < 6) {
-        alert("Senha deve ter no mínimo 6 caracteres");
+
+        alerta("minLength");
         return;
     }
 
@@ -799,10 +801,13 @@ async function salvarUsuario(id) {
 
     if (!res) return;
 
-    /* UPDATE LOCAL */
+    /* ATUALIZA LOCALMENTE */
     listaUsuarios = listaUsuarios.map(u => {
 
-        if (u.id === id) {
+        const uid = u.id || u.idpessoa;
+
+        if (uid === id) {
+
             return {
                 ...u,
                 ...body
@@ -812,14 +817,21 @@ async function salvarUsuario(id) {
         return u;
     });
 
+    /* LIMPA SENHA */
+    editandoUsuarios[id].senha = "";
+
     renderUsuarios(listaUsuarios);
 
-    alert("Usuário atualizado");
+    alerta("save");
 }
 
 async function removerUsuario(id) {
 
-    const usuario = listaUsuarios.find(u => u.id === id);
+    const usuario = listaUsuarios.find(u => {
+
+        const uid = u.id || u.idpessoa;
+        return uid === id;
+    });
 
     if (!usuario) return;
 
@@ -858,13 +870,26 @@ async function removerUsuario(id) {
 
     if (!confirm("Excluir?")) return;
 
-    const res = await apiFetch(`${API_URL}/usuarios/${id}`, {
-        method: "DELETE"
-    });
+    const res = await apiFetch(
+        `${API_URL}/usuarios/${id}`,
+        {
+            method: "DELETE"
+        }
+    );
 
     if (!res) return;
 
-    carregarUsuarios();
+    /* REMOVE LOCALMENTE */
+    listaUsuarios = listaUsuarios.filter(u => {
+
+        const uid = u.id || u.idpessoa;
+
+        return uid !== id;
+    });
+
+    delete editandoUsuarios[id];
+
+    renderUsuarios(listaUsuarios);
 }
 
 /* ================= ABAS ================= */
@@ -902,6 +927,7 @@ function mostrarAba(aba) {
         btnUsuarios.style.display = "none";
     }
 }
+
 /* ================= DARK MODE ================= */
 
 function aplicarTemaAutomatico() {
