@@ -621,7 +621,6 @@ function renderUsuarios(lista) {
 async function criarUsuario() {
 
     if (userSenha.value.length < 6) {
-        alerta("minLength");
         return;
     }
 
@@ -644,12 +643,20 @@ async function criarUsuario() {
 
     if (!res) return;
 
+    const novoUsuario = await res.json();
+
     userNome.value = "";
     userUsername.value = "";
     userEmail.value = "";
     userSenha.value = "";
 
-    await carregarUsuarios();
+    listaUsuarios.unshift(novoUsuario);
+
+    editandoUsuarios = {};
+
+    renderUsuarios(listaUsuarios);
+
+    mostrarAba("usuarios");
 }
 
 async function salvarUsuario(id) {
@@ -720,14 +727,6 @@ async function removerUsuario(id) {
         usuario.role ||
         usuario.aotipousuario ||
         "padrao";
-
-    if (
-        nomeUsuario === currentUser &&
-        tipoUsuario === "admin"
-    ) {
-        alert("O administrador não pode excluir a própria conta.");
-        return;
-    }
 
     if (
         role === "admin" &&
