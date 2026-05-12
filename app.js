@@ -492,6 +492,7 @@ async function carregarUsuarios() {
 
     listaUsuarios = await res.json();
 
+    /* LIMPA CACHE */
     editandoUsuarios = {};
 
     renderUsuarios(listaUsuarios);
@@ -643,20 +644,21 @@ async function criarUsuario() {
 
     if (!res) return;
 
-    const novoUsuario = await res.json();
-
+    /* LIMPA FORM */
     userNome.value = "";
     userUsername.value = "";
     userEmail.value = "";
     userSenha.value = "";
 
-    listaUsuarios.unshift(novoUsuario);
+    /* RECARREGA DIRETO DA API */
+    await carregarUsuarios();
 
-    editandoUsuarios = {};
+    /* MOSTRA ABA */
+    abaUsuarios.style.display = "block";
+    abaContatos.style.display = "none";
 
-    renderUsuarios(listaUsuarios);
-
-    mostrarAba("usuarios");
+    btnUsuarios.style.display = "none";
+    btnContatos.style.display = "block";
 }
 
 async function salvarUsuario(id) {
