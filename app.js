@@ -272,7 +272,6 @@ formCadastro.onsubmit = async (e) => {
         ramal: ramal.value.trim()
     };
 
-    /* CRIA CONTATO */
     const res = await apiFetch(
         `${API_URL}/pessoas/`,
         {
@@ -286,17 +285,14 @@ formCadastro.onsubmit = async (e) => {
 
     if (!res) return;
 
-    /* RECARREGA CONTATOS */
-    await exibirContatos();
-
-    /* RECARREGA USUÁRIOS */
-    await carregarUsuarios();
-
-    /* LIMPA CAMPOS */
     nome.value = "";
     departamento.value = "";
     ramal.value = "";
-};
+
+    /* ATUALIZA AS DUAS */
+    await exibirContatos();
+    await carregarUsuarios();
+}
 
 async function exibirContatos() {
 
@@ -465,7 +461,9 @@ async function salvarContato(id) {
 
     editandoContato = null;
 
+    /* ATUALIZA AS DUAS */
     await exibirContatos();
+    await carregarUsuarios();
 }
 
 async function removerContato(id) {
@@ -485,7 +483,9 @@ async function removerContato(id) {
 
     if (!res) return;
 
+    /* ATUALIZA AS DUAS */
     await exibirContatos();
+    await carregarUsuarios();
 }
 
 /* ================= USUÁRIOS ================= */
@@ -658,6 +658,7 @@ async function criarUsuario() {
 
     /* RECARREGA DIRETO DA API */
     await carregarUsuarios();
+    await exibirContatos();
 
     /* MOSTRA ABA */
     abaUsuarios.style.display = "block";
@@ -717,6 +718,7 @@ async function salvarUsuario(id) {
     if (!res) return;
 
     await carregarUsuarios();
+    await exibirContatos();
 }
 
 async function removerUsuario(id) {
@@ -757,6 +759,7 @@ async function removerUsuario(id) {
     if (!res) return;
 
     await carregarUsuarios();
+    await exibirContatos();
 }
 
 /* ================= ABAS ================= */
