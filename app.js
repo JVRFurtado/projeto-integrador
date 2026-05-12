@@ -272,6 +272,7 @@ formCadastro.onsubmit = async (e) => {
         ramal: ramal.value.trim()
     };
 
+    /* CRIA CONTATO */
     const res = await apiFetch(
         `${API_URL}/pessoas/`,
         {
@@ -285,11 +286,16 @@ formCadastro.onsubmit = async (e) => {
 
     if (!res) return;
 
+    /* RECARREGA CONTATOS */
+    await exibirContatos();
+
+    /* RECARREGA USUÁRIOS */
+    await carregarUsuarios();
+
+    /* LIMPA CAMPOS */
     nome.value = "";
     departamento.value = "";
     ramal.value = "";
-
-    await exibirContatos();
 };
 
 async function exibirContatos() {
@@ -715,7 +721,9 @@ async function salvarUsuario(id) {
 
 async function removerUsuario(id) {
 
-    const usuario = listaUsuarios.find(u => u.id === id);
+    const usuario = listaUsuarios.find(u => {
+        return (u.id || u.idpessoa) === id;
+    });
 
     if (!usuario) return;
 
@@ -731,10 +739,9 @@ async function removerUsuario(id) {
         "padrao";
 
     if (
-        role === "admin" &&
+        nomeUsuario === currentUser &&
         tipoUsuario === "admin"
     ) {
-        alert("Admins não podem excluir outros admins.");
         return;
     }
 
