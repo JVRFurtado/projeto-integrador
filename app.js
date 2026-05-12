@@ -266,26 +266,36 @@ formCadastro.onsubmit = async (e) => {
 
     e.preventDefault();
 
-    const res = await apiFetch(`${API_URL}/pessoas/`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nome: nome.value.trim(),
-            departamento: departamento.value.trim(),
-            ramal: ramal.value.trim()
-        })
-    });
+    const body = {
+        nome: nome.value.trim(),
+        departamento: departamento.value.trim(),
+        ramal: ramal.value.trim()
+    };
+
+    const res = await apiFetch(
+        `${API_URL}/pessoas/`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+    );
 
     if (!res) return;
+
+    const novoContato = await res.json();
+
+    /* ADICIONA DIRETO */
+    listaContatos.unshift(novoContato);
+
+    renderContatos(listaContatos);
 
     nome.value = "";
     departamento.value = "";
     ramal.value = "";
-
-    exibirContatos();
-};
+}
 
 async function exibirContatos() {
 
@@ -298,112 +308,161 @@ async function exibirContatos() {
     renderContatos(listaContatos);
 }
 
-function renderContatos(lista) {
+function renderUsuarios(lista) {
 
-    tabelaContatos.innerHTML = "";
-
-    const isAdmin =
-        role === "admin" ||
-        role === "gestor";
+    tabelaUsuarios.innerHTML = "";
 
     if (!Array.isArray(lista)) {
         lista = [];
     }
 
-    lista.forEach(contato => {
+    lista.forEach(u => {
 
-        /* IGNORA CONTATOS INVÁLIDOS */
-        if (!contato || !contato.id) {
-            return;
-        }
+        const id = u.id || u.idpessoa;
 
-        const contatoId = Number(contato.id);
+        const nome =
+            u.nome ||
+            u.txnome ||
+            "";
 
-        const editando =
-            editandoContato === contatoId;
+        const username =
+            u.username ||
+            u.txusername ||
+            "";
 
-        const nomeContato =
-            contato.nome || "";
+        const email =
+            u.email ||
+            u.txemail ||
+            "";
 
-        const departamentoContato =
-            contato.departamento || "";
+        const tipo =
+            u.tipo ||
+            u.aotipousuario ||
+            "padrao";
 
-        const ramalContato =
-            contato.ramal || "";
+        const adminEditandoOutroAdmin =
+            role === "admin" &&
+            tipo === "admin" &&
+            nome !== currentUser;
 
-        tabelaContatos.innerHTML += `
+        tabelaUsuarios.innerHTML += `
             <tr>
 
                 <td>
-                    ${
-                        editando
-                        ? `
-                            <input
-                                id="c-ramal-${contatoId}"
-                                value="${ramalContato}"
-                            >
-                        `
-                        : ramalContato
-                    }
+                    <input
+                        id="u-nome-${id}"
+                        value="${nome}"
+                    >
                 </td>
 
                 <td>
-                    ${
-                        editando
-                        ? `
-                            <input
-                                id="c-dep-${contatoId}"
-                                value="${departamentoContato}"
-                            >
-                        `
-                        : departamentoContato
-                    }
+                    <input
+                        id="u-username-${id}"
+                        value="${username}"
+                    >
                 </td>
 
                 <td>
-                    ${
-                        editando
-                        ? `
-                            <input
-                                id="c-nome-${contatoId}"
-                                value="${nomeContato}"
-                            >
-                        `
-                        : nomeContato
-                    }
+                    <input
+                        id="u-email-${id}"
+                        value="${email}"
+                    >
                 </td>
 
-                ${
-                    isAdmin
-                    ? `
-                        <td>
+                <td>
 
-                            ${
-                                editando
-                                ? `
-                                    <button onclick="salvarContato(${contatoId})">
-                                        💾
-                                    </button>
+                    ${
+                        adminEditandoOutroAdmin
+                        ? `
+                            <span class="badge-admin">
+                                admin
+                            </span>
+                        `
+                        : `
+                            <select id="u-tipo-${id}">
 
-                                    <button onclick="cancelarEdicao()">
-                                        ❌
-                                    </button>
-                                `
-                                : `
-                                    <button onclick="editarContato(${contatoId})">
-                                        ✏️
-                                    </button>
+                                <option
+                                    value="padrao"
+                                    ${
+                                        tipo === "padrao"
+                                        ? "selected"
+                                        : ""
+                                    }
+                                >
+                                    padrão
+                                </option>
 
-                                    <button onclick="removerContato(${contatoId})">
-                                        🗑️
-                                    </button>
-                                `
-                            }
+                                <option
+                                    value="gestor"
+                                    ${
+                                        tipo === "gestor"
+                                        ? "selected"
+                                        : ""
+                                    }
+                                >
+                                    gestor
+                                </option>
 
-                        </td>
-                    `
-                    : ""
-                }
+                                <option
+                                    value="admin"
+                                    ${
+                                        tipo === "admin"
+                                        ? "selected"
+                                        : ""
+                                    }
+                                >
+                                    admin
+                                </option>
+
+                            </select>
+                        `
+                    }
+
+                </td>
+
+                <td class="user-password">
+
+                    ${
+                        adminEditandoOutroAdmin
+                        ? "🔒"
+                        : `
+                            <input
+                                type="password"
+                                id="u-senha-${id}"
+                                placeholder="Nova senha"
+                            >
+                        `
+                    }
+
+                </td>
+
+                <td>
+
+                    <div class="user-actions">
+
+                        ${
+                            adminEditandoOutroAdmin
+                            ? "🔒"
+                            : `
+                                <button onclick="salvarUsuario(${id})">
+                                    💾
+                                </button>
+                            `
+                        }
+
+                        ${
+                            nome === currentUser
+                            ? "🔐"
+                            : `
+                                <button onclick="removerUsuario(${id})">
+                                    🗑️
+                                </button>
+                            `
+                        }
+
+                    </div>
+
+                </td>
 
             </tr>
         `;
@@ -426,27 +485,50 @@ function cancelarEdicao() {
 
 async function salvarContato(id) {
 
-    const nomeContato = document.getElementById(`c-nome-${id}`).value;
-    const departamentoContato = document.getElementById(`c-dep-${id}`).value;
-    const ramalContato = document.getElementById(`c-ramal-${id}`).value;
+    const nomeContato =
+        document.getElementById(`c-nome-${id}`).value;
 
-    const res = await apiFetch(`${API_URL}/pessoas/${id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nome: nomeContato,
-            departamento: departamentoContato,
-            ramal: ramalContato
-        })
-    });
+    const departamentoContato =
+        document.getElementById(`c-dep-${id}`).value;
+
+    const ramalContato =
+        document.getElementById(`c-ramal-${id}`).value;
+
+    const body = {
+        nome: nomeContato,
+        departamento: departamentoContato,
+        ramal: ramalContato
+    };
+
+    const res = await apiFetch(
+        `${API_URL}/pessoas/${id}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+    );
 
     if (!res) return;
 
+    /* ATUALIZA LOCALMENTE */
+    listaContatos = listaContatos.map(c => {
+
+        if (c.id === id) {
+            return {
+                ...c,
+                ...body
+            };
+        }
+
+        return c;
+    });
+
     editandoContato = null;
 
-    exibirContatos();
+    renderContatos(listaContatos);
 }
 
 async function removerContato(id) {
@@ -735,18 +817,35 @@ async function criarUsuario() {
 
 async function salvarUsuario(id) {
 
-    const dados = editandoUsuarios[id];
+    const nome =
+        document.getElementById(`u-nome-${id}`).value.trim();
 
-    if (!dados) return;
+    const username =
+        document.getElementById(`u-username-${id}`).value.trim();
 
-    if (
-        dados.senha &&
-        dados.senha.length < 6
-    ) {
+    const email =
+        document.getElementById(`u-email-${id}`).value.trim();
 
+    const tipo =
+        document.getElementById(`u-tipo-${id}`).value;
+
+    const senha =
+        document.getElementById(`u-senha-${id}`).value;
+
+    if (senha && senha.length < 6) {
         alert("Senha deve ter no mínimo 6 caracteres");
-
         return;
+    }
+
+    const body = {
+        nome,
+        username,
+        email,
+        tipo
+    };
+
+    if (senha) {
+        body.senha = senha;
     }
 
     const res = await apiFetch(
@@ -756,39 +855,28 @@ async function salvarUsuario(id) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(dados)
+            body: JSON.stringify(body)
         }
     );
 
     if (!res) return;
+
+    /* UPDATE LOCAL */
+    listaUsuarios = listaUsuarios.map(u => {
+
+        if (u.id === id) {
+            return {
+                ...u,
+                ...body
+            };
+        }
+
+        return u;
+    });
+
+    renderUsuarios(listaUsuarios);
 
     alert("Usuário atualizado");
-
-    carregarUsuarios();
-}
-
-async function removerUsuario(id) {
-
-    if (
-        !confirm(
-            "Deseja realmente excluir?"
-        )
-    ) {
-        return;
-    }
-
-    const res = await apiFetch(
-        `${API_URL}/usuarios/${id}`,
-        {
-            method: "DELETE"
-        }
-    );
-
-    if (!res) return;
-
-    alert("Usuário removido");
-
-    carregarUsuarios();
 }
 
 async function removerUsuario(id) {
