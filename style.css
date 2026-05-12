@@ -1,4 +1,605 @@
 /* =========================================
+   RESET GLOBAL
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* =========================================
+   VARIÁVEIS
+========================================= */
+
+:root {
+    --bg: #eef2f7;
+    --card: #ffffff;
+    --text: #2f2f2f;
+
+    --primary: #c62828;
+    --primary-hover: #b71c1c;
+
+    --border: #d7dce3;
+
+    --shadow:
+        0 4px 12px rgba(0,0,0,0.06);
+
+    --radius: 12px;
+
+    --transition: .22s ease;
+}
+
+html.dark {
+    --bg: #111315;
+    --card: #1c1f23;
+    --text: #f3f4f6;
+
+    --primary: #ef5350;
+    --primary-hover: #e53935;
+
+    --border: #363a40;
+
+    --shadow:
+        0 8px 22px rgba(0,0,0,0.28);
+}
+
+/* =========================================
+   BODY
+========================================= */
+
+body {
+    font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+    background: var(--bg);
+    color: var(--text);
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    transition:
+        background var(--transition),
+        color var(--transition);
+}
+
+#dashboard {
+    flex: 1;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+header {
+    width: 100%;
+
+    background: var(--primary);
+
+    color: white;
+
+    padding: 16px 22px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    box-shadow: var(--shadow);
+}
+
+header h1 {
+    font-size: 25px;
+    font-weight: 700;
+
+    letter-spacing: .3px;
+}
+
+/* =========================================
+   CONTROLES TOPO
+========================================= */
+
+.top-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.theme-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* =========================================
+   BOTÃO IDIOMAS PROFISSIONAL
+========================================= */
+
+.lang-minimal {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    width: auto !important;
+
+    min-width: 84px;
+    height: 40px;
+
+    padding: 0 14px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    outline: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        transform .15s ease,
+        box-shadow var(--transition);
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+/* LIGHT */
+
+html:not(.dark) .lang-minimal {
+    background: rgba(255,255,255,0.16);
+
+    border: 1px solid rgba(255,255,255,0.42);
+
+    color: #ffffff;
+}
+
+html:not(.dark) .lang-minimal:hover {
+    background: rgba(255,255,255,0.24);
+}
+
+/* DARK */
+
+html.dark .lang-minimal {
+    background: #2b2f34 !important;
+
+    border: 1px solid #50555c !important;
+
+    color: #f5f5f5 !important;
+}
+
+html.dark .lang-minimal:hover {
+    background: #353a40 !important;
+}
+
+.lang-minimal:hover {
+    transform: translateY(-1px);
+}
+
+.lang-minimal:focus {
+    box-shadow:
+        0 0 0 3px rgba(255,255,255,0.14);
+}
+
+.lang-minimal option {
+    background: var(--card);
+    color: var(--text);
+}
+
+/* =========================================
+   ÍCONE TEMA
+========================================= */
+
+#themeIcon {
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+}
+
+/* =========================================
+   SWITCH
+========================================= */
+
+.switch {
+    position: relative;
+
+    width: 46px;
+    height: 24px;
+
+    flex-shrink: 0;
+}
+
+.switch input {
+    display: none;
+}
+
+.switch span {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    border-radius: 999px;
+
+    background: rgba(255,255,255,0.45);
+
+    cursor: pointer;
+
+    transition: var(--transition);
+}
+
+.switch span::after {
+    content: "";
+
+    position: absolute;
+
+    width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    top: 3px;
+    left: 3px;
+
+    transition: var(--transition);
+}
+
+.switch input:checked + span::after {
+    transform: translateX(22px);
+}
+
+/* =========================================
+   LOGIN
+========================================= */
+
+.login-wrapper {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+}
+
+/* =========================================
+   CARD
+========================================= */
+
+.card {
+    background: var(--card);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+
+    padding: 22px;
+    margin: 20px;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition);
+}
+
+.card h2 {
+    margin-bottom: 18px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 360px;
+}
+
+/* =========================================
+   FORMULÁRIOS
+========================================= */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+input,
+select {
+    width: 100%;
+
+    min-height: 44px;
+
+    padding: 10px 12px;
+
+    border-radius: 10px;
+
+    border: 1px solid var(--border);
+
+    background: transparent;
+
+    color: var(--text);
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color var(--transition),
+        background var(--transition),
+        color var(--transition),
+        box-shadow var(--transition);
+}
+
+input:focus,
+select:focus {
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 3px rgba(198,40,40,0.14);
+}
+
+/* SELECTS DARK */
+
+html.dark select:not(.lang-minimal) {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+html.dark option {
+    background: var(--card);
+    color: var(--text);
+}
+
+/* =========================================
+   BOTÕES PROFISSIONAIS
+========================================= */
+
+button {
+    min-height: 44px;
+
+    padding: 10px 16px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    white-space: nowrap;
+
+    transition:
+        background var(--transition),
+        transform .15s ease,
+        box-shadow var(--transition);
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,0.08);
+}
+
+button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: scale(.98);
+}
+
+/* =========================================
+   BOTÃO LOGOUT
+========================================= */
+
+.logout-btn {
+    width: auto !important;
+
+    min-width: 90px;
+
+    height: 40px;
+}
+
+/* =========================================
+   TABS
+========================================= */
+
+.tabs {
+    display: flex;
+    gap: 10px;
+
+    margin: 12px 20px 0;
+}
+
+.tabs button {
+    flex: 1;
+}
+
+/* =========================================
+   FILTROS
+========================================= */
+
+.filter-wrapper {
+    margin: 18px 0;
+}
+
+.filter-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-controls select {
+    min-width: 170px;
+}
+
+.filter-controls input {
+    flex: 1;
+    min-width: 220px;
+}
+
+/* =========================================
+   TABELAS
+========================================= */
+
+.table-container {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border-radius: var(--radius);
+}
+
+table {
+    width: 100%;
+
+    min-width: 920px;
+
+    border-collapse: collapse;
+}
+
+th {
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+td,
+th {
+    padding: 12px;
+
+    border-bottom: 1px solid var(--border);
+
+    text-align: center;
+    vertical-align: middle;
+
+    word-break: break-word;
+}
+
+tr {
+    transition: background var(--transition);
+}
+
+tr:hover {
+    background: rgba(0,0,0,0.025);
+}
+
+html.dark tr:hover {
+    background: rgba(255,255,255,0.025);
+}
+
+/* Inputs tabela */
+
+.table-container td input,
+.table-container td select {
+    margin: 0;
+}
+
+/* =========================================
+   AÇÕES USUÁRIOS
+========================================= */
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+    min-width: 120px;
+}
+
+.user-actions button {
+    min-width: 42px;
+
+    padding: 8px 12px;
+}
+
+/* =========================================
+   SENHA
+========================================= */
+
+.user-password {
+    min-width: 180px;
+}
+
+.user-password input {
+    width: 100%;
+}
+
+/* =========================================
+   BADGE ADMIN
+========================================= */
+
+.badge-admin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer {
+    background: #2d2d2d;
+
+    color: white;
+
     text-align: center;
 
     padding: 14px;
