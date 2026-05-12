@@ -285,17 +285,14 @@ formCadastro.onsubmit = async (e) => {
 
     if (!res) return;
 
-    const novoContato = await res.json();
-
-    /* ADICIONA DIRETO */
-    listaContatos.unshift(novoContato);
-
-    renderContatos(listaContatos);
-
     nome.value = "";
     departamento.value = "";
     ramal.value = "";
-}
+
+    await exibirContatos();
+
+    alerta("save");
+};
 
 async function exibirContatos() {
 
@@ -462,22 +459,11 @@ async function salvarContato(id) {
 
     if (!res) return;
 
-    /* ATUALIZA LOCALMENTE */
-    listaContatos = listaContatos.map(c => {
-
-        if (c.id === id) {
-            return {
-                ...c,
-                ...body
-            };
-        }
-
-        return c;
-    });
-
     editandoContato = null;
 
-    renderContatos(listaContatos);
+    await exibirContatos();
+
+    alerta("save");
 }
 
 async function removerContato(id) {
@@ -488,49 +474,18 @@ async function removerContato(id) {
 
     editandoContato = null;
 
-    try {
-
-        const res = await fetch(
-            `${API_URL}/pessoas/${id}`,
-            {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        if (!res.ok) {
-
-            let erro = {};
-
-            try {
-                erro = await res.json();
-            } catch {}
-
-            console.error(erro);
-
-            alert(
-                erro.detail ||
-                "Erro ao excluir contato"
-            );
-
-            return;
+    const res = await apiFetch(
+        `${API_URL}/pessoas/${id}`,
+        {
+            method: "DELETE"
         }
+    );
 
-        listaContatos =
-            listaContatos.filter(
-                c => c.id !== id
-            );
+    if (!res) return;
 
-        renderContatos(listaContatos);
+    await exibirContatos();
 
-    } catch (e) {
-
-        console.error(e);
-
-        alert("Erro de conexão com servidor");
-    }
+    alerta("save");
 }
 
 /* ================= USUÁRIOS ================= */
@@ -677,32 +632,33 @@ async function criarUsuario() {
         return;
     }
 
-    const res = await apiFetch(`${API_URL}/usuarios/`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nome: userNome.value.trim(),
-            username: userUsername.value.trim(),
-            email: userEmail.value.trim(),
-            senha: userSenha.value,
-            tipo: userTipo.value
-        })
-    });
+    const res = await apiFetch(
+        `${API_URL}/usuarios/`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nome: userNome.value.trim(),
+                username: userUsername.value.trim(),
+                email: userEmail.value.trim(),
+                senha: userSenha.value,
+                tipo: userTipo.value
+            })
+        }
+    );
 
     if (!res) return;
-
-    const novoUsuario = await res.json();
-
-    listaUsuarios.unshift(novoUsuario);
-
-    renderUsuarios(listaUsuarios);
 
     userNome.value = "";
     userUsername.value = "";
     userEmail.value = "";
     userSenha.value = "";
+
+    await carregarUsuarios();
+
+    alerta("save");
 }
 
 async function salvarUsuario(id) {
@@ -754,21 +710,7 @@ async function salvarUsuario(id) {
 
     if (!res) return;
 
-    listaUsuarios = listaUsuarios.map(u => {
-
-        const uid = u.id || u.idpessoa;
-
-        if (uid === id) {
-            return {
-                ...u,
-                ...body
-            };
-        }
-
-        return u;
-    });
-
-    renderUsuarios(listaUsuarios);
+    await carregarUsuarios();
 
     alerta("save");
 }
@@ -790,42 +732,36 @@ async function removerUsuario(id) {
         usuario.aotipousuario ||
         "padrao";
 
-    /* NÃO DEIXA ADMIN EXCLUIR A SI MESMO */
     if (
         nomeUsuario === currentUser &&
         tipoUsuario === "admin"
     ) {
-
         alert("O administrador não pode excluir a própria conta.");
-
         return;
     }
 
-    /* ADMIN NÃO PODE EXCLUIR OUTRO ADMIN */
     if (
         role === "admin" &&
         tipoUsuario === "admin"
     ) {
-
         alert("Admins não podem excluir outros admins.");
-
         return;
     }
 
     if (!confirm("Excluir?")) return;
 
-    const res = await apiFetch(`${API_URL}/usuarios/${id}`, {
-        method: "DELETE"
-    });
+    const res = await apiFetch(
+        `${API_URL}/usuarios/${id}`,
+        {
+            method: "DELETE"
+        }
+    );
 
     if (!res) return;
 
-    listaUsuarios = listaUsuarios.filter(u => {
-        const uid = u.id || u.idpessoa;
-        return uid !== id;
-    });
+    await carregarUsuarios();
 
-    renderUsuarios(listaUsuarios);
+    alerta("save");
 }
 
 /* ================= ABAS ================= */
