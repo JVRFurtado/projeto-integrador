@@ -1,5 +1,5 @@
 /* =========================================
-   RESET GLOBAL
+   RESET
 ========================================= */
 
 * {
@@ -10,8 +10,8 @@
 
 html,
 body {
-    width: 100%;
     overflow-x: hidden;
+    min-height: 100vh;
 }
 
 /* =========================================
@@ -21,58 +21,52 @@ body {
 :root {
     --bg: #eef2f7;
     --card: #ffffff;
-    --text: #2f2f2f;
+    --text: #2d3436;
+    --text-light: #636e72;
 
     --primary: #c62828;
     --primary-hover: #b71c1c;
 
-    --border: #d7dce3;
+    --border: #dfe6e9;
 
     --shadow:
-        0 4px 12px rgba(0,0,0,0.06);
+        0 4px 14px rgba(0,0,0,0.08);
 
     --radius: 12px;
 
-    --transition: .22s ease;
+    --transition: 0.2s ease;
 }
 
 html.dark {
-    --bg: #111315;
-    --card: #1c1f23;
-    --text: #f3f4f6;
+    --bg: #121212;
+    --card: #1e1e1e;
+
+    --text: #f5f6fa;
+    --text-light: #b2bec3;
 
     --primary: #ef5350;
     --primary-hover: #e53935;
 
-    --border: #363a40;
+    --border: #333;
 
     --shadow:
-        0 8px 22px rgba(0,0,0,0.28);
+        0 6px 18px rgba(0,0,0,0.35);
 }
 
 /* =========================================
-   BODY
+   BASE
 ========================================= */
 
 body {
     font-family:
         "Segoe UI",
-        Tahoma,
-        Geneva,
-        Verdana,
         sans-serif;
 
     background: var(--bg);
     color: var(--text);
 
-    min-height: 100vh;
-
     display: flex;
     flex-direction: column;
-
-    transition:
-        background var(--transition),
-        color var(--transition);
 }
 
 #dashboard {
@@ -84,119 +78,132 @@ body {
 ========================================= */
 
 header {
-    width: 100%;
-
     background: var(--primary);
-
     color: white;
 
-    padding: 16px 22px;
+    padding: 18px 22px;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     gap: 20px;
 
     box-shadow: var(--shadow);
 }
 
 header h1 {
-    font-size: 25px;
+    font-size: 1.5rem;
     font-weight: 700;
-
-    letter-spacing: .3px;
 }
 
 /* =========================================
-   CONTROLES TOPO
+   TOP CONTROLS
 ========================================= */
 
 .top-controls {
     display: flex;
     align-items: center;
     gap: 14px;
-}
-
-.theme-control {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-wrap: wrap;
 }
 
 /* =========================================
-   BOTÃO IDIOMAS PROFISSIONAL
+   BOTÕES
+========================================= */
+
+button,
+.lang-minimal {
+    height: 42px;
+
+    padding:
+        0 18px;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background var(--transition),
+        transform var(--transition),
+        opacity var(--transition);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    text-align: center;
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+button {
+    background: var(--primary);
+    color: white;
+}
+
+button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+/* =========================================
+   BOTÃO SAIR
+========================================= */
+
+.logout-btn {
+    min-width: 110px;
+}
+
+/* =========================================
+   BOTÃO IDIOMAS
 ========================================= */
 
 .lang-minimal {
+    background: rgba(255,255,255,0.16);
+
+    color: white;
+
+    border:
+        1px solid rgba(255,255,255,0.35);
+
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
 
-    width: auto !important;
+    padding-right: 42px;
+    padding-left: 16px;
 
-    min-width: 84px;
-    height: 40px;
+    position: relative;
 
-    padding: 0 14px;
+    background-image:
+        linear-gradient(45deg, transparent 50%, white 50%),
+        linear-gradient(135deg, white 50%, transparent 50%);
 
-    border-radius: 10px;
+    background-position:
+        calc(100% - 18px) calc(50% - 3px),
+        calc(100% - 12px) calc(50% - 3px);
 
-    font-size: 14px;
-    font-weight: 700;
-
-    cursor: pointer;
-
-    outline: none;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    transition:
-        background var(--transition),
-        border-color var(--transition),
-        transform .15s ease,
-        box-shadow var(--transition);
-
-    box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,0.08);
-}
-
-/* LIGHT */
-
-html:not(.dark) .lang-minimal {
-    background: rgba(255,255,255,0.16);
-
-    border: 1px solid rgba(255,255,255,0.42);
-
-    color: #ffffff;
-}
-
-html:not(.dark) .lang-minimal:hover {
-    background: rgba(255,255,255,0.24);
-}
-
-/* DARK */
-
-html.dark .lang-minimal {
-    background: #2b2f34 !important;
-
-    border: 1px solid #50555c !important;
-
-    color: #f5f5f5 !important;
-}
-
-html.dark .lang-minimal:hover {
-    background: #353a40 !important;
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
 }
 
 .lang-minimal:hover {
-    transform: translateY(-1px);
+    background-color:
+        rgba(255,255,255,0.22);
 }
 
-.lang-minimal:focus {
-    box-shadow:
-        0 0 0 3px rgba(255,255,255,0.14);
+html.dark .lang-minimal {
+    background-color: #2a2a2a;
+
+    border: 1px solid #555;
 }
 
 .lang-minimal option {
@@ -205,18 +212,19 @@ html.dark .lang-minimal:hover {
 }
 
 /* =========================================
-   ÍCONE TEMA
+   THEME
 ========================================= */
 
-#themeIcon {
-    width: 24px;
-    height: 24px;
-
+.theme-control {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 8px;
+}
 
+#themeIcon {
     font-size: 18px;
+    width: 22px;
+    text-align: center;
 }
 
 /* =========================================
@@ -242,11 +250,9 @@ html.dark .lang-minimal:hover {
     width: 100%;
     height: 100%;
 
+    background: rgba(255,255,255,0.35);
+
     border-radius: 999px;
-
-    background: rgba(255,255,255,0.45);
-
-    cursor: pointer;
 
     transition: var(--transition);
 }
@@ -259,9 +265,9 @@ html.dark .lang-minimal:hover {
     width: 18px;
     height: 18px;
 
-    border-radius: 50%;
-
     background: white;
+
+    border-radius: 50%;
 
     top: 3px;
     left: 3px;
@@ -281,15 +287,11 @@ html.dark .lang-minimal:hover {
     flex: 1;
 
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 
-    padding: 24px;
+    padding: 30px 16px;
 }
-
-/* =========================================
-   CARD
-========================================= */
 
 .card {
     background: var(--card);
@@ -298,16 +300,9 @@ html.dark .lang-minimal:hover {
 
     box-shadow: var(--shadow);
 
-    padding: 22px;
-    margin: 20px;
+    padding: 24px;
 
-    transition:
-        background var(--transition),
-        border-color var(--transition);
-}
-
-.card h2 {
-    margin-bottom: 18px;
+    margin: 18px;
 }
 
 .login-card {
@@ -316,27 +311,14 @@ html.dark .lang-minimal:hover {
 }
 
 /* =========================================
-   FORMULÁRIOS
+   FORM
 ========================================= */
-
-.form-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(180px, 1fr));
-
-    gap: 12px;
-
-    margin-bottom: 14px;
-}
 
 input,
 select {
     width: 100%;
 
-    min-height: 44px;
-
-    padding: 10px 12px;
+    padding: 12px 14px;
 
     border-radius: 10px;
 
@@ -348,94 +330,42 @@ select {
 
     font-size: 14px;
 
-    outline: none;
-
     transition:
-        border-color var(--transition),
-        background var(--transition),
-        color var(--transition),
+        border var(--transition),
         box-shadow var(--transition);
 }
 
 input:focus,
 select:focus {
+    outline: none;
+
     border-color: var(--primary);
 
     box-shadow:
-        0 0 0 3px rgba(198,40,40,0.14);
-}
-
-/* SELECTS DARK */
-
-html.dark select:not(.lang-minimal) {
-    background: var(--card);
-    color: var(--text);
-    border: 1px solid var(--border);
-}
-
-html.dark option {
-    background: var(--card);
-    color: var(--text);
+        0 0 0 3px rgba(198,40,40,0.15);
 }
 
 /* =========================================
-   BOTÕES PROFISSIONAIS
+   ESPAÇAMENTO LOGIN
 ========================================= */
 
-button {
-    min-height: 44px;
-
-    padding: 10px 16px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: var(--primary);
-
-    color: white;
-
-    font-size: 14px;
-    font-weight: 700;
-
-    cursor: pointer;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 6px;
-
-    white-space: nowrap;
-
-    transition:
-        background var(--transition),
-        transform .15s ease,
-        box-shadow var(--transition);
-
-    box-shadow:
-        0 4px 10px rgba(0,0,0,0.08);
-}
-
-button:hover {
-    background: var(--primary-hover);
-    transform: translateY(-1px);
-}
-
-button:active {
-    transform: scale(.98);
+#loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
 /* =========================================
-   BOTÃO LOGOUT
+   GRID
 ========================================= */
 
-.logout-btn {
-    width: auto !important;
+.form-grid {
+    display: grid;
 
-    min-width: 90px;
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
 
-    height: 40px;
+    gap: 14px;
 }
 
 /* =========================================
@@ -444,9 +374,9 @@ button:active {
 
 .tabs {
     display: flex;
-    gap: 10px;
+    gap: 12px;
 
-    margin: 12px 20px 0;
+    margin: 16px 0;
 }
 
 .tabs button {
@@ -458,24 +388,38 @@ button:active {
 ========================================= */
 
 .filter-wrapper {
-    margin: 24px 0 18px;
+    margin:
+        18px 0 22px;
+}
+
+.filter-wrapper label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: var(--text-light);
 }
 
 .filter-controls {
     display: flex;
     align-items: center;
-    gap: 14px;
+
+    gap: 12px;
+
     flex-wrap: nowrap;
 }
 
 .filter-controls select {
+    width: 180px;
     min-width: 180px;
-    max-width: 200px;
 }
 
 .filter-controls input {
     flex: 1;
-    min-width: 260px;
+    min-width: 240px;
 }
 
 /* =========================================
@@ -487,13 +431,17 @@ button:active {
 
     overflow-x: auto;
 
-    border-radius: var(--radius);
+    border-radius: 12px;
+
+    background: var(--card);
+
+    box-shadow: var(--shadow);
 }
 
 table {
     width: 100%;
 
-    min-width: 920px;
+    min-width: 900px;
 
     border-collapse: collapse;
 }
@@ -504,42 +452,39 @@ th {
     color: white;
 
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
-td,
-th {
-    padding: 12px;
-
-    border-bottom: 1px solid var(--border);
+th,
+td {
+    padding: 14px 12px;
 
     text-align: center;
+
+    border-bottom:
+        1px solid var(--border);
+
     vertical-align: middle;
-
-    word-break: break-word;
 }
 
-tr {
-    transition: background var(--transition);
+td {
+    color: var(--text);
 }
 
-tr:hover {
-    background: rgba(0,0,0,0.025);
-}
+/* =========================================
+   INPUTS TABELA
+========================================= */
 
-html.dark tr:hover {
-    background: rgba(255,255,255,0.025);
-}
+td input,
+td select {
+    width: 100%;
+    min-width: 0;
 
-/* Inputs tabela */
-
-.table-container td input,
-.table-container td select {
     margin: 0;
 }
 
 /* =========================================
-   AÇÕES USUÁRIOS
+   AÇÕES
 ========================================= */
 
 .user-actions {
@@ -556,41 +501,21 @@ html.dark tr:hover {
 
 .user-actions button {
     min-width: 42px;
+    height: 38px;
 
-    padding: 8px 12px;
+    padding: 0 12px;
 }
-
-/* =========================================
-   SENHA
-========================================= */
 
 .user-password {
     min-width: 180px;
 }
 
-.user-password input {
-    width: 100%;
-}
-
 /* =========================================
-   BADGE ADMIN
+   SELECT TIPO
 ========================================= */
 
-.badge-admin {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 6px 10px;
-
-    border-radius: 999px;
-
-    background: var(--primary);
-
-    color: white;
-
-    font-size: 12px;
-    font-weight: 700;
+#tabelaUsuarios td select {
+    min-width: 130px;
 }
 
 /* =========================================
@@ -598,19 +523,29 @@ html.dark tr:hover {
 ========================================= */
 
 footer {
-    background: #2d2d2d;
+    margin-top: auto;
+
+    background: #333;
 
     color: white;
 
     text-align: center;
 
     padding: 14px;
-
-    margin-top: auto;
 }
 
 /* =========================================
-   RESPONSIVO
+   DARK MODE SELECT
+========================================= */
+
+html.dark select,
+html.dark option {
+    background: var(--card);
+    color: var(--text);
+}
+
+/* =========================================
+   MOBILE
 ========================================= */
 
 @media (max-width: 768px) {
@@ -619,30 +554,34 @@ footer {
         flex-direction: column;
         align-items: stretch;
 
+        gap: 16px;
+    }
+
+    header h1 {
         text-align: center;
     }
 
     .top-controls {
         width: 100%;
 
-        justify-content: space-between;
+        justify-content: center;
 
-        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .logout-btn,
+    .lang-minimal {
+        flex: 1;
+        min-width: 120px;
     }
 
     .theme-control {
-        justify-content: flex-end;
+        justify-content: center;
+        width: 100%;
     }
 
     .tabs {
         flex-direction: column;
-
-        margin: 10px;
-    }
-
-    .card {
-        margin: 10px;
-        padding: 16px;
     }
 
     .form-grid {
@@ -654,29 +593,38 @@ footer {
         align-items: stretch;
     }
 
-    .filter-controls input,
-    .filter-controls select {
+    .filter-controls select,
+    .filter-controls input {
         width: 100%;
         min-width: 100%;
+    }
+
+    input,
+    select,
+    button {
+        width: 100%;
+    }
+
+    .card {
+        margin: 10px;
+        padding: 18px;
     }
 
     table {
         min-width: 850px;
     }
 
-    td,
-    th {
-        padding: 8px;
-        font-size: 13px;
+    th,
+    td {
+        padding: 10px;
+        font-size: 14px;
     }
 
-    button {
-        width: 100%;
+    .user-password {
+        min-width: 160px;
     }
 
-    .user-actions button,
-    .logout-btn,
-    .lang-minimal {
-        width: auto !important;
+    .user-actions {
+        min-width: 110px;
     }
 }
