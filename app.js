@@ -492,6 +492,8 @@ async function carregarUsuarios() {
 
     listaUsuarios = await res.json();
 
+    editandoUsuarios = {};
+
     renderUsuarios(listaUsuarios);
 }
 
@@ -508,16 +510,13 @@ function renderUsuarios(lista) {
         const email = u.email || u.txemail || "";
         const tipo = u.tipo || u.aotipousuario || "padrao";
 
-        if (!editandoUsuarios[id]) {
-
-            editandoUsuarios[id] = {
-                nome,
-                username,
-                email,
-                tipo,
-                senha: ""
-            };
-        }
+       editandoUsuarios[id] = {
+            nome,
+            username,
+            email,
+            tipo,
+            senha: ""
+        };
 
         const editando = editandoUsuarios[id];
 
