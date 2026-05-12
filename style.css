@@ -1,17 +1,16 @@
 /* =========================================
-   RESET
+   RESET / BASE
 ========================================= */
 
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
 html,
 body {
+    margin: 0;
+    padding: 0;
     overflow-x: hidden;
-    min-height: 100vh;
 }
 
 /* =========================================
@@ -21,49 +20,41 @@ body {
 :root {
     --bg: #eef2f7;
     --card: #ffffff;
-    --text: #2d3436;
-    --text-light: #636e72;
-
+    --text: #333333;
     --primary: #c62828;
     --primary-hover: #b71c1c;
-
-    --border: #dfe6e9;
+    --border: #dcdcdc;
 
     --shadow:
-        0 4px 14px rgba(0,0,0,0.08);
+        0 4px 12px rgba(0,0,0,0.08);
 
-    --radius: 12px;
+    --radius: 10px;
 
-    --transition: 0.2s ease;
+    --transition: .2s ease;
 }
 
 html.dark {
     --bg: #121212;
     --card: #1e1e1e;
-
-    --text: #f5f6fa;
-    --text-light: #b2bec3;
-
+    --text: #f1f1f1;
     --primary: #ef5350;
     --primary-hover: #e53935;
-
-    --border: #333;
+    --border: #3a3a3a;
 
     --shadow:
-        0 6px 18px rgba(0,0,0,0.35);
+        0 4px 16px rgba(0,0,0,0.35);
 }
 
 /* =========================================
-   BASE
+   BODY
 ========================================= */
 
 body {
-    font-family:
-        "Segoe UI",
-        sans-serif;
-
+    font-family: "Segoe UI", sans-serif;
     background: var(--bg);
     color: var(--text);
+
+    min-height: 100vh;
 
     display: flex;
     flex-direction: column;
@@ -81,85 +72,37 @@ header {
     background: var(--primary);
     color: white;
 
-    padding: 18px 22px;
+    padding: 14px 18px;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    gap: 20px;
+    gap: 16px;
 
     box-shadow: var(--shadow);
 }
 
 header h1 {
-    font-size: 1.5rem;
+    margin: 0;
+    font-size: 24px;
     font-weight: 700;
 }
 
 /* =========================================
-   TOP CONTROLS
+   CONTROLES TOPO
 ========================================= */
 
 .top-controls {
     display: flex;
     align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
+    gap: 12px;
 }
 
-/* =========================================
-   BOTÕES
-========================================= */
-
-button,
-.lang-minimal {
-    height: 42px;
-
-    padding:
-        0 18px;
-
-    border: none;
-    border-radius: 10px;
-
-    font-size: 14px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition:
-        background var(--transition),
-        transform var(--transition),
-        opacity var(--transition);
-
-    display: inline-flex;
+.theme-control {
+    display: flex;
     align-items: center;
-    justify-content: center;
-
-    gap: 8px;
-
-    text-align: center;
-    line-height: 1;
-
-    white-space: nowrap;
-}
-
-button {
-    background: var(--primary);
-    color: white;
-}
-
-button:hover {
-    background: var(--primary-hover);
-    transform: translateY(-1px);
-}
-
-/* =========================================
-   BOTÃO SAIR
-========================================= */
-
-.logout-btn {
-    min-width: 110px;
+    gap: 10px;
 }
 
 /* =========================================
@@ -167,43 +110,51 @@ button:hover {
 ========================================= */
 
 .lang-minimal {
-    background: rgba(255,255,255,0.16);
+    width: auto !important;
 
-    color: white;
+    min-width: 78px;
+    height: 40px;
 
-    border:
-        1px solid rgba(255,255,255,0.35);
+    padding: 0 12px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    outline: none;
+
+    cursor: pointer;
 
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
 
-    padding-right: 42px;
-    padding-left: 16px;
+    transition: var(--transition);
 
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    background-image:
-        linear-gradient(45deg, transparent 50%, white 50%),
-        linear-gradient(135deg, white 50%, transparent 50%);
+    text-align: center;
+}
 
-    background-position:
-        calc(100% - 18px) calc(50% - 3px),
-        calc(100% - 12px) calc(50% - 3px);
+/* LIGHT */
+html:not(.dark) .lang-minimal {
+    background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.42);
+    color: white;
+}
 
-    background-size: 6px 6px;
-    background-repeat: no-repeat;
+/* DARK */
+html.dark .lang-minimal {
+    background: #2b2b2b;
+    border: 1px solid #5d5d5d;
+    color: #f1f1f1;
 }
 
 .lang-minimal:hover {
-    background-color:
-        rgba(255,255,255,0.22);
-}
-
-html.dark .lang-minimal {
-    background-color: #2a2a2a;
-
-    border: 1px solid #555;
+    transform: translateY(-1px);
 }
 
 .lang-minimal option {
@@ -212,19 +163,18 @@ html.dark .lang-minimal {
 }
 
 /* =========================================
-   THEME
+   ÍCONE TEMA
 ========================================= */
-
-.theme-control {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
 
 #themeIcon {
     font-size: 18px;
-    width: 22px;
-    text-align: center;
+
+    width: 24px;
+    height: 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* =========================================
@@ -234,8 +184,8 @@ html.dark .lang-minimal {
 .switch {
     position: relative;
 
-    width: 46px;
-    height: 24px;
+    width: 44px;
+    height: 22px;
 
     flex-shrink: 0;
 }
@@ -250,9 +200,11 @@ html.dark .lang-minimal {
     width: 100%;
     height: 100%;
 
-    background: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.45);
 
     border-radius: 999px;
+
+    cursor: pointer;
 
     transition: var(--transition);
 }
@@ -267,10 +219,10 @@ html.dark .lang-minimal {
 
     background: white;
 
-    border-radius: 50%;
+    top: 2px;
+    left: 2px;
 
-    top: 3px;
-    left: 3px;
+    border-radius: 50%;
 
     transition: var(--transition);
 }
@@ -287,11 +239,15 @@ html.dark .lang-minimal {
     flex: 1;
 
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 
-    padding: 30px 16px;
+    padding: 20px;
 }
+
+/* =========================================
+   CARDS
+========================================= */
 
 .card {
     background: var(--card);
@@ -300,27 +256,38 @@ html.dark .lang-minimal {
 
     box-shadow: var(--shadow);
 
-    padding: 24px;
-
-    margin: 18px;
+    padding: 20px;
+    margin: 20px;
 }
 
 .login-card {
     width: 100%;
-    max-width: 360px;
+    max-width: 340px;
 }
 
 /* =========================================
-   FORM
+   FORMULÁRIOS
 ========================================= */
+
+.form-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
 
 input,
 select {
     width: 100%;
 
-    padding: 12px 14px;
+    min-height: 42px;
 
-    border-radius: 10px;
+    padding: 10px 12px;
+
+    border-radius: 8px;
 
     border: 1px solid var(--border);
 
@@ -330,42 +297,80 @@ select {
 
     font-size: 14px;
 
-    transition:
-        border var(--transition),
-        box-shadow var(--transition);
+    outline: none;
+
+    transition: var(--transition);
 }
 
 input:focus,
 select:focus {
-    outline: none;
-
     border-color: var(--primary);
+}
 
-    box-shadow:
-        0 0 0 3px rgba(198,40,40,0.15);
+/* SELECTS DARK */
+
+html.dark select:not(.lang-minimal) {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+html.dark option {
+    background: var(--card);
+    color: var(--text);
 }
 
 /* =========================================
-   ESPAÇAMENTO LOGIN
+   BOTÕES
 ========================================= */
 
-#loginForm {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+button {
+    min-height: 42px;
+
+    padding: 10px 16px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .15s ease;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    white-space: nowrap;
+}
+
+button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: scale(.98);
 }
 
 /* =========================================
-   GRID
+   BOTÃO LOGOUT
 ========================================= */
 
-.form-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(180px, 1fr));
-
-    gap: 14px;
+.logout-btn {
+    width: auto !important;
+    min-width: 90px;
 }
 
 /* =========================================
@@ -374,9 +379,9 @@ select:focus {
 
 .tabs {
     display: flex;
-    gap: 12px;
+    gap: 10px;
 
-    margin: 16px 0;
+    margin: 10px 20px 0;
 }
 
 .tabs button {
@@ -388,38 +393,22 @@ select:focus {
 ========================================= */
 
 .filter-wrapper {
-    margin:
-        18px 0 22px;
-}
-
-.filter-wrapper label {
-    display: block;
-
-    margin-bottom: 10px;
-
-    font-size: 14px;
-    font-weight: 600;
-
-    color: var(--text-light);
+    margin: 18px 0;
 }
 
 .filter-controls {
     display: flex;
-    align-items: center;
-
-    gap: 12px;
-
-    flex-wrap: nowrap;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .filter-controls select {
-    width: 180px;
-    min-width: 180px;
+    min-width: 170px;
 }
 
 .filter-controls input {
     flex: 1;
-    min-width: 240px;
+    min-width: 220px;
 }
 
 /* =========================================
@@ -428,19 +417,13 @@ select:focus {
 
 .table-container {
     width: 100%;
-
     overflow-x: auto;
 
-    border-radius: 12px;
-
-    background: var(--card);
-
-    box-shadow: var(--shadow);
+    border-radius: var(--radius);
 }
 
 table {
     width: 100%;
-
     min-width: 900px;
 
     border-collapse: collapse;
@@ -448,43 +431,32 @@ table {
 
 th {
     background: var(--primary);
-
     color: white;
 
-    font-size: 14px;
     font-weight: 600;
 }
 
-th,
-td {
-    padding: 14px 12px;
+td,
+th {
+    padding: 12px;
+
+    border-bottom: 1px solid var(--border);
 
     text-align: center;
-
-    border-bottom:
-        1px solid var(--border);
-
     vertical-align: middle;
+
+    word-break: break-word;
 }
 
-td {
-    color: var(--text);
-}
-
-/* =========================================
-   INPUTS TABELA
-========================================= */
+/* Inputs dentro da tabela */
 
 td input,
 td select {
-    width: 100%;
-    min-width: 0;
-
     margin: 0;
 }
 
 /* =========================================
-   AÇÕES
+   AÇÕES USUÁRIOS
 ========================================= */
 
 .user-actions {
@@ -499,23 +471,37 @@ td select {
     min-width: 120px;
 }
 
-.user-actions button {
-    min-width: 42px;
-    height: 38px;
-
-    padding: 0 12px;
-}
+/* =========================================
+   CAMPO SENHA
+========================================= */
 
 .user-password {
     min-width: 180px;
 }
 
+.user-password input {
+    width: 100%;
+}
+
 /* =========================================
-   SELECT TIPO
+   BADGE ADMIN
 ========================================= */
 
-#tabelaUsuarios td select {
-    min-width: 130px;
+.badge-admin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 12px;
+    font-weight: 700;
 }
 
 /* =========================================
@@ -523,25 +509,12 @@ td select {
 ========================================= */
 
 footer {
-    margin-top: auto;
-
     background: #333;
-
     color: white;
 
     text-align: center;
 
-    padding: 14px;
-}
-
-/* =========================================
-   DARK MODE SELECT
-========================================= */
-
-html.dark select,
-html.dark option {
-    background: var(--card);
-    color: var(--text);
+    padding: 12px;
 }
 
 /* =========================================
@@ -554,34 +527,31 @@ html.dark option {
         flex-direction: column;
         align-items: stretch;
 
-        gap: 16px;
-    }
-
-    header h1 {
         text-align: center;
     }
 
     .top-controls {
         width: 100%;
 
-        justify-content: center;
+        justify-content: space-between;
+        align-items: center;
 
-        gap: 12px;
-    }
-
-    .logout-btn,
-    .lang-minimal {
-        flex: 1;
-        min-width: 120px;
+        flex-wrap: wrap;
     }
 
     .theme-control {
-        justify-content: center;
-        width: 100%;
+        justify-content: flex-end;
     }
 
     .tabs {
         flex-direction: column;
+
+        margin: 10px;
+    }
+
+    .card {
+        margin: 10px;
+        padding: 15px;
     }
 
     .form-grid {
@@ -590,41 +560,31 @@ html.dark option {
 
     .filter-controls {
         flex-direction: column;
-        align-items: stretch;
     }
 
-    .filter-controls select,
-    .filter-controls input {
+    .filter-controls input,
+    .filter-controls select {
         width: 100%;
         min-width: 100%;
-    }
-
-    input,
-    select,
-    button {
-        width: 100%;
-    }
-
-    .card {
-        margin: 10px;
-        padding: 18px;
     }
 
     table {
         min-width: 850px;
     }
 
-    th,
-    td {
-        padding: 10px;
+    td,
+    th {
+        padding: 8px;
         font-size: 14px;
     }
 
-    .user-password {
-        min-width: 160px;
+    button {
+        width: 100%;
     }
 
-    .user-actions {
-        min-width: 110px;
+    .user-actions button,
+    .lang-minimal,
+    .logout-btn {
+        width: auto !important;
     }
 }
