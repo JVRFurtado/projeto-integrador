@@ -1,15 +1,36 @@
-/* REMOVE SCROLL LATERAL */
-html, body {
+/* =========================================
+   RESET / BASE
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
     overflow-x: hidden;
 }
 
-/* VARIÁVEIS */
+/* =========================================
+   VARIÁVEIS
+========================================= */
+
 :root {
     --bg: #eef2f7;
     --card: #ffffff;
-    --text: #333;
+    --text: #333333;
     --primary: #c62828;
+    --primary-hover: #b71c1c;
     --border: #dcdcdc;
+
+    --shadow:
+        0 4px 12px rgba(0,0,0,0.08);
+
+    --radius: 10px;
+
+    --transition: .2s ease;
 }
 
 html.dark {
@@ -17,17 +38,24 @@ html.dark {
     --card: #1e1e1e;
     --text: #f1f1f1;
     --primary: #ef5350;
-    --border: #333;
+    --primary-hover: #e53935;
+    --border: #3a3a3a;
+
+    --shadow:
+        0 4px 16px rgba(0,0,0,0.35);
 }
 
-/* BASE */
+/* =========================================
+   BODY
+========================================= */
+
 body {
-    margin: 0;
     font-family: "Segoe UI", sans-serif;
     background: var(--bg);
     color: var(--text);
 
     min-height: 100vh;
+
     display: flex;
     flex-direction: column;
 }
@@ -36,18 +64,35 @@ body {
     flex: 1;
 }
 
-/* HEADER */
+/* =========================================
+   HEADER
+========================================= */
+
 header {
     background: var(--primary);
     color: white;
-    padding: 15px;
+
+    padding: 14px 18px;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    gap: 16px;
+
+    box-shadow: var(--shadow);
 }
 
-/* CONTROLES */
+header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* =========================================
+   CONTROLES TOPO
+========================================= */
+
 .top-controls {
     display: flex;
     align-items: center;
@@ -57,63 +102,59 @@ header {
 .theme-control {
     display: flex;
     align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
+    gap: 10px;
 }
 
-.logout-btn {
-    width: auto !important;
-    padding: 8px 14px;
-    font-size: 14px;
-    white-space: nowrap;
-}
+/* =========================================
+   BOTÃO IDIOMAS
+========================================= */
 
-/* ÍCONE */
-#themeIcon {
-    font-size: 16px;
-}
-
-/* LANG */
 .lang-minimal {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.35);
-    color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 8px 12px;
+    width: auto !important;
+
+    min-width: 78px;
+    height: 40px;
+
+    padding: 0 12px;
+
     border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
     outline: none;
+
+    cursor: pointer;
 
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
 
-    transition:
-        background .2s ease,
-        border-color .2s ease,
-        transform .15s ease;
+    transition: var(--transition);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+/* LIGHT */
+html:not(.dark) .lang-minimal {
+    background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.42);
+    color: white;
+}
+
+/* DARK */
+html.dark .lang-minimal {
+    background: #2b2b2b;
+    border: 1px solid #5d5d5d;
+    color: #f1f1f1;
 }
 
 .lang-minimal:hover {
-    background: rgba(255,255,255,0.22);
-}
-
-.lang-minimal:focus {
-    border-color: rgba(255,255,255,0.7);
-}
-
-/* LIGHT MODE */
-html:not(.dark) .lang-minimal {
-    background: rgba(255,255,255,0.18);
-    border: 1px solid rgba(255,255,255,0.45);
-    color: #fff;
-}
-
-/* DARK MODE */
-html.dark .lang-minimal {
-    background: #2a2a2a;
-    border: 1px solid #555;
-    color: #f1f1f1;
+    transform: translateY(-1px);
 }
 
 .lang-minimal option {
@@ -121,92 +162,32 @@ html.dark .lang-minimal {
     color: var(--text);
 }
 
-/* LOGIN CENTRAL */
-.login-wrapper {
-    flex: 1;
+/* =========================================
+   ÍCONE TEMA
+========================================= */
+
+#themeIcon {
+    font-size: 18px;
+
+    width: 24px;
+    height: 24px;
+
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
-/* CARD */
-.card {
-    background: var(--card);
-    padding: 20px;
-    margin: 20px;
-    border-radius: 10px;
-}
+/* =========================================
+   SWITCH
+========================================= */
 
-.login-card {
-    width: 100%;
-    max-width: 320px;
-}
-
-/* FORM */
-input, select {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text);
-}
-
-button {
-    padding: 10px;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-}
-
-/* TABS */
-.tabs {
-    display: flex;
-    gap: 10px;
-    margin: 10px;
-}
-
-.tabs button {
-    flex: 1;
-}
-
-/* TABLE */
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-    min-width: 600px;
-}
-
-th {
-    background: var(--primary);
-    color: white;
-}
-
-td, th {
-    padding: 10px;
-    border-bottom: 1px solid var(--border);
-    text-align: center;
-    word-break: break-word;
-}
-
-/* SWITCH */
 .switch {
     position: relative;
-    width: 40px;
-    height: 20px;
+
+    width: 44px;
+    height: 22px;
+
+    flex-shrink: 0;
 }
 
 .switch input {
@@ -214,86 +195,121 @@ td, th {
 }
 
 .switch span {
-    background: #ccc;
     position: absolute;
+
     width: 100%;
     height: 100%;
-    border-radius: 20px;
+
+    background: rgba(255,255,255,0.45);
+
+    border-radius: 999px;
+
+    cursor: pointer;
+
+    transition: var(--transition);
 }
 
 .switch span::after {
     content: "";
+
     position: absolute;
-    width: 16px;
-    height: 16px;
+
+    width: 18px;
+    height: 18px;
+
     background: white;
+
     top: 2px;
     left: 2px;
+
     border-radius: 50%;
-    transition: 0.3s;
+
+    transition: var(--transition);
 }
 
-input:checked + span::after {
-    transform: translateX(20px);
-}
-
-/* FOOTER */
-footer {
-    background: #333;
-    color: white;
-    text-align: center;
-    padding: 10px;
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-
-    header {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    header h1 {
-        text-align: center;
-    }
-
-    .top-controls {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .lang-minimal {
-        order: 1;
-    }
-
-    .theme-control {
-        order: 2;
-    }
-
-    .tabs {
-        flex-direction: column;
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    input, select, button {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    button {
-        box-sizing: border-box;
-    }
+.switch input:checked + span::after {
+    transform: translateX(22px);
 }
 
 /* =========================================
-   FIX SELECT DARK MODE
+   LOGIN
 ========================================= */
 
-html.dark select {
+.login-wrapper {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.card {
+    background: var(--card);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+
+    padding: 20px;
+    margin: 20px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 340px;
+}
+
+/* =========================================
+   FORMULÁRIOS
+========================================= */
+
+.form-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+input,
+select {
+    width: 100%;
+
+    min-height: 42px;
+
+    padding: 10px 12px;
+
+    border-radius: 8px;
+
+    border: 1px solid var(--border);
+
+    background: transparent;
+
+    color: var(--text);
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: var(--transition);
+}
+
+input:focus,
+select:focus {
+    border-color: var(--primary);
+}
+
+/* SELECTS DARK */
+
+html.dark select:not(.lang-minimal) {
     background: var(--card);
     color: var(--text);
     border: 1px solid var(--border);
@@ -305,14 +321,138 @@ html.dark option {
 }
 
 /* =========================================
+   BOTÕES
+========================================= */
+
+button {
+    min-height: 42px;
+
+    padding: 10px 16px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .15s ease;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    white-space: nowrap;
+}
+
+button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: scale(.98);
+}
+
+/* =========================================
+   BOTÃO LOGOUT
+========================================= */
+
+.logout-btn {
+    width: auto !important;
+    min-width: 90px;
+}
+
+/* =========================================
+   TABS
+========================================= */
+
+.tabs {
+    display: flex;
+    gap: 10px;
+
+    margin: 10px 20px 0;
+}
+
+.tabs button {
+    flex: 1;
+}
+
+/* =========================================
+   FILTROS
+========================================= */
+
+.filter-wrapper {
+    margin: 18px 0;
+}
+
+.filter-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-controls select {
+    min-width: 170px;
+}
+
+.filter-controls input {
+    flex: 1;
+    min-width: 220px;
+}
+
+/* =========================================
    TABELAS
 ========================================= */
 
-#tabelaUsuarios td,
-#tabelaUsuarios th,
-#tabelaContatos td,
-#tabelaContatos th {
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+
+    border-radius: var(--radius);
+}
+
+table {
+    width: 100%;
+    min-width: 900px;
+
+    border-collapse: collapse;
+}
+
+th {
+    background: var(--primary);
+    color: white;
+
+    font-weight: 600;
+}
+
+td,
+th {
+    padding: 12px;
+
+    border-bottom: 1px solid var(--border);
+
+    text-align: center;
     vertical-align: middle;
+
+    word-break: break-word;
+}
+
+/* Inputs dentro da tabela */
+
+td input,
+td select {
+    margin: 0;
 }
 
 /* =========================================
@@ -323,105 +463,91 @@ html.dark option {
     display: flex;
     align-items: center;
     justify-content: center;
+
     gap: 8px;
+
     flex-wrap: wrap;
-    min-width: 110px;
-}
 
-.user-password {
-    min-width: 140px;
-    padding-right: 10px;
-}
-
-.user-password input {
-    width: 100%;
-    box-sizing: border-box;
+    min-width: 120px;
 }
 
 /* =========================================
-   MOBILE USERS TABLE
+   CAMPO SENHA
 ========================================= */
 
-@media (max-width: 768px) {
-
-    #abaUsuarios table {
-        min-width: 820px;
-    }
-
-    .user-actions {
-        min-width: 120px;
-        gap: 6px;
-    }
-
-    .user-password {
-        min-width: 160px;
-    }
-}
-
-.filter-wrapper {
-    margin: 15px 0;
-}
-
-.filter-controls {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.filter-controls select {
-    min-width: 160px;
-}
-
-.filter-controls input {
-    flex: 1;
-    min-width: 220px;
-}
-
-/* =========================
-   TABELAS RESPONSIVAS
-========================= */
-
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-    border-radius: 10px;
-}
-
-table {
-    width: 100%;
-    min-width: 900px;
-    border-collapse: collapse;
-}
-
-td {
-    vertical-align: middle;
-}
-
-/* Inputs da tabela */
-td input,
-td select {
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-    margin: 0;
-}
-
-/* Coluna ações */
-.user-actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-/* Senha */
 .user-password {
     min-width: 180px;
 }
 
-/* MOBILE */
+.user-password input {
+    width: 100%;
+}
+
+/* =========================================
+   BADGE ADMIN
+========================================= */
+
+.badge-admin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer {
+    background: #333;
+    color: white;
+
+    text-align: center;
+
+    padding: 12px;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
 @media (max-width: 768px) {
+
+    header {
+        flex-direction: column;
+        align-items: stretch;
+
+        text-align: center;
+    }
+
+    .top-controls {
+        width: 100%;
+
+        justify-content: space-between;
+        align-items: center;
+
+        flex-wrap: wrap;
+    }
+
+    .theme-control {
+        justify-content: flex-end;
+    }
+
+    .tabs {
+        flex-direction: column;
+
+        margin: 10px;
+    }
 
     .card {
         margin: 10px;
@@ -429,9 +555,7 @@ td select {
     }
 
     .form-grid {
-        display: grid;
         grid-template-columns: 1fr;
-        gap: 10px;
     }
 
     .filter-controls {
@@ -454,8 +578,13 @@ td select {
         font-size: 14px;
     }
 
-    .user-actions button {
-        width: auto;
-        min-width: 40px;
+    button {
+        width: 100%;
+    }
+
+    .user-actions button,
+    .lang-minimal,
+    .logout-btn {
+        width: auto !important;
     }
 }
