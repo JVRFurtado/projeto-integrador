@@ -21,6 +21,7 @@ body {
 :root {
     --bg: #eef2f7;
     --card: #ffffff;
+
     --text: #2d3436;
     --text-light: #636e72;
 
@@ -116,8 +117,7 @@ button,
 .lang-minimal {
     height: 42px;
 
-    padding:
-        0 18px;
+    padding: 0 18px;
 
     border: none;
     border-radius: 10px;
@@ -167,19 +167,17 @@ button:hover {
 ========================================= */
 
 .lang-minimal {
-    background: rgba(255,255,255,0.16);
-
+    background: var(--primary);
     color: white;
 
-    border:
-        1px solid rgba(255,255,255,0.35);
+    border: none;
 
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
 
-    padding-right: 42px;
-    padding-left: 16px;
+    padding:
+        0 42px 0 16px;
 
     position: relative;
 
@@ -196,14 +194,13 @@ button:hover {
 }
 
 .lang-minimal:hover {
-    background-color:
-        rgba(255,255,255,0.22);
+    background: var(--primary-hover);
+    transform: translateY(-1px);
 }
 
 html.dark .lang-minimal {
-    background-color: #2a2a2a;
-
-    border: 1px solid #555;
+    background: var(--primary);
+    color: white;
 }
 
 .lang-minimal option {
@@ -346,7 +343,7 @@ select:focus {
 }
 
 /* =========================================
-   ESPAÇAMENTO LOGIN
+   LOGIN ESPAÇAMENTO
 ========================================= */
 
 #loginForm {
@@ -381,6 +378,11 @@ select:focus {
 
 .tabs button {
     flex: 1;
+
+    min-height: 46px;
+
+    font-size: 15px;
+    font-weight: 600;
 }
 
 /* =========================================
@@ -484,6 +486,14 @@ td select {
 }
 
 /* =========================================
+   SELECT TIPO
+========================================= */
+
+#tabelaUsuarios td select {
+    min-width: 130px;
+}
+
+/* =========================================
    AÇÕES
 ========================================= */
 
@@ -508,14 +518,6 @@ td select {
 
 .user-password {
     min-width: 180px;
-}
-
-/* =========================================
-   SELECT TIPO
-========================================= */
-
-#tabelaUsuarios td select {
-    min-width: 130px;
 }
 
 /* =========================================
@@ -580,8 +582,28 @@ html.dark option {
         width: 100%;
     }
 
+    /* TABS MOBILE FIX */
+
     .tabs {
-        flex-direction: column;
+        flex-direction: row;
+
+        width: 100%;
+
+        gap: 10px;
+    }
+
+    .tabs button {
+        flex: 1;
+
+        width: 100%;
+
+        min-width: 0;
+
+        padding: 12px 10px;
+
+        font-size: 14px;
+
+        white-space: nowrap;
     }
 
     .form-grid {
