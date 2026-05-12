@@ -74,23 +74,52 @@ header {
 }
 
 /* LANG */
+/* LANG */
 .lang-minimal {
-    background: var(--primary);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: white;
-    font-weight: bold;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    font-weight: 600;
     cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
     outline: none;
+
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .15s ease;
+}
+
+.lang-minimal:hover {
+    background: rgba(255,255,255,0.22);
+}
+
+.lang-minimal:focus {
+    border-color: rgba(255,255,255,0.7);
+}
+
+/* LIGHT MODE */
+html:not(.dark) .lang-minimal {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.45);
+    color: #fff;
+}
+
+/* DARK MODE */
+html.dark .lang-minimal {
+    background: #2a2a2a;
+    border: 1px solid #555;
+    color: #f1f1f1;
 }
 
 .lang-minimal option {
-    color: var(--text);
     background: var(--card);
+    color: var(--text);
 }
 
 /* LOGIN CENTRAL */
