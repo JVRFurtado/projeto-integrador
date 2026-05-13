@@ -218,7 +218,7 @@ function entrarSistema() {
 
     /* ================= USUÁRIO PADRÃO ================= */
 
-    if (role !== "admin") {
+    if (role !== "admin" && role !== "gestor") {
 
         btnUsuarios.style.display = "none";
 
@@ -527,10 +527,19 @@ function renderUsuarios(lista) {
 
         const editando = editandoUsuarios[id];
 
-        const adminEditandoOutroAdmin =
-            role === "admin" &&
-            tipo === "admin" &&
-            nome !== currentUser;
+        const bloqueado =
+            (
+                role === "gestor" &&
+                (
+                    tipo === "admin" ||
+                    tipo === "gestor"
+                )
+            ) ||
+            (
+                role === "admin" &&
+                tipo === "admin" &&
+                nome !== currentUser
+            );
 
         const tr = document.createElement("tr");
 
@@ -558,23 +567,34 @@ function renderUsuarios(lista) {
 
             <td>
                 ${
-                    adminEditandoOutroAdmin
+                    bloqueado
                     ? `
                         <span class="badge-admin">
                             admin
                         </span>
                     `
                     : `
-                        <select id="u-tipo-${id}">
+                       <select id="u-tipo-${id}">
                             <option value="padrao"
                                 ${editando.tipo === "padrao" ? "selected" : ""}>
                                 padrão
                             </option>
 
-                            <option value="admin"
-                                ${editando.tipo === "admin" ? "selected" : ""}>
-                                admin
+                            <option value="gestor"
+                                ${editando.tipo === "gestor" ? "selected" : ""}>
+                                gestor
                             </option>
+
+                            ${
+                                role === "admin"
+                                ? `
+                                    <option value="admin"
+                                        ${editando.tipo === "admin" ? "selected" : ""}>
+                                        admin
+                                    </option>
+                                `
+                                : ""
+                            }
                         </select>
                     `
                 }
@@ -582,7 +602,7 @@ function renderUsuarios(lista) {
 
             <td class="user-password">
                 ${
-                    adminEditandoOutroAdmin
+                    bloqueado
                     ? "🔒"
                     : `
                         <input
@@ -598,7 +618,7 @@ function renderUsuarios(lista) {
                 <div class="user-actions">
 
                     ${
-                        adminEditandoOutroAdmin
+                        bloqueado
                         ? "🔒"
                         : `
                             <button onclick="salvarUsuario(${id})">
@@ -627,7 +647,39 @@ function renderUsuarios(lista) {
 
 async function criarUsuario() {
 
-    if (userSenha.value.length < 6) {
+    const nomeValue = userNome.value.trim();
+    const usernameValue = userUsername.value.trim();
+    const emailValue = userEmail.value.trim();
+    const senhaValue = userSenha.value;
+
+    /* CAMPOS OBRIGATÓRIOS */
+    if (
+        !nomeValue ||
+        !usernameValue ||
+        !emailValue ||
+        !senhaValue
+    ) {
+        return;
+    }
+
+    /* EMAIL VÁLIDO */
+    const emailValido =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+
+    if (!emailValido) {
+        return;
+    }
+
+    /* SENHA */
+    if (senhaValue.length < 6) {
+        return;
+    }
+
+    /* GESTOR NÃO CRIA ADMIN */
+    if (
+        role === "gestor" &&
+        userTipo.value === "admin"
+    ) {
         return;
     }
 
@@ -639,10 +691,10 @@ async function criarUsuario() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                nome: userNome.value.trim(),
-                username: userUsername.value.trim(),
-                email: userEmail.value.trim(),
-                senha: userSenha.value,
+                nome: nomeValue,
+                username: usernameValue,
+                email: emailValue,
+                senha: senhaValue,
                 tipo: userTipo.value
             })
         }
@@ -650,17 +702,14 @@ async function criarUsuario() {
 
     if (!res) return;
 
-    /* LIMPA FORM */
     userNome.value = "";
     userUsername.value = "";
     userEmail.value = "";
     userSenha.value = "";
 
-    /* RECARREGA DIRETO DA API */
     await carregarUsuarios();
     await exibirContatos();
 
-    /* MOSTRA ABA */
     abaUsuarios.style.display = "block";
     abaContatos.style.display = "none";
 
@@ -740,14 +789,31 @@ async function removerUsuario(id) {
         usuario.aotipousuario ||
         "padrao";
 
+    /* NÃO PODE EXCLUIR A SI MESMO */
     if (
-        nomeUsuario === currentUser &&
-        tipoUsuario === "admin"
+        nomeUsuario === currentUser
     ) {
         return;
     }
 
-    if (!confirm("Excluir?")) return;
+    /* GESTOR NÃO REMOVE GESTOR/ADMIN */
+    if (
+        role === "gestor" &&
+        (
+            tipoUsuario === "admin" ||
+            tipoUsuario === "gestor"
+        )
+    ) {
+        return;
+    }
+
+    /* ADMIN NÃO REMOVE ADMIN */
+    if (
+        role === "admin" &&
+        tipoUsuario === "admin"
+    ) {
+        return;
+    }
 
     const res = await apiFetch(
         `${API_URL}/usuarios/${id}`,
