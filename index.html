@@ -170,9 +170,9 @@
                     id="tipoFiltro"
                     onchange="filtrarContatos()"
                 >
-                    <option value="nome">Contato</option>
-                    <option value="departamento">Departamento</option>
-                    <option value="ramal">Ramal</option>
+                    <option value="nome" data-i18n="responsible">Contato</option>
+                    <option value="departamento" data-i18n="department">Departamento</option>
+                    <option value="ramal" data-i18n="extension">Ramal</option>
                 </select>
 
                 <input
@@ -187,14 +187,14 @@
 
         <div class="table-container">
 
-            <table>
+            <table aria-label="Tabela de contatos">
 
                 <thead>
                     <tr>
-                        <th data-i18n="extension">Ramal</th>
-                        <th data-i18n="department">Departamento</th>
-                        <th data-i18n="responsible">Responsável</th>
-                        <th id="colAcoes" data-i18n="actions">Ações</th>
+                        <th scope="col" data-i18n="extension">Ramal</th>
+                        <th scope="col" data-i18n="department">Departamento</th>
+                        <th scope="col" data-i18n="responsible">Responsável</th>
+                        <th scope="col" id="colAcoes" data-i18n="actions">Ações</th>
                     </tr>
                 </thead>
 
@@ -211,61 +211,78 @@
             Usuários
         </h2>
 
-        <div class="form-grid">
+        <form id="formUsuarios" class="form-grid" novalidate>
 
-            <input
-                id="userNome"
-                data-i18n="name"
-                placeholder="Nome"
-                required
+            <label for="userNome" class="sr-only">Nome</label>
+            
+                <input
+                    id="userNome"
+                    name="nome"
+                    data-i18n="name"
+                    placeholder="Nome"
+                    required
+                    aria-required="true"
+                >
+
+            <label for="userUsername" class="sr-only">Usuário</label>
+
+                <input
+                    id="userUsername"
+                    name="username"
+                    data-i18n="nameUser"
+                    placeholder="Usuário"
+                    required
+                    aria-required="true"
+                >
+
+            <label for="userEmail" class="sr-only">Email</label>
+                
+                <input
+                    id="userEmail"
+                    name="email"
+                    type="email"
+                    data-i18n="email"
+                    placeholder="Email"
+                    required
+                    aria-required="true"
             >
 
-            <input
-                id="userUsername"
-                data-i18n="nameUser"
-                placeholder="Usuário"
-                required
-            >
+            <label for="userSenha" class="sr-only">Senha</label>
+                
+                <input
+                    id="userSenha"
+                    name="senha"
+                    type="password"
+                    data-i18n="password"
+                    placeholder="Senha"
+                    required
+                    minlength="6"
+                    aria-required="true"
+                >
 
-            <input
-                id="userEmail"
-                data-i18n="email"
-                placeholder="Email"
-                type="email"
-                required
-            >
-
-            <input
-                id="userSenha"
-                type="password"
-                data-i18n="password"
-                placeholder="Senha"
-                required
-            >
-
-            <select id="userTipo">
-                <option value="padrao" data-i18n="standard">
-                    Padrão
-                </option>
-
-                <option value="gestor" data-i18n="manager">
-                    Gestor
-                </option>
-
-                <option value="admin" data-i18n="admin">
-                    Admin
-                </option>
-            </select>
+            <label for="userTipo" class="sr-only">Tipo</label>
+            <select id="userTipo" aria-label="Tipo de usuário">
+                <option value="padrao" data-i18n="standard"> 
+                    Padrão 
+                </option> 
+                
+                <option value="gestor" data-i18n="manager"> 
+                    Gestor 
+                </option> 
+                
+                <option value="admin" data-i18n="admin"> 
+                    Admin 
+                </option> </select>
 
             <button
-                type="button"
+                type="submit"
                 onclick="criarUsuario()"
                 data-i18n="create"
             >
                 Criar
             </button>
 
-        </div>
+        </form>
 
         <div class="filter-wrapper">
 
@@ -282,15 +299,15 @@
                     id="tipoFiltroUsuarios"
                     onchange="filtrarUsuarios()"
                 >
-                    <option value="nome">
+                    <option value="nome" data-i18n="name">
                         Nome
                     </option>
 
-                    <option value="username">
+                    <option value="username" data-i18n="nameUser">
                         Username
                     </option>
 
-                    <option value="email">
+                    <option value="email" data-i18n="email">
                         Email
                     </option>
                 </select>
@@ -307,16 +324,16 @@
 
         <div class="table-container">
 
-            <table>
+            <table aria-label="Tabela de usuários">
 
                 <thead>
                     <tr>
-                        <th data-i18n="name">Nome</th>
-                        <th data-i18n="nameUser">Usuário</th>
-                        <th data-i18n="email">Email</th>
-                        <th data-i18n="type">Tipo</th>
-                        <th data-i18n="password">Senha</th>
-                        <th data-i18n="actions">Ações</th>
+                        <th scope="col" data-i18n="name">Nome</th>
+                        <th scope="col" data-i18n="nameUser">Usuário</th>
+                        <th scope="col" data-i18n="email">Email</th>
+                        <th scope="col" data-i18n="type">Tipo</th>
+                        <th scope="col" data-i18n="password">Senha</th>
+                        <th scope="col" data-i18n="actions">Ações</th>
                     </tr>
                 </thead>
 
