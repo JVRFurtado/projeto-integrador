@@ -218,6 +218,18 @@ function entrarSistema() {
 
     /* ================= USUÁRIO PADRÃO ================= */
 
+    if (role === "gestor") {
+
+        const adminOption =
+            document.querySelector(
+                '#userTipo option[value="admin"]'
+            );
+
+        if (adminOption) {
+            adminOption.remove();
+        }
+    }
+
     if (role !== "admin" && role !== "gestor") {
 
         btnUsuarios.style.display = "none";
@@ -310,7 +322,8 @@ function renderContatos(lista) {
     tabelaContatos.innerHTML = "";
 
     const isAdmin =
-        role === "admin"
+        role === "admin" ||
+        role === "gestor"
 
     if (!Array.isArray(lista)) {
         lista = [];
@@ -517,13 +530,16 @@ function renderUsuarios(lista) {
         const email = u.email || u.txemail || "";
         const tipo = u.tipo || u.aotipousuario || "padrao";
 
-       editandoUsuarios[id] = {
-            nome,
-            username,
-            email,
-            tipo,
-            senha: ""
-        };
+       if (!editandoUsuarios[id]) {
+
+            editandoUsuarios[id] = {
+                nome,
+                username,
+                email,
+                tipo,
+                senha: ""
+            };
+        }
 
         const editando = editandoUsuarios[id];
 
@@ -807,14 +823,6 @@ async function removerUsuario(id) {
         return;
     }
 
-    /* ADMIN NÃO REMOVE ADMIN */
-    if (
-        role === "admin" &&
-        tipoUsuario === "admin"
-    ) {
-        return;
-    }
-
     const res = await apiFetch(
         `${API_URL}/usuarios/${id}`,
         {
@@ -833,7 +841,8 @@ async function removerUsuario(id) {
 function mostrarAba(aba) {
 
     const isAdmin =
-        role === "admin"
+        role === "admin" ||
+        role === "gestor"
 
     /* USUÁRIO PADRÃO */
     if (!isAdmin) {
@@ -934,17 +943,19 @@ const i18n = {
         genericError:"Erro",
         filter:"Filtrar",
         responsible:"Responsável",
-        email:"Email"
+        email:"Email",
+        manager:"Gestor",
+        loginPlaceholder:"Nome de usuário ou email"
     },
 
     en: {
         title: "Corporate Agenda",
-        login: "Log in",
+        login: "Login",
         enter: "Enter",
         contacts: "Contacts",    
         users: "Users",
         password: "Password",
-        logout: "Log out",
+        logout: "Logout",
         save: "Save",
         create: "Create",
         name: "Name",
@@ -966,7 +977,9 @@ const i18n = {
         genericError: "Error",
         filter: "Filter",
         responsible: "Responsible",
-        email: "Email"
+        email: "Email",
+        manager:"Manager",
+        loginPlaceholder:"Username or email"
     },
 
     es: {
@@ -998,7 +1011,9 @@ const i18n = {
         genericError: "Error",
         filter: "Filtrar",
         responsible: "Responsable",
-        email: "Correo electrónico"
+        email: "Correo electrónico",
+        manager:"Gestor",
+        loginPlaceholder:"Nombre de usuario o correo electrónico"
     },
 
     fr: {
@@ -1030,7 +1045,9 @@ const i18n = {
         genericError: "Erreur",
         filter: "Filtrer",
         responsible: "Responsable",
-        email: "Email"
+        email: "Email",
+        manager:"Gestionnaire",
+        loginPlaceholder:"Nom d'utilisateur ou e-mail"
     },
 
     de: {
@@ -1062,7 +1079,9 @@ const i18n = {
         genericError: "Fehler",
         filter: "Filtern",
         responsible: "Verantwortlich",
-        email: "E-Mail"
+        email: "E-Mail",
+        manager:"Manager",
+        loginPlaceholder:"Benutzername oder E‑Mail"
     },
 
     it: {
@@ -1094,7 +1113,9 @@ const i18n = {
         genericError: "Errore",
         filter: "Filtra",
         responsible: "Responsabile",
-        email: "Email"
+        email: "Email",
+        manager:"Gestore",
+        loginPlaceholder:"Nome utente o email"
     }
 };
 
