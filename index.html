@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-lang="pt">
 <head>
     <meta charset="UTF-8">
 
@@ -31,7 +31,11 @@
 
     <div class="top-controls">
 
-        <select id="langSwitch" class="lang-minimal">
+        <select
+            id="langSwitch"
+            class="lang-minimal"
+            aria-label="Selecionar idioma"
+        >
             <option value="pt">PT</option>
             <option value="en">EN</option>
             <option value="es">ES</option>
@@ -45,7 +49,11 @@
             <span id="themeIcon">🌙</span>
 
             <label class="switch">
-                <input type="checkbox" id="themeToggle">
+                <input
+                    type="checkbox"
+                    id="themeToggle"
+                    aria-label="Alternar tema escuro"
+                />
                 <span></span>
             </label>
 
@@ -75,6 +83,9 @@
 
             <input
                 id="loginUsername"
+                name="username"
+                autocomplete="username"
+                aria-label="Usuário"
                 data-i18n="loginPlaceholder"
                 placeholder="Nome"
                 required
@@ -82,6 +93,9 @@
 
             <input
                 id="loginPassword"
+                name="password"
+                autocomplete="current-password"
+                aria-label="Senha"
                 type="password"
                 data-i18n="password"
                 placeholder="Senha"
@@ -130,6 +144,7 @@
 
             <input
                 id="ramal"
+                aria-label="Ramal"
                 data-i18n="extension"
                 placeholder="Ramal"
                 required
@@ -137,6 +152,7 @@
 
             <input
                 id="departamento"
+                aria-label="Departamento"
                 data-i18n="department"
                 placeholder="Departamento"
                 required
@@ -144,6 +160,7 @@
 
             <input
                 id="nome"
+                aria-label="Responsável"
                 data-i18n="responsible"
                 placeholder="Nome"
                 required
@@ -168,6 +185,7 @@
 
                 <select
                     id="tipoFiltro"
+                    aria-label="Tipo de filtro"
                     onchange="filtrarContatos()"
                 >
                     <option value="nome" data-i18n="responsible">Contato</option>
@@ -177,6 +195,7 @@
 
                 <input
                     id="buscar"
+                    aria-label="Buscar contatos"
                     data-i18n="search"
                     placeholder="Buscar..."
                     oninput="filtrarContatos()"
@@ -296,6 +315,7 @@
 
                 <select
                     id="tipoFiltroUsuarios"
+                    aria-label="Tipo de filtro de usuários"
                     onchange="filtrarUsuarios()"
                 >
                     <option value="nome" data-i18n="name">
@@ -313,6 +333,7 @@
 
                 <input
                     id="buscarUsuarios"
+                    aria-label="Buscar usuários"
                     data-i18n="searchUsers"
                     placeholder="Buscar usuário..."
                     oninput="filtrarUsuarios()"
@@ -351,5 +372,12 @@
 
 <script src="app.js"></script>
 
+<div
+    id="liveRegion"
+    class="sr-only"
+    aria-live="polite"
+    aria-atomic="true"
+></div>
+    
 </body>
 </html>
