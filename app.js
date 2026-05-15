@@ -45,6 +45,8 @@ const langSwitch = document.getElementById("langSwitch");
 
 const logoutBtn = document.getElementById("logoutBtn");
 
+const formUsuarios = document.getElementById("formUsuarios");
+
 /* ================= ESTADO ================= */
 
 let token = localStorage.getItem("token");
@@ -408,7 +410,11 @@ function renderContatos(lista) {
                                 </button>
                             `
                             : `
-                                <button onclick="editarContato(${contatoId})">
+                                <button
+                                    onclick="editarContato(${contatoId})"
+                                    aria-label="Editar contato"
+                                    title="Editar contato"
+                                >
                                     ✏️
                                 </button>
 
@@ -503,6 +509,20 @@ async function removerContato(id) {
 
 /* ================= USUÁRIOS ================= */
 
+formUsuarios.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    if (!formUsuarios.checkValidity()) {
+
+        formUsuarios.reportValidity();
+
+        return;
+    }
+
+    await criarUsuario();
+});
+        
 async function carregarUsuarios() {
 
     const res = await apiFetch(`${API_URL}/usuarios/`);
@@ -586,7 +606,7 @@ function renderUsuarios(lista) {
                     bloqueado
                     ? `
                         <span class="badge-admin">
-                            admin
+                            ${tipo}
                         </span>
                     `
                     : `
@@ -643,11 +663,32 @@ function renderUsuarios(lista) {
                         `
                     }
 
-                    ${
-                        nome === currentUser
-                        ? "🔐"
+                   ${
+                        (
+                            nome === currentUser
+                            ||
+                            (
+                                role === "gestor" &&
+                                (
+                                    tipo === "admin" ||
+                                    tipo === "gestor"
+                                )
+                            )
+                        )
+                        ? `
+                            <span
+                                class="lock-icon"
+                                aria-label="Usuário protegido"
+                                title="Usuário protegido"
+                            >
+                                🔒
+                            </span>
+                        `
                         : `
-                            <button onclick="removerUsuario(${id})">
+                            <button
+                                onclick="removerUsuario(${id})"
+                                aria-label="Excluir usuário"
+                            >
                                 🗑️
                             </button>
                         `
@@ -663,33 +704,44 @@ function renderUsuarios(lista) {
 
 async function criarUsuario() {
 
+    if (!formUsuarios.checkValidity()) {
+
+        formUsuarios.reportValidity();
+
+        return;
+    }
+
     const nomeValue = userNome.value.trim();
     const usernameValue = userUsername.value.trim();
     const emailValue = userEmail.value.trim();
     const senhaValue = userSenha.value;
 
-    /* CAMPOS OBRIGATÓRIOS */
-    if (
-        !nomeValue ||
-        !usernameValue ||
-        !emailValue ||
-        !senhaValue
-    ) {
-        return;
-    }
+    userEmail.setCustomValidity("");
 
-    /* EMAIL VÁLIDO */
     const emailValido =
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
 
     if (!emailValido) {
+
+        userEmail.setCustomValidity("E-mail inválido");
+
+        userEmail.reportValidity();
+
         return;
     }
 
-    /* SENHA */
     if (senhaValue.length < 6) {
+
+        userSenha.setCustomValidity(
+            "A senha deve ter no mínimo 6 caracteres"
+        );
+
+        userSenha.reportValidity();
+
         return;
     }
+
+    userSenha.setCustomValidity("");
 
     /* GESTOR NÃO CRIA ADMIN */
     if (
@@ -835,6 +887,47 @@ async function removerUsuario(id) {
     await carregarUsuarios();
     await exibirContatos();
 }
+
+/* ================= ENTER NAVEGAÇÃO ================= */
+
+const camposUsuarios = [
+    userNome,
+    userUsername,
+    userEmail,
+    userSenha,
+    userTipo
+];
+
+userEmail.addEventListener("input", () => {
+    userEmail.setCustomValidity("");
+});
+
+userSenha.addEventListener("input", () => {
+    userSenha.setCustomValidity("");
+});
+
+camposUsuarios.forEach((campo, index) => {
+
+    campo.addEventListener("keydown", (e) => {
+
+        if (e.key !== "Enter") return;
+
+        if (campo.tagName === "SELECT") {
+            return;
+        }
+
+        const ultimoCampo =
+            index === camposUsuarios.length - 1;
+
+        if (!ultimoCampo) {
+
+            e.preventDefault();
+
+            camposUsuarios[index + 1].focus();
+
+        }
+    });
+});
 
 /* ================= ABAS ================= */
 
@@ -1145,16 +1238,22 @@ function aplicarIdioma(lang) {
 
         const texto = getTranslation(key, lang);
 
+        const tag = el.tagName.toLowerCase();
+
         if (
-            el.tagName.toLowerCase() === "input" ||
-            el.tagName.toLowerCase() === "textarea"
+            tag === "input" ||
+            tag === "textarea"
         ) {
 
             el.placeholder = texto;
 
+        } else if (tag === "option") {
+
+            el.textContent = texto;
+
         } else {
 
-            el.innerText = texto;
+            el.textContent = texto;
         }
     });
 
