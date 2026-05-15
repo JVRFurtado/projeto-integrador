@@ -211,13 +211,14 @@
             Usuários
         </h2>
 
-        <form id="formUsuarios" class="form-grid" novalidate>
+        <form id="formUsuarios" class="form-grid">
 
             <label for="userNome" class="sr-only">Nome</label>
             
                 <input
                     id="userNome"
                     name="nome"
+                    autocomplete="name"
                     data-i18n="name"
                     placeholder="Nome"
                     required
@@ -229,6 +230,7 @@
                 <input
                     id="userUsername"
                     name="username"
+                    autocomplete="username"
                     data-i18n="nameUser"
                     placeholder="Usuário"
                     required
@@ -240,6 +242,7 @@
                 <input
                     id="userEmail"
                     name="email"
+                    autocomplete="email"
                     type="email"
                     data-i18n="email"
                     placeholder="Email"
@@ -252,6 +255,7 @@
                 <input
                     id="userSenha"
                     name="senha"
+                    autocomplete="new-password"
                     type="password"
                     data-i18n="password"
                     placeholder="Senha"
@@ -276,7 +280,6 @@
 
             <button
                 type="submit"
-                onclick="criarUsuario()"
                 data-i18n="create"
             >
                 Criar
