@@ -412,7 +412,6 @@ function renderContatos(lista) {
                             : `
                                 <button
                                     onclick="editarContato(${contatoId})"
-                                    aria-label="Editar contato"
                                     title="Editar contato"
                                 >
                                     ✏️
@@ -611,12 +610,12 @@ function renderUsuarios(lista) {
                     `
                     : `
                        <select id="u-tipo-${id}">
-                            <option value="padrao"
+                            <option value="padrao" data-i18n="standard"
                                 ${editando.tipo === "padrao" ? "selected" : ""}>
                                 padrão
                             </option>
 
-                            <option value="gestor"
+                            <option value="gestor" data-i18n="manager"
                                 ${editando.tipo === "gestor" ? "selected" : ""}>
                                 gestor
                             </option>
@@ -624,7 +623,7 @@ function renderUsuarios(lista) {
                             ${
                                 role === "admin"
                                 ? `
-                                    <option value="admin"
+                                    <option value="admin" data-i18n="admin"
                                         ${editando.tipo === "admin" ? "selected" : ""}>
                                         admin
                                     </option>
@@ -644,6 +643,7 @@ function renderUsuarios(lista) {
                         <input
                             id="u-senha-${id}"
                             type="password"
+                            data-i18n="newPass"
                             placeholder="Nova senha"
                         >
                     `
@@ -678,7 +678,6 @@ function renderUsuarios(lista) {
                         ? `
                             <span
                                 class="lock-icon"
-                                aria-label="Usuário protegido"
                                 title="Usuário protegido"
                             >
                                 🔒
@@ -687,7 +686,6 @@ function renderUsuarios(lista) {
                         : `
                             <button
                                 onclick="removerUsuario(${id})"
-                                aria-label="Excluir usuário"
                             >
                                 🗑️
                             </button>
