@@ -47,6 +47,19 @@ const logoutBtn = document.getElementById("logoutBtn");
 
 const formUsuarios = document.getElementById("formUsuarios");
 
+const liveRegion = document.getElementById("liveRegion");
+
+function announce(message) {
+
+    if (!liveRegion) return;
+
+    liveRegion.textContent = "";
+
+    setTimeout(() => {
+        liveRegion.textContent = message;
+    }, 100);
+}
+
 /* ================= ESTADO ================= */
 
 let token = localStorage.getItem("token");
@@ -62,11 +75,32 @@ let buscaUsuarios = "";
 let filtroUsuarios = "nome";
 let editandoUsuarios = {};
 
+function currentLang() {
+
+    return localStorage.getItem("lang") || "pt";
+}
+
+function escapeHtml(str = "") {
+
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+                                             
 /* ================= ALERT ================= */
 
 function alerta(msg) {
+
     const lang = localStorage.getItem("lang") || "pt";
-    alert(getTranslation(msg, lang));
+
+    const texto = getTranslation(msg, lang);
+
+    announce(texto);
+
+    alert(texto);
 }
 
 /* ================= LOGIN ================= */
@@ -111,7 +145,7 @@ loginForm.onsubmit = async (e) => {
             return;
         }
 
-        token = data.access_token;
+        token = String(data.access_token || "");
 
         localStorage.setItem("token", token);
 
@@ -159,7 +193,9 @@ async function apiFetch(url, options = {}) {
             ...options,
             headers: {
                 ...(options.headers || {}),
-                Authorization: `Bearer ${token}`
+                    ...(token
+                        ? { Authorization: `Bearer ${token}` }
+                        : {})
             }
         });
 
@@ -271,7 +307,7 @@ function logout() {
     if (theme) localStorage.setItem("theme", theme);
     if (lang) localStorage.setItem("lang", lang);
 
-    location.reload();
+    window.location.href = "/";
 }
 
 /* ================= CONTATOS ================= */
@@ -333,7 +369,7 @@ function renderContatos(lista) {
 
     lista.forEach(contato => {
 
-        if (!contato || !contato.id) {
+        if (!contato || contato.id == null) {
             return;
         }
 
@@ -343,13 +379,13 @@ function renderContatos(lista) {
             editandoContato === contatoId;
 
         const nomeContato =
-            contato.nome || "";
+            escapeHtml(contato.nome || "");
 
         const departamentoContato =
-            contato.departamento || "";
+            escapeHtml(contato.departamento || "");
 
         const ramalContato =
-            contato.ramal || "";
+            escapeHtml(contato.ramal || "");
 
         const tr = document.createElement("tr");
 
@@ -360,7 +396,7 @@ function renderContatos(lista) {
                     ? `
                         <input
                             id="c-ramal-${contatoId}"
-                            value="${ramalContato}"
+                            value="${escapeHtml(ramalContato)}"
                         >
                     `
                     : ramalContato
@@ -373,7 +409,7 @@ function renderContatos(lista) {
                     ? `
                         <input
                             id="c-dep-${contatoId}"
-                            value="${departamentoContato}"
+                            value="${escapeHtml(departamentoContato)}"
                         >
                     `
                     : departamentoContato
@@ -386,7 +422,7 @@ function renderContatos(lista) {
                 ? `
                     <input
                         id="c-nome-${contatoId}"
-                        value="${nomeContato}"
+                        value="${escapeHtml(nomeContato)}"
                     >
                     `
                     : nomeContato
@@ -401,23 +437,34 @@ function renderContatos(lista) {
                         ${
                             editando
                             ? `
-                                <button onclick="salvarContato(${contatoId})">
+                                <button
+                                    type="button"
+                                    onclick="salvarContato(${contatoId})"
+                                >
                                     💾
                                 </button>
 
-                                <button onclick="cancelarEdicao()">
+                                <button
+                                    type="button"
+                                    onclick="cancelarEdicao()"
+                                >
                                     ❌
                                 </button>
                             `
                             : `
                                 <button
                                     onclick="editarContato(${contatoId})"
-                                    title="Editar contato"
+                                    type="button"
+                                    title="${getTranslation("editContact", currentLang())}"
                                 >
                                     ✏️
                                 </button>
 
-                                <button onclick="removerContato(${contatoId})">
+                                <button
+                                    type="button"
+                                    onclick="removerContato(${contatoId})"
+                                    aria-label="${getTranslation("deleteContact", currentLang())}"
+                                >
                                     🗑️
                                 </button>
                             `
@@ -450,16 +497,16 @@ function cancelarEdicao() {
 async function salvarContato(id) {
 
     const nomeContato =
-        document.getElementById(`c-nome-${id}`).value;
+        document.getElementById(`c-nome-${id}`)?.value || "";
 
     const departamentoContato =
-        document.getElementById(`c-dep-${id}`).value;
+        document.getElementById(`c-dep-${id}`)?.value || "";
 
     const ramalContato =
-        document.getElementById(`c-ramal-${id}`).value;
+        document.getElementById(`c-ramal-${id}`)?.value || "";
 
     const body = {
-        nome: nomeContato,
+        nome: nomeContato.trim(),
         departamento: departamentoContato,
         ramal: ramalContato
     };
@@ -486,7 +533,7 @@ async function salvarContato(id) {
 
 async function removerContato(id) {
 
-    if (!confirm("Excluir contato?")) {
+    if (!confirm(getTranslation("deleteConfirm", currentLang()))) {
         return;
     }
 
@@ -542,11 +589,11 @@ function renderUsuarios(lista) {
 
     lista.forEach(u => {
 
-        const id = u.id || u.idpessoa;
+        const id = Number(u.id ?? u.idpessoa);
 
-        const nome = u.nome || u.txnome || "";
-        const username = u.username || u.txusername || "";
-        const email = u.email || u.txemail || "";
+        const nome = escapeHtml(u.nome || u.txnome || "");
+        const username = escapeHtml(u.username || u.txusername || "");
+        const email = escapeHtml(u.email || u.txemail || "");
         const tipo = u.tipo || u.aotipousuario || "padrao";
 
        if (!editandoUsuarios[id]) {
@@ -582,21 +629,21 @@ function renderUsuarios(lista) {
             <td>
                 <input
                     id="u-nome-${id}"
-                    value="${editando.nome}"
+                    value="${escapeHtml(editando.nome)}"
                 >
             </td>
 
             <td>
                 <input
                     id="u-username-${id}"
-                    value="${editando.username}"
+                    value="${escapeHtml(editando.username)}"
                 >
             </td>
 
             <td>
                 <input
                     id="u-email-${id}"
-                    value="${editando.email}"
+                    value="${escapeHtml(editando.email)}"
                 >
             </td>
 
@@ -605,19 +652,19 @@ function renderUsuarios(lista) {
                     bloqueado
                     ? `
                         <span class="badge-admin">
-                            ${tipo}
+                            ${getTranslation(tipo, currentLang())}
                         </span>
                     `
                     : `
                        <select id="u-tipo-${id}">
                             <option value="padrao" data-i18n="standard"
                                 ${editando.tipo === "padrao" ? "selected" : ""}>
-                                padrão
+                                ${getTranslation("standard", currentLang())}
                             </option>
 
                             <option value="gestor" data-i18n="manager"
                                 ${editando.tipo === "gestor" ? "selected" : ""}>
-                                gestor
+                                ${getTranslation("manager", currentLang())}
                             </option>
 
                             ${
@@ -625,7 +672,7 @@ function renderUsuarios(lista) {
                                 ? `
                                     <option value="admin" data-i18n="admin"
                                         ${editando.tipo === "admin" ? "selected" : ""}>
-                                        admin
+                                        ${getTranslation("admin", currentLang())}
                                     </option>
                                 `
                                 : ""
@@ -644,7 +691,8 @@ function renderUsuarios(lista) {
                             id="u-senha-${id}"
                             type="password"
                             data-i18n="newPass"
-                            placeholder="Nova senha"
+                            placeholder="${getTranslation("newPass", currentLang())}"
+                            aria-label="${getTranslation("newPass", currentLang())}"
                         >
                     `
                 }
@@ -657,8 +705,12 @@ function renderUsuarios(lista) {
                         bloqueado
                         ? "🔒"
                         : `
-                            <button onclick="salvarUsuario(${id})">
-                                💾
+                            <button
+                                type="button"
+                                onclick="salvarUsuario(${id})"
+                                aria-label="${getTranslation("save", currentLang())}"
+                            >
+                                <span aria-hidden="true">💾</span>
                             </button>
                         `
                     }
@@ -678,16 +730,18 @@ function renderUsuarios(lista) {
                         ? `
                             <span
                                 class="lock-icon"
-                                title="Usuário protegido"
+                                title="${getTranslation("protectedUser", currentLang())}"
                             >
-                                🔒
+                                 <span aria-hidden="true">🔒</span>
                             </span>
                         `
                         : `
                             <button
+                                type="button"
                                 onclick="removerUsuario(${id})"
+                                aria-label="${getTranslation("deleteUser", currentLang())}"
                             >
-                                🗑️
+                                <span aria-hidden="true">🗑️</span>
                             </button>
                         `
                     }
@@ -776,23 +830,19 @@ async function criarUsuario() {
     await carregarUsuarios();
     await exibirContatos();
 
-    abaUsuarios.style.display = "block";
-    abaContatos.style.display = "none";
-
-    btnUsuarios.style.display = "none";
-    btnContatos.style.display = "block";
+    mostrarAba("usuarios");
 }
 
 async function salvarUsuario(id) {
 
     const nome =
-        document.getElementById(`u-nome-${id}`).value.trim();
+        document.getElementById(`u-nome-${id}`)?.value.trim() || "";
 
     const username =
-        document.getElementById(`u-username-${id}`).value.trim();
+        document.getElementById(`u-username-${id}`)?.value.trim() || "";
 
     const email =
-        document.getElementById(`u-email-${id}`).value.trim();
+        document.getElementById(`u-email-${id}`)?.value.trim() || "";
 
     const tipoEl =
         document.getElementById(`u-tipo-${id}`);
@@ -839,7 +889,7 @@ async function salvarUsuario(id) {
 async function removerUsuario(id) {
 
     const usuario = listaUsuarios.find(u => {
-        return (u.id || u.idpessoa) === id;
+        return (u.id ?? u.idpessoa) === id;
     });
 
     if (!usuario) return;
@@ -997,7 +1047,7 @@ themeToggle.onchange = () => {
 
 function atualizarIconeTema() {
 
-    themeIcon.innerText =
+    themeIcon.textContent =
         themeToggle.checked ? "🌙" : "☀️";
 }
 
@@ -1036,7 +1086,12 @@ const i18n = {
         responsible:"Responsável",
         email:"Email",
         manager:"Gestor",
-        loginPlaceholder:"Nome de usuário ou email"
+        loginPlaceholder:"Nome de usuário ou email",
+        deleteContact:"Excluir contato",
+        deleteUser:"Excluir usuário",
+        editContact:"Editar contato",
+        protectedUser:"Usuário protegido",
+        deleteConfirm:"Tem certeza?"
     },
 
     en: {
@@ -1070,7 +1125,12 @@ const i18n = {
         responsible: "Responsible",
         email: "Email",
         manager:"Manager",
-        loginPlaceholder:"Username or email"
+        loginPlaceholder:"Username or email",
+        deleteContact:"Delete contact",
+        deleteUser:"Delete user",
+        editContact:"Edit contact",
+        deleteConfirm:"Are you sure?",
+        protectedUser:"Protected user"
     },
 
     es: {
@@ -1104,7 +1164,12 @@ const i18n = {
         responsible: "Responsable",
         email: "Correo electrónico",
         manager:"Gestor",
-        loginPlaceholder:"Nombre de usuario o correo electrónico"
+        loginPlaceholder:"Nombre de usuario o correo electrónico",
+        deleteConfirm:"¿Estás seguro?",
+        deleteContact:"Eliminar contacto",
+        deleteUser:"Eliminar usuario",
+        editContact:"Editar contacto",
+        protectedUser:"Usuario protegido"
     },
 
     fr: {
@@ -1138,7 +1203,12 @@ const i18n = {
         responsible: "Responsable",
         email: "Email",
         manager:"Gestionnaire",
-        loginPlaceholder:"Nom d'utilisateur ou e-mail"
+        deleteConfirm:"Êtes-vous sûr ?",
+        loginPlaceholder:"Nom d'utilisateur ou e-mail",
+        deleteContact:"Supprimer le contact",
+        deleteUser:"Supprimer l’utilisateur",
+        editContact:"Modifier le contact",
+        protectedUser:"Utilisateur protégé"
     },
 
     de: {
@@ -1172,7 +1242,12 @@ const i18n = {
         responsible: "Verantwortlich",
         email: "E-Mail",
         manager:"Manager",
-        loginPlaceholder:"Benutzername oder E‑Mail"
+        loginPlaceholder:"Benutzername oder E‑Mail",
+        deleteConfirm:"Bist du sicher?",
+        deleteContact:"Kontakt löschen",
+        deleteUser:"Benutzer löschen",
+        editContact:"Kontakt bearbeiten",
+        protectedUser:"Geschützter Benutzer"
     },
 
     it: {
@@ -1206,7 +1281,12 @@ const i18n = {
         responsible: "Responsabile",
         email: "Email",
         manager:"Gestore",
-        loginPlaceholder:"Nome utente o email"
+        loginPlaceholder:"Nome utente o email",
+        deleteContact:"Elimina contatto",
+        deleteUser:"Elimina utente",
+        editContact:"Modifica contatto",
+        protectedUser:"Utente protetto",
+        deleteConfirm:"Sei sicuro?"
     }
 };
 
@@ -1214,9 +1294,14 @@ const i18n = {
 
 langSwitch.onchange = () => {
 
-    localStorage.setItem("lang", langSwitch.value);
+    const lang = langSwitch.value;
 
-    aplicarIdioma(langSwitch.value);
+    localStorage.setItem("lang", lang);
+
+    aplicarIdioma(lang);
+
+    renderContatos(listaContatos);
+    renderUsuarios(listaUsuarios);
 };
 
 function getTranslation(key, lang = "pt") {
@@ -1229,6 +1314,8 @@ function getTranslation(key, lang = "pt") {
 }
 
 function aplicarIdioma(lang) {
+
+    document.documentElement.lang = lang;
 
     document.querySelectorAll("[data-i18n]").forEach(el => {
 
@@ -1244,6 +1331,11 @@ function aplicarIdioma(lang) {
         ) {
 
             el.placeholder = texto;
+            el.setAttribute("aria-label", texto);
+
+        } else if (tag === "select") {
+
+            el.setAttribute("aria-label", texto);
 
         } else if (tag === "option") {
 
@@ -1251,7 +1343,9 @@ function aplicarIdioma(lang) {
 
         } else {
 
-            el.textContent = texto;
+            if (el.children.length === 0) {
+                el.textContent = texto;
+            }
         }
     });
 
@@ -1324,11 +1418,11 @@ function filtrarUsuarios() {
         }
 
         if (tipo === "username") {
-            valor = (u.username || "").toLowerCase();
+            valor = (u.username || u.txusername || "").toLowerCase();
         }
 
         if (tipo === "email") {
-            valor = (u.email || "").toLowerCase();
+            valor = (u.email || u.txemail || "").toLowerCase();
         }
 
         return valor.includes(termo);
