@@ -58,13 +58,14 @@
                     type="checkbox"
                     id="themeToggle"
                     aria-label="Alternar tema escuro"
+                    data-i18n="theme"
                 />
                 <span></span>
             </label>
 
             <button
                 id="logoutBtn"
-                aria-label="Logout"
+                aria-label="Sair"
                 class="logout-btn"
                 onclick="logout()"
                 data-i18n="logout"
@@ -203,6 +204,7 @@
 
                 <select
                     id="tipoFiltro"
+                    data-i18n="filter"
                     aria-label="Tipo de filtro"
                     onchange="filtrarContatos()"
                 >
@@ -225,7 +227,10 @@
 
         <div class="table-container">
 
-            <table aria-label="Tabela de contatos">
+            <table
+                aria-label="Tabela de contatos"
+                data-i18n="contacts"
+            >
 
                 <thead>
                     <tr>
@@ -336,6 +341,7 @@
 
                 <select
                     id="tipoFiltroUsuarios"
+                    data-i18n="filter"
                     aria-label="Tipo de filtro de usuários"
                     onchange="filtrarUsuarios()"
                 >
@@ -366,7 +372,10 @@
 
         <div class="table-container">
 
-            <table aria-label="Tabela de usuários">
+            <table
+                aria-label="Tabela de usuários"
+                data-i18n="users"
+            >
 
                 <thead>
                     <tr>
