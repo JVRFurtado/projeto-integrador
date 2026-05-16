@@ -307,7 +307,11 @@ function logout() {
     if (theme) localStorage.setItem("theme", theme);
     if (lang) localStorage.setItem("lang", lang);
 
-    window.location.href = "/";
+    token = null;
+    role = "";
+    currentUser = "";
+
+    window.location.reload();
 }
 
 /* ================= CONTATOS ================= */
@@ -440,6 +444,7 @@ function renderContatos(lista) {
                                 <button
                                     type="button"
                                     onclick="salvarContato(${contatoId})"
+                                    aria-label="${getTranslation("save", currentLang())}"
                                 >
                                     💾
                                 </button>
@@ -447,6 +452,7 @@ function renderContatos(lista) {
                                 <button
                                     type="button"
                                     onclick="cancelarEdicao()"
+                                    aria-label="${getTranslation("cancel", currentLang())}"
                                 >
                                     ❌
                                 </button>
@@ -456,6 +462,7 @@ function renderContatos(lista) {
                                     onclick="editarContato(${contatoId})"
                                     type="button"
                                     title="${getTranslation("editContact", currentLang())}"
+                                    aria-label="${getTranslation("editContact", currentLang())}"
                                 >
                                     ✏️
                                 </button>
@@ -594,7 +601,11 @@ function renderUsuarios(lista) {
         const nome = escapeHtml(u.nome || u.txnome || "");
         const username = escapeHtml(u.username || u.txusername || "");
         const email = escapeHtml(u.email || u.txemail || "");
-        const tipo = u.tipo || u.aotipousuario || "padrao";
+        const tipo = (
+            u.tipo ||
+            u.aotipousuario ||
+            "padrao"
+        ).toLowerCase();
 
        if (!editandoUsuarios[id]) {
 
@@ -652,7 +663,7 @@ function renderUsuarios(lista) {
                     bloqueado
                     ? `
                         <span class="badge-admin">
-                            ${getTranslation(tipo, currentLang())}
+                            ${traduzirTipo(tipo)}
                         </span>
                     `
                     : `
@@ -1091,7 +1102,9 @@ const i18n = {
         deleteUser:"Excluir usuário",
         editContact:"Editar contato",
         protectedUser:"Usuário protegido",
-        deleteConfirm:"Tem certeza?"
+        deleteConfirm:"Tem certeza?",
+        theme:"Alternar tema",
+        cancel:"Cancelar"
     },
 
     en: {
@@ -1130,7 +1143,9 @@ const i18n = {
         deleteUser:"Delete user",
         editContact:"Edit contact",
         deleteConfirm:"Are you sure?",
-        protectedUser:"Protected user"
+        protectedUser:"Protected user",
+        cancel:"Cancel",
+        theme:"Toggle theme"
     },
 
     es: {
@@ -1169,7 +1184,9 @@ const i18n = {
         deleteContact:"Eliminar contacto",
         deleteUser:"Eliminar usuario",
         editContact:"Editar contacto",
-        protectedUser:"Usuario protegido"
+        protectedUser:"Usuario protegido",
+        theme:"Cambiar tema",
+        cancel:"Cancelar"
     },
 
     fr: {
@@ -1208,7 +1225,9 @@ const i18n = {
         deleteContact:"Supprimer le contact",
         deleteUser:"Supprimer l’utilisateur",
         editContact:"Modifier le contact",
-        protectedUser:"Utilisateur protégé"
+        protectedUser:"Utilisateur protégé",
+        cancel:"Annuler",
+        theme:"Changer le thème"
     },
 
     de: {
@@ -1247,7 +1266,9 @@ const i18n = {
         deleteContact:"Kontakt löschen",
         deleteUser:"Benutzer löschen",
         editContact:"Kontakt bearbeiten",
-        protectedUser:"Geschützter Benutzer"
+        protectedUser:"Geschützter Benutzer",
+        theme:"Theme wechseln",
+        cancel:"Abbrechen"
     },
 
     it: {
@@ -1286,7 +1307,9 @@ const i18n = {
         deleteUser:"Elimina utente",
         editContact:"Modifica contatto",
         protectedUser:"Utente protetto",
-        deleteConfirm:"Sei sicuro?"
+        deleteConfirm:"Sei sicuro?",
+        cancel:"Annulla",
+        theme:"Cambia tema"
     }
 };
 
@@ -1310,6 +1333,20 @@ function getTranslation(key, lang = "pt") {
         i18n[lang]?.[key] ||
         i18n["pt"]?.[key] ||
         key
+    );
+}
+
+function traduzirTipo(tipo) {
+
+    const mapa = {
+        padrao: "standard",
+        gestor: "manager",
+        admin: "admin"
+    };
+
+    return getTranslation(
+        mapa[tipo] || tipo,
+        currentLang()
     );
 }
 
@@ -1345,6 +1382,14 @@ function aplicarIdioma(lang) {
 
             if (el.children.length === 0) {
                 el.textContent = texto;
+            }
+
+            if (el.hasAttribute("aria-label")) {
+                el.setAttribute("aria-label", texto);
+            }
+
+            if (el.hasAttribute("title")) {
+                el.setAttribute("title", texto);
             }
         }
     });
