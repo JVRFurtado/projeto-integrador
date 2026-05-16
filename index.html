@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
 
@@ -46,7 +46,12 @@
 
         <div class="theme-control">
 
-            <span id="themeIcon">🌙</span>
+            <span
+                id="themeIcon"
+                aria-hidden="true"
+            >
+                🌙
+            </span>
 
             <label class="switch">
                 <input
@@ -59,6 +64,7 @@
 
             <button
                 id="logoutBtn"
+                aria-label="Logout"
                 class="logout-btn"
                 onclick="logout()"
                 data-i18n="logout"
@@ -83,6 +89,7 @@
 
             <input
                 id="loginUsername"
+                type="text"
                 name="username"
                 autocomplete="username"
                 aria-label="Usuário"
@@ -102,7 +109,10 @@
                 required
             >
 
-            <button data-i18n="enter">
+            <button
+                type="submit"
+                data-i18n="enter"
+            >
                 Entrar
             </button>
 
@@ -144,6 +154,7 @@
 
             <input
                 id="ramal"
+                type="text"
                 aria-label="Ramal"
                 data-i18n="extension"
                 placeholder="Ramal"
@@ -152,6 +163,8 @@
 
             <input
                 id="departamento"
+                autocomplete="organization"
+                type="text"
                 aria-label="Departamento"
                 data-i18n="department"
                 placeholder="Departamento"
@@ -160,13 +173,18 @@
 
             <input
                 id="nome"
+                type="text"
+                autocomplete="name"
                 aria-label="Responsável"
                 data-i18n="responsible"
                 placeholder="Nome"
                 required
             >
 
-            <button data-i18n="save">
+            <button
+                type="submit"
+                data-i18n="save"
+            >
                 Salvar
             </button>
 
@@ -195,6 +213,7 @@
 
                 <input
                     id="buscar"
+                    type="text"
                     aria-label="Buscar contatos"
                     data-i18n="search"
                     placeholder="Buscar..."
@@ -206,7 +225,7 @@
 
         <div class="table-container">
 
-            <table>
+            <table aria-label="Tabela de contatos">
 
                 <thead>
                     <tr>
@@ -236,6 +255,7 @@
             
                 <input
                     id="userNome"
+                    type="text"
                     name="nome"
                     autocomplete="name"
                     data-i18n="name"
@@ -247,6 +267,7 @@
 
                 <input
                     id="userUsername"
+                    type="text"
                     name="username"
                     autocomplete="username"
                     data-i18n="nameUser"
@@ -333,6 +354,7 @@
 
                 <input
                     id="buscarUsuarios"
+                    type="text"
                     aria-label="Buscar usuários"
                     data-i18n="searchUsers"
                     placeholder="Buscar usuário..."
@@ -344,7 +366,7 @@
 
         <div class="table-container">
 
-            <table>
+            <table aria-label="Tabela de usuários">
 
                 <thead>
                     <tr>
@@ -375,6 +397,7 @@
 <div
     id="liveRegion"
     class="sr-only"
+    role="status"
     aria-live="polite"
     aria-atomic="true"
 ></div>
